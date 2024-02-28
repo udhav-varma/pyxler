@@ -78,20 +78,29 @@ async_funcdef: ASYNC funcdef
 funcdef: 'def' NAME parameters cond_arrowtest ':' suite
 cond_arrowtest: ARROWOP test | 
 parameters: '(' cond_typedargslist ')'
+
 cond_typedargslist: typedargslist | 
-typedargslist: (tfpdef ['=' test] (',' tfpdef ['=' test])* [',' [
-        '*' [tfpdef] (',' tfpdef ['=' test])* [',' ['**' tfpdef cond_comma]]
-      | '**' tfpdef cond_comma]]
-  | '*' [tfpdef] (',' tfpdef ['=' test])* [',' ['**' tfpdef cond_comma]]
-  | '**' tfpdef cond_comma)
-tfpdef: NAME [':' test]
-varargslist: (vfpdef ['=' test] (',' vfpdef ['=' test])* [',' [
-        '*' [vfpdef] (',' vfpdef ['=' test])* [',' ['**' vfpdef cond_comma]]
-      | '**' vfpdef cond_comma]]
-  | '*' [vfpdef] (',' vfpdef ['=' test])* [',' ['**' vfpdef cond_comma]]
+typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar
+  | '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma
+  | '**' tfpdef cond_comma
+conds_comma_startfpdefcondcomma: ',' | ',' '**' tfpdef cond_comma | 
+cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma
+      | '**' tfpdef cond_comma | 
+cond_comma_or_condstarorstartstar: ',' cond_star_or_startstar | 
+close_comma_tfpdef_condeqtest: ',' tfpdef cond_eqtest close_comma_tfpdef_condeqtest | 
+cond_tfpdef: tfpdef | 
+tfpdef: NAME | NAME ':' test
+
+varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_condstarorstartstarvf
+  | '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma
   | '**' vfpdef cond_comma
-)
 vfpdef: NAME
+close_comma_vfpdef_condeqtest: ',' vfpdef cond_eqtest close_comma_vfpdef_condeqtest | 
+cond_vfpdef: vfpdef | 
+cond_star_or_startstar_vf: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma
+      | '**' vfpdef cond_comma | 
+conds_comma_starvfpdefcondcomma: ',' | ',' '**' vfpdef cond_comma | 
+cond_comma_or_condstarorstartstarvf: ',' cond_star_or_startstar_vf | 
 
 stmt: simple_stmt | compound_stmt
 simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE
