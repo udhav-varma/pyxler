@@ -1,29 +1,33 @@
 %option noyywrap
 %option yylineno
 %{
-
+#include<iostream>
+#include<stack>
+using std::stack;
+stack<int> indents;
+int dedpos = 0;
 %}
 
 NEWLINE ([\n])
-COMMENT ([#] [.]* {NEWLINE})
+COMMENT ([#](.*){NEWLINE})
 
 bytesescapeseq ([\\] (.|[\n]))
 longbyteschar  ([^\\])
 shortbyteschar ([^\\\n"])
-longbytesitem  ({longbyteschar} | {bytesescapeseq})
-shortbytesitem ({shortbyteschar} | {bytesescapeseq})
-longbytes ((["][']['][']["]  {longbytesitem}* ["][']['][']["]) | ([']["]["]["][']  {longbytesitem}* [']["]["]["][']))
-shortbytes  ((["][']["] {shortbytesitem}* ["][']["]) | ([']["]['] {shortbytesitem}* [']["][']))
-bytesprefix    ("b" | "B" | "br" | "Br" | "bR" | "BR" | "rb" | "rB" | "Rb" | "RB")
+longbytesitem  ({longbyteschar}|{bytesescapeseq})
+shortbytesitem ({shortbyteschar}|{bytesescapeseq})
+longbytes ((["][']['][']["]{longbytesitem}*["][']['][']["])|([']["]["]["][']{longbytesitem}*[']["]["]["][']))
+shortbytes  ((["][']["]{shortbytesitem}*["][']["])|([']["][']{shortbytesitem}*[']["][']))
+bytesprefix    ("b"|"B"|"br"|"Br"|"bR"|"BR"|"rb"|"rB"|"Rb"|"RB")
 bytesliteral   {bytesprefix}({shortbytes}|{longbytes})
 stringescapeseq ([\][.])
 longstringchar  [^\\]
 shortstringchar [^\\\n"]
 longstringitem  ({longstringchar}|{stringescapeseq})
 shortstringitem ({shortstringchar}|{stringescapeseq})
-longstring   ((["][']['][']["] {longstringitem}* ["][']['][']["]) | ([']["]["]["]['] {longstringitem}* [']["]["]["][']))
-shortstring  ((["][']["] {shortstringitem}* ["][']["]) | ([']["]['] {shortstringitem}* [']["][']))
-stringprefix    ("r" | "u" | "R" | "U" | "f" | "F" | "fr" | "Fr" | "fR" | "FR" | "rf" | "rF" | "Rf" | "RF")
+longstring   ((["][']['][']["]{longstringitem}*["][']['][']["])|([']["]["]["][']{longstringitem}*[']["]["]["][']))
+shortstring  ((["][']["]{shortstringitem}*["][']["])|([']["][']{shortstringitem}*[']["][']))
+stringprefix    ("r"|"u"|"R"|"U"|"f"|"F"|"fr"|"Fr"|"fR"|"FR"|"rf"|"rF"|"Rf"|"RF")
 stringliteral   ({stringprefix}?)({shortstring}|{longstring})
 
 
@@ -54,24 +58,55 @@ NEQ "!="
 nonzerodigit [1-9]
 bindigit [0-1]
 octdigit [0-7]
-hexdigit ({digit} | [a-f] | [A-F])
-decinteger (({nonzerodigit}((([_]?){digit})*)) | (([0]+) (([_]?)[0])*))
+hexdigit ({digit}|[a-f]|[A-F])
+decinteger (({nonzerodigit}((([_]?){digit})*))|(([0]+)(([_]?)[0])*))
 bininteger ([0][bB](([_]?){bindigit})+)
 octinteger ([0][oO](([_]?){octdigit})+)
 hexinteger ([0][xX](([_]?){hexdigit})+)
-integer ({decinteger} | {bininteger} | {octinteger} | {hexinteger})
+integer ({decinteger}|{bininteger}|{octinteger}|{hexinteger})
 
-floatnumber ({pointfloat} | {exponentfloat})
-pointfloat (([{digitpart}]? {fraction}) | ({digitpart} [.]))
-exponentfloat ({digitpart} | {pointfloat}) {exponent}
-digitpart {digit} ((([_]?){digit})*)
-fraction [.] {digitpart}
-exponent ("e"|"E") ["+"|"-"]? {digitpart}
+floatnumber ({pointfloat}|{exponentfloat})
+pointfloat (([{digitpart}]?{fraction})|({digitpart}[.]))
+exponentfloat ({digitpart}|{pointfloat}){exponent}
+digitpart {digit}((([_]?){digit})*)
+fraction [.]{digitpart}
+exponent ("e"|"E")(["+"|"-"]?){digitpart}
 digit  [0-9]
 imagnumber ({floatnumber}|{digitpart})[jJ]
 
 %%
 
+^[ ]*\n       {/* Ignore blank lines.*/}
+^[ ]*[^ \n]+ {
+    int pos = yyleng - 1;
+    while(pos >= 0 and yytext[pos] != ' '){
+        unput(yytext[pos]);
+        --pos;
+    }
+    if(pos > indents.top()){
+        indents.push(pos);
+        return INDENT;
+    }
+    int ctr = 0;
+    while(pos < indents.top()){
+        ctr++;
+        indets.pop();
+    }
+    for(int i = 0; i < ctr; i++){
+        unput('$');
+    }
+    dedpos = ctr;
+}
+
+[$] {
+    if(dedpos > 0){
+        --dedpos;
+        return DEDENT;
+    }
+    else{
+        printf("Error, unrecognised token");
+    }
+}
 "async" {return ASYNC;}
 "name" {return NAME;}
 "del" {return DEL;}
@@ -111,32 +146,36 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 "class" {return CLASS;}
 "def" {return DEF;}
 
-NEWLINE {return NEWLINE;}
-COMMENT {;}
-ADDASSIGN {return ADDASSIGN;}
-SUBASSIGN {return SUBASSIGN;}
-MULASSIGN {return MULASSIGN;}
-DIVASSIGN {return DIVASSIGN;}
-IDIVASSIGN {return IDIVASSIGN;}
-MODASSIGN {return MODASSIGN;}
-ATASSIGN {return ATASSIGN;}
-ANDASSIGN {return ANDASSIGN;}
-ORASSIGN {return ORASSIGN;}
-XORASSIGN {return XORASSIGN;}
-LSASSIGN {return LSASSIGN;}
-RSASSIGN {return RSASSIGN;}
-POWASSIGN {return POWASSIGN;}
-ARROWOP {return ARROWOP;}
+{NEWLINE} {return NEWLINE;}
+{COMMENT} {;}
+{ADDASSIGN} {return ADDASSIGN;}
+{SUBASSIGN} {return SUBASSIGN;}
+{MULASSIGN} {return MULASSIGN;}
+{DIVASSIGN} {return DIVASSIGN;}
+{IDIVASSIGN} {return IDIVASSIGN;}
+{MODASSIGN} {return MODASSIGN;}
+{ATASSIGN} {return ATASSIGN;}
+{ANDASSIGN} {return ANDASSIGN;}
+{ORASSIGN} {return ORASSIGN;}
+{XORASSIGN} {return XORASSIGN;}
+{LSASSIGN} {return LSASSIGN;}
+{RSASSIGN} {return RSASSIGN;}
+{POWASSIGN} {return POWASSIGN;}
+{ARROWOP} {return ARROWOP;}
 
-POW {return POW;}
-IDIV {return IDIV;}
-LEFTSHIFT {return LEFTSHIFT;}
-RIGHTSHIFT {return RIGHTSHIFT;}
-LEQ {return LEQ;}
-GEQ {return GEQ;}
-EQUAL {return EQUAL;}
-NEQ {return NEQ;}
-
-({integer} | {floatnumber} | {imagnumber})  {return NUMBER;}
-
+{POW} {return POW;}
+{IDIV} {return IDIV;}
+{LEFTSHIFT} {return LEFTSHIFT;}
+{RIGHTSHIFT} {return RIGHTSHIFT;}
+{LEQ} {return LEQ;}
+{GEQ} {return GEQ;}
+{EQUAL} {return EQUAL;}
+{NEQ} {return NEQ;}
+({integer}|{floatnumber}|{imagnumber})  {return NUMBER;}
 %%
+
+int main(int argc, char * argv[])
+{
+    indents.push(0);
+
+}

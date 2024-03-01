@@ -99,10 +99,6 @@ cond_arrowtest: ARROWOP test |
 parameters: '(' cond_typedargslist ')'
 cond_typedargslist: typedargslist | 
 
-
-
-
-
 typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar
   | '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma
   | POW tfpdef cond_comma
