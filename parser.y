@@ -287,7 +287,7 @@ argument: test comp_for |
           '*' test 
 
 comp_iter: comp_for | comp_if
-comp_for: cond_async FOR exprlist IN or_test comp_iter | cond_async FOR exprlist IN or_test comp_iter
+comp_for: cond_async FOR exprlist IN or_test comp_iter
 cond_async: ASYNC | 
 comp_if: IF test_nocond | IF test_nocond comp_iter
 
