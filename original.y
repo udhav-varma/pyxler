@@ -19,8 +19,9 @@ decorated: decorators (classdef | funcdef | async_funcdef)
 
 async_funcdef: ASYNC funcdef
 funcdef: 'def' NAME parameters ['->' test] ':' suite
-
 parameters: '(' [typedargslist] ')'
+
+
 typedargslist: (tfpdef ['=' test] (',' tfpdef ['=' test])* [',' [
         '*' [tfpdef] (',' tfpdef ['=' test])* [',' ['**' tfpdef [',']]]
       | '**' tfpdef [',']]]
@@ -111,6 +112,7 @@ atom: ('(' [yield_expr|testlist_comp] ')' |
        NAME | NUMBER | STRING+ | '...' | 'None' | 'True' | 'False')
 testlist_comp: (test|star_expr) ( comp_for | (',' (test|star_expr))* [','] )
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME
+
 subscriptlist: subscript (',' subscript)* [',']
 subscript: test | [test] ':' [test] [sliceop]
 sliceop: ':' [test]

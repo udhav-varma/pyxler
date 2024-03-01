@@ -81,29 +81,28 @@
 
 single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
 file_input: nstatement ENDMARKER
-nstatement: nstatement NEWLINE 
-          | nstatement stmt 
-          |
+nstatement: nstatement NEWLINE | nstatement stmt |
 eval_input: testlist multiline ENDMARKER
-multiline: multiline NEWLINE 
-          | 
-decorator: '@' dotted_name cond_brack_cond_arglist NEWLINE
-cond_arglist: arglist
-            |
-brack_cond_arglist: '(' cond_arglist ')'
-cond_brack_cond_arglist: brack_cond_arglist
-            | 
+multiline: multiline NEWLINE | 
 
-decorators: decorator
-          | decorators decorator 
+decorator: '@' dotted_name cond_brack_cond_arglist NEWLINE
+cond_brack_cond_arglist: brack_cond_arglist | 
+brack_cond_arglist: '(' cond_arglist ')'
+cond_arglist: arglist |
+decorators: decorator | decorators decorator 
+
 decorated: decorators defob
 defob: classdef | funcdef | async_funcdef
 async_funcdef: ASYNC funcdef
 funcdef: DEF NAME parameters cond_arrowtest ':' suite
 cond_arrowtest: ARROWOP test | 
 parameters: '(' cond_typedargslist ')'
-
 cond_typedargslist: typedargslist | 
+
+
+
+
+
 typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar
   | '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma
   | POW tfpdef cond_comma
@@ -233,7 +232,9 @@ close_plusminusterm: close_plusminusterm '+' term  | close_plusminusterm '-' ter
 term: factor close_muldivopsfactor
 group_muldivremops: '*' | '@' | '/' | '%' | IDIV 
 close_muldivopsfactor: close_muldivopsfactor group_muldivremops factor  | 
-factor: plus_or_minus_or_not factor | power
+
+factor: close_plus_or_minus_or_not power
+close_plus_or_minus_or_not: close_plus_or_minus_or_not plus_or_minus_or_not | 
 plus_or_minus_or_not: '+' | '-' | '~'
 power: atom_expr POW factor | atom_expr
 atom_expr: AWAIT atom close_trailer | atom close_trailer
@@ -257,7 +258,7 @@ exprlist: expr_or_star_expr close_comma_expr_or_star_expr cond_comma
 expr_or_star_expr: expr | star_expr
 close_comma_expr_or_star_expr: close_comma_expr_or_star_expr ',' expr_or_star_expr  | 
 testlist: test close_comma_test cond_comma
-close_comma_test: ',' test close_comma_test | 
+close_comma_test: close_comma_test ',' test | 
 dictorsetmaker:  testcoltest_or_starrexpr compfor_or_close_commatestcoltestorstarexpr_condcomma |
                   some_non_terminal
 testcoltest_or_starrexpr: test ':' test | POW expr
