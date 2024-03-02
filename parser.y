@@ -13,6 +13,11 @@
       AST ast;
 %}
 
+%union{
+    Node * ptr;
+    string val;
+}
+
 %token NEWLINE // done
 %token ENDMARKER
 %token ASYNC // done
@@ -81,8 +86,8 @@
 %token IDIV // // done
 %%
 
-single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
 file_input: nstatement ENDMARKER
+single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
 nstatement: nstatement NEWLINE | nstatement stmt |
 eval_input: testlist multiline ENDMARKER
 multiline: multiline NEWLINE | 
@@ -144,25 +149,85 @@ testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma
 test_or_starexp: test | star_expr
 close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp  | 
 cond_comma: ',' | 
-augassign: ADDASSIGN | SUBASSIGN | MULASSIGN | ATASSIGN | DIVASSIGN | MODASSIGN | ANDASSIGN | ORASSIGN | XORASSIGN |
+augassign: ADDASSIGN{
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "+=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anod)
+        }
+         | SUBASSIGN | MULASSIGN | ATASSIGN | DIVASSIGN | MODASSIGN | ANDASSIGN | ORASSIGN | XORASSIGN |
             LSASSIGN | RSASSIGN | POWASSIGN | IDIVASSIGN
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
-del_stmt: DEL exprlist
-pass_stmt: PASS
-flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt | yield_stmt
+del_stmt: DEL exprlist {
+    auto p = new node("nt", "DelStatement");
+    auto delnode = new node("KEYWORD", "DEL");
+    ast.add_node(p);
+    ast.add_node(delnode);
+    ast.add_edge(p, delnode);
+    ast.add_edge(p, $<ptr>1);
+    $<ptr>$ = p;
+}
+pass_stmt: PASS{
+    auto p = new node("nt", "PassStatement");
+    auto pnode = new node("KEYWORD", "PASS");
+    ast.add_node(p);
+    ast.add_node(pnode);
+    ast.add_edge(p, pnode);
+    $<ptr>$ = p;
+}
+flow_stmt: break_stmt {
+            $<ptr>$ = $<ptr>1;
+        } 
+        | continue_stmt {
+            $<ptr>$ = $<ptr>1
+        }
+        | return_stmt {
+            $<ptr>$ = $<ptr>1
+        }
+        | raise_stmt {
+            $<ptr>$ = $<ptr>1
+        }
+        | yield_stmt{
+            $<ptr>$ = $<ptr>1
+        }
 
 break_stmt: BREAK {
-      Node *n1 = new Node(0, "Break Statement", ast->sz);
-      ast.add_node(n1);
-      Node *n2 = new Node(1, "break", ast->sz);
-      ast.add_node(n2);
-      ast.add_edge(n1, n2);
+    auto p = new node("nt", "BreakStatement");
+    $<ptr>$ = p;
+    ast.add_node(p);
+    auto p1 = new node("KEYWORD", "break");
+    ast.add_node(p1);
+    ast.add_edge(p, p1);
 }
 
-continue_stmt: CONTINUE
-return_stmt: RETURN cond_testlist
-cond_testlist: testlist | 
-yield_stmt: yield_expr
+continue_stmt: CONTINUE {
+    auto p = new node("nt", "ContinueStatement");
+    $<ptr>$ = p;
+    ast.add_node(p);
+    auto p1 = new node("KEYWORD", "continue");
+    ast.add_node(p1);
+    ast.add_edge(p, p1);
+}
+
+return_stmt: RETURN cond_testlist{
+    auto p = new node("nt", "ReturnStatement");
+    auto rnode = new node("KEYWORD", "continue");
+    ast.add_node(p);
+    ast.add_node(rnode);
+    ast.add_edge(p, rnode);
+    ast.add_edge(p, $<ptr>1);
+    $<ptr>$ = p;
+}
+
+cond_testlist: testlist{
+      $<ptr>$ = $1;
+} | {
+      $<ptr>$ = nullptr;
+}
+yield_stmt: yield_expr {
+    $<ptr>$ = $<ptr>1
+}
 raise_stmt: RAISE cond_from_test
 cond_from_test: test | test FROM test | 
 import_stmt: import_name | import_from
@@ -298,10 +363,43 @@ cond_async: ASYNC |
 comp_if: IF test_nocond | IF test_nocond comp_iter
 
 // not used in grammar, but may appear in "node" passed from Parser to Compiler
-encoding_decl: NAME
+encoding_decl: NAME {
+        auto p = new node("nt", "EncodingDeclaration");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("IDENTIFIER", )
+    }
 
-yield_expr: YIELD yield_arg | YIELD
-yield_arg: FROM test | testlist
+yield_expr: YIELD yield_arg{
+        auto p = new node("nt", "YieldExpression");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "yield");
+        ast.add_node(p1);
+        ast.add_edge(p, p1);
+        ast.add_edge(p, $2);
+    } 
+    | YIELD {
+        auto p = new node("nt", "YieldExpression");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "yield");
+        ast.add_node(p1);
+        ast.add_edge(p, p1); 
+    }
+
+yield_arg: FROM test{
+        auto p = new node("nt", "YieldArguments");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "from");
+        ast.add_node(p1);
+        ast.add_edge(p, p1);
+        ast.add_edge(p, $2);
+    } 
+    | testlist {
+        $<ptr>$ = $<ptr>1;
+    }
 
 %%
 

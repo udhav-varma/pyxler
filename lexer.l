@@ -237,8 +237,12 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 {GEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return GEQ;}
 {EQUAL} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return EQUAL;}
 {NEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NEQ;}
-({integer}|{floatnumber}|{imagnumber})  {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NUMBER;}
-{NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NAME;}
+({integer}|{floatnumber}|{imagnumber})  {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.val = string(yytext, yytext + yyleng);
+    return NUMBER;}
+{NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.val = string(yytext, yytext + yyleng);
+    return NAME;}
 . {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; return yytext[0];}
 
 ^[ ]*[^ \n]+ {
