@@ -1,15 +1,107 @@
 %option noyywrap
 %option yylineno
 %{
-#include<iostream>
-#include<stack>
+#include<bits/stdc++.h>
 using std::stack;
 stack<int> indents;
 int dedpos = 0;
+
+int indent = 0;
+bool spaceset = false;
+int setspace()
+{
+    spaceset = true;
+    if(indent > indents.top()){ 
+    indents.push(indent); 
+    printf("INDENT\n");
+    return 1;
+    } 
+    int ctr = 0; 
+    while(indent < indents.top()){ 
+    ctr++; 
+    indents.pop(); 
+    } 
+    if(indents.top() != indent){ 
+    printf("Indentation error\n"); 
+    return 0;
+    } 
+    dedpos = ctr; 
+    return 0;
+}
+  enum yytokentype
+  {
+    NEWLINE = 258,
+    ENDMARKER = 259,
+    ASYNC = 260,
+    NAME = 261,
+    DEL = 262,
+    PASS = 263,
+    BREAK = 264,
+    CONTINUE = 265,
+    RETURN = 266,
+    RAISE = 267,
+    FROM = 268,
+    IMPORT = 269,
+    AS = 270,
+    GLOBAL = 271,
+    NONLOCAL = 272,
+    ASSERT = 273,
+    IF = 274,
+    ELIF = 275,
+    ELSE = 276,
+    FOR = 277,
+    IN = 278,
+    WHILE = 279,
+    TRY = 280,
+    FINALLY = 281,
+    WITH = 282,
+    EXCEPT = 283,
+    LAMBDA = 284,
+    NOT = 285,
+    OR = 286,
+    AND = 287,
+    AWAIT = 288,
+    IS = 289,
+    INDENT = 290,
+    DEDENT = 291,
+    YIELD = 292,
+    TRUE = 293,
+    NUMBER = 294,
+    STRING = 295,
+    FALSE = 296,
+    NONE = 297,
+    CLASS = 298,
+    DEF = 299,
+    ARROWOP = 300,
+    POW = 301,
+    ADDASSIGN = 302,
+    SUBASSIGN = 303,
+    MULASSIGN = 304,
+    ATASSIGN = 305,
+    DIVASSIGN = 306,
+    MODASSIGN = 307,
+    ANDASSIGN = 308,
+    ORASSIGN = 309,
+    XORASSIGN = 310,
+    LSASSIGN = 311,
+    RSASSIGN = 312,
+    POWASSIGN = 313,
+    IDIVASSIGN = 314,
+    ELLIPSIS = 315,
+    EQUAL = 316,
+    GEQ = 317,
+    LEQ = 318,
+    LTORGT = 319,
+    NEQ = 320,
+    LEFTSHIFT = 321,
+    RIGHTSHIFT = 322,
+    IDIV = 323
+  };
 %}
 
 NEWLINE ([\n])
 COMMENT ([#](.*){NEWLINE})
+NAME ([A-Za-z_][A-Za-z0-9_]*)
 
 bytesescapeseq ([\\] (.|[\n]))
 longbyteschar  ([^\\])
@@ -59,7 +151,7 @@ nonzerodigit [1-9]
 bindigit [0-1]
 octdigit [0-7]
 hexdigit ({digit}|[a-f]|[A-F])
-decinteger (({nonzerodigit}((([_]?){digit})*))|(([0]+)(([_]?)[0])*))
+decinteger ({nonzerodigit}(([_]?{digit})*|([0]+)([_]?[0])*))
 bininteger ([0][bB](([_]?){bindigit})+)
 octinteger ([0][oO](([_]?){octdigit})+)
 hexinteger ([0][xX](([_]?){hexdigit})+)
@@ -75,107 +167,100 @@ digit  [0-9]
 imagnumber ({floatnumber}|{digitpart})[jJ]
 
 %%
-
-^[ ]*\n       {/* Ignore blank lines.*/}
-^[ ]*[^ \n]+ {
-    int pos = yyleng - 1;
-    while(pos >= 0 and yytext[pos] != ' '){
-        unput(yytext[pos]);
-        --pos;
-    }
-    if(pos > indents.top()){
-        indents.push(pos);
-        return INDENT;
-    }
-    int ctr = 0;
-    while(pos < indents.top()){
-        ctr++;
-        indets.pop();
-    }
-    for(int i = 0; i < ctr; i++){
-        unput('$');
-    }
-    dedpos = ctr;
-}
-
-[$] {
+ {
     if(dedpos > 0){
         --dedpos;
         return DEDENT;
     }
-    else{
-        printf("Error, unrecognised token");
+ }
+^[ ]*\n       {/* Ignore blank lines.*/}
+
+"async" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; return ASYNC;}
+"del" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DEL;}
+"pass" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return PASS;}
+"break" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return BREAK;}
+"continue" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return CONTINUE;}
+"return" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RETURN;}
+"raise" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RAISE;}
+"from" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FROM;}
+"import" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IMPORT;}
+"as" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AS;}
+"global" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return GLOBAL;}
+"nonlocal" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NONLOCAL;}
+"assert" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ASSERT;}
+"if" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IF;}
+"elif" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ELIF;}
+"else" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ELSE;}
+"for" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FOR;}
+"in" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IN;}
+"while" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return WHILE;}
+"try" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return TRY;}
+"finally" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FINALLY;}
+"with" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return WITH;}
+"except" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return EXCEPT;}
+"lambda" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LAMBDA;}
+"not" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NOT;}
+"or" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return OR;}
+"and" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AND;}
+"await" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AWAIT;}
+"is" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IS;}
+"yield" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return YIELD;}
+"True" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return TRUE;}
+"string" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return STRING;}
+"False" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FALSE;}
+"None" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NONE;}
+"class" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return CLASS;}
+"def" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DEF;}
+
+{NEWLINE} {indent = 0; spaceset = false;return NEWLINE;}
+{COMMENT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};;}
+{ADDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ADDASSIGN;}
+{SUBASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return SUBASSIGN;}
+{MULASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return MULASSIGN;}
+{DIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DIVASSIGN;}
+{IDIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IDIVASSIGN;}
+{MODASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return MODASSIGN;}
+{ATASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ATASSIGN;}
+{ANDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ANDASSIGN;}
+{ORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ORASSIGN;}
+{XORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return XORASSIGN;}
+{LSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LSASSIGN;}
+{RSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RSASSIGN;}
+{POWASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return POWASSIGN;}
+{ARROWOP} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ARROWOP;}
+
+{POW} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return POW;}
+{IDIV} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IDIV;}
+{LEFTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LEFTSHIFT;}
+{RIGHTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RIGHTSHIFT;}
+{LEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LEQ;}
+{GEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return GEQ;}
+{EQUAL} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return EQUAL;}
+{NEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NEQ;}
+({integer}|{floatnumber}|{imagnumber})  {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NUMBER;}
+{NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NAME;}
+. {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; return yytext[0];}
+
+^[ ]*[^ \n]+ {
+    int pos = yyleng - 1;
+    while(pos >= 1 and yytext[pos] != ' '){
+        unput(yytext[pos]);
+        --pos;
     }
+    
+    if(yytext[pos] == ' ') pos++;
+    indent = pos;
+    if(setspace()) return INDENT;
 }
-"async" {return ASYNC;}
-"name" {return NAME;}
-"del" {return DEL;}
-"pass" {return PASS;}
-"break" {return BREAK;}
-"continue" {return CONTINUE;}
-"return" {return RETURN;}
-"raise" {return RAISE;}
-"from" {return FROM;}
-"import" {return IMPORT;}
-"as" {return AS;}
-"global" {return GLOBAL;}
-"nonlocal" {return NONLOCAL;}
-"assert" {return ASSERT;}
-"if" {return IF;}
-"elif" {return ELIF;}
-"else" {return ELSE;}
-"for" {return FOR;}
-"in" {return IN;}
-"while" {return WHILE;}
-"try" {return TRY;}
-"finally" {return FINALLY;}
-"with" {return WITH;}
-"except" {return EXCEPT;}
-"lambda" {return LAMBDA;}
-"not" {return NOT;}
-"or" {return OR;}
-"and" {return AND;}
-"await" {return AWAIT;}
-"is" {return IS;}
-"yield" {return YIELD;}
-"True" {return TRUE;}
-"number" {return NUMBER;}
-"string" {return STRING;}
-"False" {return FALSE;}
-"None" {return NONE;}
-"class" {return CLASS;}
-"def" {return DEF;}
-
-{NEWLINE} {return NEWLINE;}
-{COMMENT} {;}
-{ADDASSIGN} {return ADDASSIGN;}
-{SUBASSIGN} {return SUBASSIGN;}
-{MULASSIGN} {return MULASSIGN;}
-{DIVASSIGN} {return DIVASSIGN;}
-{IDIVASSIGN} {return IDIVASSIGN;}
-{MODASSIGN} {return MODASSIGN;}
-{ATASSIGN} {return ATASSIGN;}
-{ANDASSIGN} {return ANDASSIGN;}
-{ORASSIGN} {return ORASSIGN;}
-{XORASSIGN} {return XORASSIGN;}
-{LSASSIGN} {return LSASSIGN;}
-{RSASSIGN} {return RSASSIGN;}
-{POWASSIGN} {return POWASSIGN;}
-{ARROWOP} {return ARROWOP;}
-
-{POW} {return POW;}
-{IDIV} {return IDIV;}
-{LEFTSHIFT} {return LEFTSHIFT;}
-{RIGHTSHIFT} {return RIGHTSHIFT;}
-{LEQ} {return LEQ;}
-{GEQ} {return GEQ;}
-{EQUAL} {return EQUAL;}
-{NEQ} {return NEQ;}
-({integer}|{floatnumber}|{imagnumber})  {return NUMBER;}
+<<EOF>> {return 0;}
 %%
 
 int main(int argc, char * argv[])
 {
     indents.push(0);
-
+    if(argc > 1){
+        FIlE *in = fopen(argv[1], "r");
+        yyin = in;
+    }
+    else yyin = stdin;
 }

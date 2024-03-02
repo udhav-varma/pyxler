@@ -1,0 +1,51 @@
+Done token
+
+IF
+Done token
+
+Character  
+Done token
+
+NAME
+Done token
+
+Character  
+Done token
+
+equal
+Done token
+
+Character  
+Done token
+
+number
+Done token
+
+Character :
+Done token
+
+newline
+Done token
+
+enter
+here 4
+INDENT
+Done token
+
+PASS
+Done token
+
+newline
+Done token
+
+enter
+here 0
+NAME
+Done token
+
+DEDENT
+Done token
+
+Character :
+Done token
+
