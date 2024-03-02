@@ -9,8 +9,10 @@
 //      eval_input is the input for the eval() functions.
 // NB: compound_stmt in single_input is followed by extra NEWLINE!
 %{
-
+      #include "node.cpp"
+      AST ast;
 %}
+
 %token NEWLINE // done
 %token ENDMARKER
 %token ASYNC // done
@@ -148,7 +150,15 @@ augassign: ADDASSIGN | SUBASSIGN | MULASSIGN | ATASSIGN | DIVASSIGN | MODASSIGN 
 del_stmt: DEL exprlist
 pass_stmt: PASS
 flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt | yield_stmt
-break_stmt: BREAK
+
+break_stmt: BREAK {
+      Node *n1 = new Node(0, "Break Statement", ast->sz);
+      ast.add_node(n1);
+      Node *n2 = new Node(1, "break", ast->sz);
+      ast.add_node(n2);
+      ast.add_edge(n1, n2);
+}
+
 continue_stmt: CONTINUE
 return_stmt: RETURN cond_testlist
 cond_testlist: testlist | 
@@ -294,3 +304,10 @@ yield_expr: YIELD yield_arg | YIELD
 yield_arg: FROM test | testlist
 
 %%
+
+
+int main(int argc, char *argv){
+
+
+
+}
