@@ -99,23 +99,28 @@ exponent ("e"|"E")(["+"|"-"]?){digitpart}
 digit  [0-9]
 imagnumber ({floatnumber}|{digitpart})[jJ]
 %x INLINE
+%x OUTLINE
 %%
 
     if(inside_line) BEGIN(INLINE);
-[ ] {space++; /*cerr<<"uninline space detected\n";*/}
+    else BEGIN(OUTLINE);
+<OUTLINE>[ ] {space++; /*cerr<<"uninline space detected\n";*/}
 
 
-{NEWLINE}|{COMMENT} {
+<OUTLINE>{NEWLINE}|{COMMENT} {
     space = 0;
     inside_line = 0;
 }
 
-. {
-        /*cerr << "here\n";*/
+<OUTLINE>. {
+        cerr << "here ex\n";
         int pos = space;
+        cerr << "pos: " << pos << '\n';
         if(pos > indents.top()){
             inside_line = true;
             unput(yytext[0]);
+            indents.push(pos);
+            cerr << "return indent\n";
             return INDENT;
         }
         else if(pos == indents.top()){
@@ -126,6 +131,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         else if(pos < indents.top()){
             indents.pop();
             unput(yytext[0]);
+            cerr<<"\n\nreturning dedent\n\n";
             return DEDENT;
         }
     }
@@ -133,6 +139,9 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 <INLINE>{NEWLINE} {
     yylval.ptr = new node("NEWLINE", "NEWLINE");
     yylval.val = "NEWLINE";
+    inside_line = 0;
+    space = 0;
+    // cerr << "return newline token";
     return NEWLINE;
 }
 
@@ -192,6 +201,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "assert";
     return ASSERT;}
 <INLINE>"if" {
+    cerr<<"if read\n";
     yylval.ptr = new node("KEYWORD", "if");
     yylval.val = "if";
     return IF;}
@@ -375,20 +385,25 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "!=";
     return NEQ;}
 <INLINE>({integer}|{floatnumber}|{imagnumber})  {
-    // cerr << "here number\n";
+    cerr << "here number "<< yytext <<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("NUMBER", yylval.val);
     return NUMBER;}
 <INLINE>{NAME} {
-    // cerr << "here name\n";
+    cerr << "here name "<<yytext<<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
     return NAME;}
 <INLINE>. {
-    // cerr << "here delimiter\n";
+    cerr << "here delimiter "<<yytext<<"\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];}
 
-<*><<EOF>> {return ENDMARKER;}
+<*><<EOF>> {
+    cerr << "returning end\n";
+    yylval.val = "ENDMARKER";
+    yylval.ptr = new node("ENDMARKER", yylval.val);
+    return ENDMARKER;
+    }
 %%

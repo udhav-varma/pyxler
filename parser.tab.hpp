@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 24 "parser.y"
+#line 25 "parser.y"
 
     #ifndef PARSER
     #include "node.hpp"
