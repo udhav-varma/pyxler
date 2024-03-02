@@ -6,29 +6,30 @@
 // #include "node.hpp"
 using std::stack;
 stack<int> indents;
-int dedpos = 0;
 int indent = 0;
+int space = 0;
 bool spaceset = false;
-int setspace()
-{
-    spaceset = true;
-    if(indent > indents.top()){ 
-    indents.push(indent); 
-    printf("INDENT\n");
-    return 1;
-    } 
-    int ctr = 0; 
-    while(indent < indents.top()){ 
-    ctr++; 
-    indents.pop(); 
-    } 
-    if(indents.top() != indent){ 
-    printf("Indentation error\n"); 
-    return 0;
-    } 
-    dedpos = ctr; 
-    return 0;
-}
+int inside_line = 0;
+// int setspace()
+// {
+//     spaceset = true;
+//     if(indent > indents.top()){ 
+//     indents.push(indent); 
+//     printf("INDENT\n");
+//     return 1;
+//     } 
+//     int ctr = 0; 
+//     while(indent < indents.top()){ 
+//     ctr++; 
+//     indents.pop(); 
+//     } 
+//     if(indents.top() != indent){ 
+//     printf("Indentation error\n"); 
+//     return 0;
+//     } 
+//     dedpos = ctr; 
+//     return 0;
+// }
 %}
 
 NEWLINE ([\n])
@@ -97,284 +98,297 @@ fraction [.]{digitpart}
 exponent ("e"|"E")(["+"|"-"]?){digitpart}
 digit  [0-9]
 imagnumber ({floatnumber}|{digitpart})[jJ]
-
+%x INLINE
 %%
- {
-    if(dedpos > 0){
-        --dedpos;
-        yylval.ptr = new node("DEDENT", "DEDENT");
-        yylval.val = string("DEDENT");
-        return DEDENT;
-    }
- }
-^[ ]*\n       {/* Ignore blank lines.*/}
 
-"async" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+    if(inside_line) BEGIN(INLINE);
+[ ] {space++; /*cerr<<"uninline space detected\n";*/}
+
+
+{NEWLINE}|{COMMENT} {
+    space = 0;
+    inside_line = 0;
+}
+
+. {
+        /*cerr << "here\n";*/
+        int pos = space;
+        if(pos > indents.top()){
+            inside_line = true;
+            unput(yytext[0]);
+            return INDENT;
+        }
+        else if(pos == indents.top()){
+            inside_line = true;
+            BEGIN(INLINE);
+            unput(yytext[0]);
+        }
+        else if(pos < indents.top()){
+            indents.pop();
+            unput(yytext[0]);
+            return DEDENT;
+        }
+    }
+
+<INLINE>{NEWLINE} {
+    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.val = "NEWLINE";
+    return NEWLINE;
+}
+
+<INLINE>[ ]*  {/*cerr << "space\n";*/}
+
+<INLINE>"async" { 
     yylval.ptr = new node("KEYWORD", "async");
     yylval.val = "async";
     return ASYNC;}
-"del" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"del" {
     yylval.ptr = new node("KEYWORD", "del");
     yylval.val = "del";
     return DEL;}
-"pass" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"pass" {
     yylval.ptr = new node("KEYWORD", "pass");
     yylval.val = "pass";
     return PASS;}
-"break" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"break" {
     yylval.ptr = new node("KEYWORD", "break");
     yylval.val = "break";
     return BREAK;}
-"continue" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"continue" {
     yylval.ptr = new node("KEYWORD", "continue");
     yylval.val = "continue";
     return CONTINUE;}
-"return" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"return" {
     yylval.ptr = new node("KEYWORD", "return");
     yylval.val = "return";
     return RETURN;}
-"raise" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"raise" {
     yylval.ptr = new node("KEYWORD", "raise");
     yylval.val = "raise";
     return RAISE;}
-"from" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"from" {
     yylval.ptr = new node("KEYWORD", "from");
     yylval.val = "from";
     return FROM;}
-"import" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"import" {
+    // cerr<<"import detected\n";
     yylval.ptr = new node("KEYWORD", "import");
     yylval.val = "import";
     return IMPORT;}
-"as" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"as" {
     yylval.ptr = new node("KEYWORD", "as");
     yylval.val = "as";
     return AS;}
-"global" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"global" {
     yylval.ptr = new node("KEYWORD", "global");
     yylval.val = "global";
     return GLOBAL;}
-"nonlocal" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"nonlocal" {
     yylval.ptr = new node("KEYWORD", "nonlocal");
     yylval.val = "nonlocal";
     return NONLOCAL;}
-"assert" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"assert" {
     yylval.ptr = new node("KEYWORD", "assert");
     yylval.val = "assert";
     return ASSERT;}
-"if" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"if" {
     yylval.ptr = new node("KEYWORD", "if");
     yylval.val = "if";
     return IF;}
-"elif" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"elif" {
     yylval.ptr = new node("KEYWORD", "elif");
     yylval.val = "elif";
     return ELIF;}
-"else" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"else" {
     yylval.ptr = new node("KEYWORD", "else");
     yylval.val = "else";
     return ELSE;}
-"for" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"for" {
     yylval.ptr = new node("KEYWORD", "for");
     yylval.val = "for";
     return FOR;}
-"in" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"in" {
     yylval.ptr = new node("KEYWORD", "in");
     yylval.val = "in";
     return IN;}
-"while" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"while" {
     yylval.ptr = new node("KEYWORD", "while");
     yylval.val = "while";
     return WHILE;}
-"try" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"try" {
     yylval.ptr = new node("KEYWORD", "try");
     yylval.val = "try";
     return TRY;}
-"finally" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"finally" {
     yylval.ptr = new node("KEYWORD", "finally");
     yylval.val = "finally";
     return FINALLY;}
-"with" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"with" {
     yylval.ptr = new node("KEYWORD", "with");
     yylval.val = "with";
     return WITH;}
-"except" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"except" {
     yylval.ptr = new node("KEYWORD", "except");
     yylval.val = "except";
     return EXCEPT;}
-"lambda" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"lambda" {
     yylval.ptr = new node("KEYWORD", "lambda");
     yylval.val = "lambda";
     return LAMBDA;}
-"not" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"not" {
     yylval.ptr = new node("KEYWORD", "not");
     yylval.val = "not";
     return NOT;}
-"or" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"or" {
     yylval.ptr = new node("KEYWORD", "or");
     yylval.val = "or";
     return OR;}
-"and" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"and" {
     yylval.ptr = new node("KEYWORD", "and");
     yylval.val = "and";
     return AND;}
-"await" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"await" {
     yylval.ptr = new node("KEYWORD", "await");
     yylval.val = "await";
     return AWAIT;}
-"is" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"is" {
     yylval.ptr = new node("KEYWORD", "is");
     yylval.val = "is";
     return IS;}
-"yield" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"yield" {
     yylval.ptr = new node("KEYWORD", "yield");
     yylval.val = "yield";
     return YIELD;}
-"True" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"True" {
     yylval.ptr = new node("KEYWORD", "True");
     yylval.val = "True";
     return TRUE;}
-"False" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"False" {
     yylval.ptr = new node("KEYWORD", "False");
     yylval.val = "False";
     return FALSE;}
-"None" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"None" {
     yylval.ptr = new node("KEYWORD", "None");
     yylval.val = "None";
     return NONE;}
-"class" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"class" {
     yylval.ptr = new node("KEYWORD", "class");
     yylval.val = "class";
     return CLASS;}
-"def" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>"def" {
     yylval.ptr = new node("KEYWORD", "def");
     yylval.val = "def";
     return DEF;}
 
-{NEWLINE} {indent = 0; spaceset = false;
-    yylval.ptr = new node("NEWLINE", "NEWLINE");
-    yylval.val = "NEWLINE";
-    return NEWLINE;}
-{COMMENT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};}
-{ADDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{COMMENT} {}
+<INLINE>{ADDASSIGN} {
     yylval.ptr = new node("OPERATOR", "+=");
     yylval.val = "+=";
     return ADDASSIGN;}
-{SUBASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{SUBASSIGN} {
     yylval.ptr = new node("OPERATOR", "-=");
     yylval.val = "-=";
     return SUBASSIGN;}
-{MULASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{MULASSIGN} {
     yylval.ptr = new node("OPERATOR", "*=");
     yylval.val = "*=";
     return MULASSIGN;}
-{DIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{DIVASSIGN} {
     yylval.ptr = new node("OPERATOR", "/=");
     yylval.val = "/=";
     return DIVASSIGN;}
-{IDIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{IDIVASSIGN} {
     yylval.ptr = new node("OPERATOR", "//=");
     yylval.val = "//=";
     return IDIVASSIGN;}
-{MODASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{MODASSIGN} {
     yylval.ptr = new node("OPERATOR", "%=");
     yylval.val = "%=";
     return MODASSIGN;}
-{ATASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{ATASSIGN} {
     yylval.ptr = new node("OPERATOR", "@=");
     yylval.val = "@=";
     return ATASSIGN;}
-{ANDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{ANDASSIGN} {
     yylval.ptr = new node("OPERATOR", "&=");
     yylval.val = "&=";
     return ANDASSIGN;}
-{ORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{ORASSIGN} {
     yylval.ptr = new node("OPERATOR", "|=");
     yylval.val = "|=";
     return ORASSIGN;}
-{XORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{XORASSIGN} {
     yylval.ptr = new node("OPERATOR", "^=");
     yylval.val = "^=";
     return XORASSIGN;}
-{LSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{LSASSIGN} {
     yylval.ptr = new node("OPERATOR", "<<=");
     yylval.val = "<<=";
     return LSASSIGN;}
-{RSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{RSASSIGN} {
     yylval.ptr = new node("OPERATOR", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
-{POWASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{POWASSIGN} {
     yylval.ptr = new node("OPERATOR", "**=");
     yylval.val = "**=";
     return POWASSIGN;}
-{ARROWOP} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{ARROWOP} {
     yylval.ptr = new node("OPERATOR", "->");
     yylval.val = "->";
     return ARROWOP;}
 
-{stringliteral} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+<INLINE>{stringliteral} { 
     yylval.ptr = new node("STRING LITERAL", string(yytext, yytext + yyleng));
     yylval.val = string(yytext, yytext + yyleng);
     return STRING;}
-{POW} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{POW} {
     yylval.ptr = new node("OPERATOR", "**");
     yylval.val = "**";
     return POW;}
-{IDIV} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{IDIV} {
     yylval.ptr = new node("OPERATOR", "//");
     yylval.val = "//";
     return IDIV;}
-{LEFTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{LEFTSHIFT} {
     yylval.ptr = new node("OPERATOR", "<<");
     yylval.val = "<<";
     return LEFTSHIFT;}
-{RIGHTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{RIGHTSHIFT} {
     yylval.ptr = new node("OPERATOR", ">>");
     yylval.val = ">>";
     return RIGHTSHIFT;}
-{LEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{LEQ} {
     yylval.ptr = new node("OPERATOR", "<=");
     yylval.val = "<=";
     return LEQ;}
-{GEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{GEQ} {
     yylval.ptr = new node("OPERATOR", ">=");
     yylval.val = ">=";
     return GEQ;}
-{EQUAL} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{EQUAL} {
     yylval.ptr = new node("OPERATOR", "==");
     yylval.val = "==";
     return EQUAL;}
-{NEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{NEQ} {
     yylval.ptr = new node("OPERATOR", "!=");
     yylval.val = "!=";
     return NEQ;}
-({integer}|{floatnumber}|{imagnumber})  {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>({integer}|{floatnumber}|{imagnumber})  {
+    // cerr << "here number\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("NUMBER", yylval.val);
     return NUMBER;}
-{NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+<INLINE>{NAME} {
+    // cerr << "here name\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
     return NAME;}
-. {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+<INLINE>. {
+    // cerr << "here delimiter\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];}
 
-^[ ]*[^ \n]+ {
-    int pos = yyleng - 1;
-    while(pos >= 1 and yytext[pos] != ' '){
-        unput(yytext[pos]);
-        --pos;
-    }
-    
-    if(yytext[pos] == ' ') pos++;
-    indent = pos;
-    if(setspace()){
-        yylval.val = "INDENT";
-        yylval.ptr = new node("INDENT", yylval.val);
-        return INDENT;
-    }
-}
-<<EOF>> {return ENDMARKER;}
+<*><<EOF>> {return ENDMARKER;}
 %%

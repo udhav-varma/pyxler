@@ -23,6 +23,9 @@ public:
     }
 
     void add_edge(node* parent, node* child){
+        if(child == NULL){
+            return;
+        }
         parent->children.push_back(child);
         child->parent = parent;
     }
@@ -56,11 +59,11 @@ public:
         }
     }
 
-    void graphviz(){
+    void graphviz(node * ptr){
         int id = 1;
         dotcode.append("digraph AST{\n");
-        dfs1(tree[1], id);
-        dfs2(tree[1]);
+        dfs1(ptr, id);
+        dfs2(ptr);
         dotcode.append("}\n");
         cout<<dotcode;
     }

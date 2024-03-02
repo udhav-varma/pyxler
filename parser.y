@@ -17,6 +17,8 @@
       void yyerror(string s){
         printf("Error! Line Number %d, message: %s\n", yylineno, s.c_str());
       }
+      extern stack<int> indents;
+      #define YYDEBUG 1
 %}
 
 %code requires{
@@ -98,13 +100,16 @@
 %token LEFTSHIFT // << done
 %token RIGHTSHIFT // >> done
 %token IDIV // // done
+%start file_input
 %%
 
 file_input: nstatement ENDMARKER{
     $<ptr>$ = new node("nt", "file_input");
+    cerr<<"nstatement \n";
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.graphviz($<ptr>$);
 }
 
 single_input: NEWLINE {
@@ -122,15 +127,18 @@ single_input: NEWLINE {
 }
 
 nstatement: nstatement NEWLINE {
+    cerr<<"nstatement -> nstatement newline\n";
     $<ptr>$ = new node("nt", "nstatement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }| nstatement stmt {
+    cerr<<"nstatement -> nstatement stmt\n";
     $<ptr>$ = new node("nt", "nstatement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | {
+    cerr << "Null rpodsdsdsfds\n";
     $<ptr>$ = NULL;
 }
 eval_input: testlist multiline ENDMARKER {
@@ -465,6 +473,7 @@ cond_comma_or_condstarorstartstarvf: ',' cond_star_or_startstar_vf {
 } 
 
 stmt: simple_stmt {
+    cerr<<"stmt reached\n";
     $<ptr>$ = $<ptr>1;
 } | compound_stmt {
     $<ptr>$ = $<ptr>1;
@@ -472,6 +481,7 @@ stmt: simple_stmt {
 simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE {
         // $<ptr>4 = new node("NEWLINE", "NEWLINE");
         // ast.add_node($<ptr>4);
+        cerr << "simple statement\n";
         $<ptr>$ = new node("nt", "simple_stmt");
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -512,6 +522,8 @@ small_stmt: expr_stmt {
     $<ptr>$ = $<ptr>1;
 }
 | import_stmt {
+    cerr<<" import stmt \n";
+    // cerr << $<val>1 << '\n';
     $<ptr>$ = $<ptr>1;
 }
 | global_stmt {
@@ -833,6 +845,7 @@ cond_from_test: test {
 }
 
 import_stmt: import_name {
+    cerr << "import name\n";
     $<ptr>$ = $<ptr>1;
 }
 | import_from {
@@ -840,6 +853,7 @@ import_stmt: import_name {
 }
 import_name: IMPORT dotted_as_names{
     // 
+    cerr<<"import\n";
     auto p = new node("nt", "ImportStatement");
     // auto inode = new node("KEYWORD", "import");
     ast.add_node(p);
@@ -971,10 +985,7 @@ import_as_name: NAME{
 }
 
 dotted_as_name: dotted_name{
-    auto p = new node("nt", "DottedAsName");
-    ast.add_node(p);
-    ast.add_edge(p, $<ptr>1);
-    $<ptr>$ = p;
+    $<ptr>$ = $<ptr>1;
 } | dotted_name AS NAME{
     auto p = new node("nt", "DottedAsName");
     // auto p1 = new node("KEYWORD", "as");
@@ -1014,11 +1025,11 @@ close_commaimportasname: close_commaimportasname ',' import_as_name{
 }
 
 dotted_as_names: dotted_as_name close_commadottedasname{
-    auto p = new node("nt", "DottedAsNames");
-    ast.add_node(p);
-    ast.add_edge(p, $<ptr>1);
-    ast.add_edge(p, $<ptr>2);
-    $<ptr>$ = p;
+    $<ptr>$ = new node("nt", "DottedAsNames");
+    cerr<<"dotted_as_name reached\n";
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_commadottedasname: close_commadottedasname ',' dotted_as_name{
@@ -1038,6 +1049,8 @@ close_commadottedasname: close_commadottedasname ',' dotted_as_name{
 dotted_name: NAME close_dotted_name{
     auto p = new node("nt", "DottedName");
     // auto p1 = new node("IDENTIFIER", $<val>1);
+    cerr << "Dotted name reached\n";
+    cerr << $<val>1 << '\n';
     ast.add_node(p);
     // ast.add_node(p1);
     ast.add_edge(p, $<ptr>1);
@@ -1060,6 +1073,7 @@ close_dotted_name: close_dotted_name '.' NAME{
     // $<ptr>2 = p2;
     // $<ptr>3 = p3;
 } | {
+    cerr << "Null production\n";
     $<ptr>$ = NULL;
 } 
 
@@ -2207,8 +2221,6 @@ argument: test comp_for {
     test '=' test {
         $<ptr>$ = new node("nt", "argument");
         ast.add_node($<ptr>$);
-        $<ptr>2 = new node("DELIMITER", "=");
-        ast.add_node($<ptr>2);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2); 
         ast.add_edge($<ptr>$, $<ptr>3);   
@@ -2302,5 +2314,6 @@ yield_arg: FROM test {
 
 
 int main(int argc, char *argv[]){
-
+    indents.push(0);
+    yyparse();
 }

@@ -34,11 +34,11 @@
 /* Undocumented macros, especially those whose name start with YY_,
    are private implementation details.  Do not rely on them.  */
 
-#ifndef YY_YY_PARSER_TAB_HPP_INCLUDED
-# define YY_YY_PARSER_TAB_HPP_INCLUDED
+#ifndef YY_YY_PARSER_TAB_H_INCLUDED
+# define YY_YY_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -50,7 +50,7 @@ extern int yydebug;
     #include "node.hpp"
     #endif
 
-#line 54 "parser.tab.hpp"
+#line 54 "parser.tab.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -138,4 +138,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_PARSER_TAB_HPP_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */
