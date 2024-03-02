@@ -170,80 +170,264 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
  {
     if(dedpos > 0){
         --dedpos;
+        yylval.ptr = new node("DEDENT", "DEDENT");
+        yylval.val = string("DEDENT");
         return DEDENT;
     }
  }
 ^[ ]*\n       {/* Ignore blank lines.*/}
 
-"async" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; return ASYNC;}
-"del" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DEL;}
-"pass" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return PASS;}
-"break" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return BREAK;}
-"continue" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return CONTINUE;}
-"return" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RETURN;}
-"raise" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RAISE;}
-"from" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FROM;}
-"import" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IMPORT;}
-"as" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AS;}
-"global" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return GLOBAL;}
-"nonlocal" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NONLOCAL;}
-"assert" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ASSERT;}
-"if" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IF;}
-"elif" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ELIF;}
-"else" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ELSE;}
-"for" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FOR;}
-"in" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IN;}
-"while" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return WHILE;}
-"try" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return TRY;}
-"finally" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FINALLY;}
-"with" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return WITH;}
-"except" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return EXCEPT;}
-"lambda" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LAMBDA;}
-"not" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NOT;}
-"or" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return OR;}
-"and" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AND;}
-"await" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return AWAIT;}
-"is" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IS;}
-"yield" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return YIELD;}
-"True" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return TRUE;}
-"string" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return STRING;}
-"False" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return FALSE;}
-"None" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NONE;}
-"class" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return CLASS;}
-"def" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DEF;}
+"async" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+    yylval.ptr = new node("KEYWORD", "async");
+    yyval.val = "async";
+    return ASYNC;}
+"del" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "del");
+    yylval.val = "del";
+    return DEL;}
+"pass" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "pass");
+    yylval.val = "pass";
+    return PASS;}
+"break" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "break");
+    yylval.val = "break";
+    return BREAK;}
+"continue" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "continue");
+    yylval.val = "continue";
+    return CONTINUE;}
+"return" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "return");
+    yylval.val = "return";
+    return RETURN;}
+"raise" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "raise");
+    yylval.val = "raise";
+    return RAISE;}
+"from" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "from");
+    yylval.val = "from";
+    return FROM;}
+"import" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "import");
+    yylval.val = "import";
+    return IMPORT;}
+"as" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "as");
+    yylval.val = "as";
+    return AS;}
+"global" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "global");
+    yylval.val = "global";
+    return GLOBAL;}
+"nonlocal" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "nonlocal");
+    yylval.val = "nonlocal";
+    return NONLOCAL;}
+"assert" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "assert");
+    yylval.val = "assert";
+    return ASSERT;}
+"if" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "if");
+    yylval.val = "if";
+    return IF;}
+"elif" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "elif");
+    yylval.val = "elif";
+    return ELIF;}
+"else" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "else");
+    yylval.val = "else";
+    return ELSE;}
+"for" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "for");
+    yylval.val = "for";
+    return FOR;}
+"in" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "in");
+    yylval.val = "in";
+    return IN;}
+"while" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "while");
+    yylval.val = "while";
+    return WHILE;}
+"try" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "try");
+    yylval.val = "try";
+    return TRY;}
+"finally" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "finally");
+    yylval.val = "finally";
+    return FINALLY;}
+"with" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "with");
+    yylval.val = "with";
+    return WITH;}
+"except" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "except");
+    yylval.val = "except";
+    return EXCEPT;}
+"lambda" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "lambda");
+    yylval.val = "lambda";
+    return LAMBDA;}
+"not" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "not");
+    yylval.val = "not";
+    return NOT;}
+"or" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "or");
+    yylval.val = "or";
+    return OR;}
+"and" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "and");
+    yylval.val = "and";
+    return AND;}
+"await" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "await");
+    yylval.val = "await";
+    return AWAIT;}
+"is" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "is");
+    yylval.val = "is";
+    return IS;}
+"yield" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "yield");
+    yylval.val = "yield";
+    return YIELD;}
+"True" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "True");
+    yylval.val = "True";
+    return TRUE;}
+"False" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "False");
+    yylval.val = "False";
+    return FALSE;}
+"None" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "None");
+    yylval.val = "None";
+    return NONE;}
+"class" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "class");
+    yylval.val = "class";
+    return CLASS;}
+"def" {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("KEYWORD", "def");
+    yylval.val = "def";
+    return DEF;}
 
-{NEWLINE} {indent = 0; spaceset = false;return NEWLINE;}
-{COMMENT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};;}
-{ADDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ADDASSIGN;}
-{SUBASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return SUBASSIGN;}
-{MULASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return MULASSIGN;}
-{DIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return DIVASSIGN;}
-{IDIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IDIVASSIGN;}
-{MODASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return MODASSIGN;}
-{ATASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ATASSIGN;}
-{ANDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ANDASSIGN;}
-{ORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ORASSIGN;}
-{XORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return XORASSIGN;}
-{LSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LSASSIGN;}
-{RSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RSASSIGN;}
-{POWASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return POWASSIGN;}
-{ARROWOP} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return ARROWOP;}
+{NEWLINE} {indent = 0; spaceset = false;
+    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.val = "NEWLINE";
+    return NEWLINE;}
+{COMMENT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};}
+{ADDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "+=");
+    yylval.val = "+=";
+    return ADDASSIGN;}
+{SUBASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "-=")
+    yylval.val = "-=";
+    return SUBASSIGN;}
+{MULASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "*=");
+    yylval.val = "*=";
+    return MULASSIGN;}
+{DIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "/=");
+    yylval.val = "/=";
+    return DIVASSIGN;}
+{IDIVASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "//=");
+    yylval.val = "//=";
+    return IDIVASSIGN;}
+{MODASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "%=");
+    yylval.val = "%=";
+    return MODASSIGN;}
+{ATASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "@=");
+    yylval.val = "@=";
+    return ATASSIGN;}
+{ANDASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "&=");
+    yylval.val = "&=";
+    return ANDASSIGN;}
+{ORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "|=");
+    yylval.val = "|=";
+    return ORASSIGN;}
+{XORASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "^=");
+    yylval.val = "^=";
+    return XORASSIGN;}
+{LSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "<<=");
+    yylval.val = "<<=";
+    return LSASSIGN;}
+{RSASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", ">>=");
+    yylval.val = ">>=";
+    return RSASSIGN;}
+{POWASSIGN} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "**=");
+    yylval.val = "**=";
+    return POWASSIGN;}
+{ARROWOP} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "->");
+    yylval.val = "->";
+    return ARROWOP;}
 
-{POW} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return POW;}
-{IDIV} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return IDIV;}
-{LEFTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LEFTSHIFT;}
-{RIGHTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return RIGHTSHIFT;}
-{LEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return LEQ;}
-{GEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return GEQ;}
-{EQUAL} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return EQUAL;}
-{NEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};return NEQ;}
+{stringliteral} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+    yylval.ptr = new node("STRING LITERAL", string(yytext, yytext + yyleng));
+    yylval.val = string(yytext, yytext + yyleng);
+    return STRING;}
+{POW} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "**");
+    yylval.val = "**";
+    return POW;}
+{IDIV} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "//");
+    yylval.val = "//";
+    return IDIV;}
+{LEFTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "<<");
+    yylval.val = "<<";
+    return LEFTSHIFT;}
+{RIGHTSHIFT} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", ">>");
+    yylval.val = ">>";
+    return RIGHTSHIFT;}
+{LEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR"< "<=");
+    yylval.val = "<=";
+    return LEQ;}
+{GEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", ">=");
+    yylval.val = ">=";
+    return GEQ;}
+{EQUAL} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "==");
+    yylval.val = "==";
+    return EQUAL;}
+{NEQ} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
+    yylval.ptr = new node("OPERATOR", "!=");
+    yylval.val = "!=";
+    return NEQ;}
 ({integer}|{floatnumber}|{imagnumber})  {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
     yylval.val = string(yytext, yytext + yyleng);
+    yylval.ptr = new node("NUMBER", yylval.val);
     return NUMBER;}
 {NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};
     yylval.val = string(yytext, yytext + yyleng);
+    yylval.ptr = new node("IDENTIFIER", yylval.val);
     return NAME;}
-. {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; return yytext[0];}
+. {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; 
+    yylval.val = string(1, yytext[0]);
+    yylval.ptr = new node("DELIMITER", yylval.val);
+    return yytext[0];}
 
 ^[ ]*[^ \n]+ {
     int pos = yyleng - 1;
@@ -254,7 +438,11 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     
     if(yytext[pos] == ' ') pos++;
     indent = pos;
-    if(setspace()) return INDENT;
+    if(setspace()){
+        yylval.val = "INDENT";
+        yylval.ptr = new node("INDENT", yylval.val);
+        return INDENT;
+    }
 }
 <<EOF>> {return 0;}
 %%
