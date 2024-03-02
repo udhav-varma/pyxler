@@ -133,31 +133,228 @@ simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE
 close_small_stmt: close_small_stmt ';' small_stmt 
         | 
 cond_semi_colon: ';' | 
-small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt |
-             import_stmt | global_stmt | nonlocal_stmt | assert_stmt
-expr_stmt: testlist_star_expr anna_or_auga_or_closeyield
-yield_or_test: yield_expr | testlist
-yield_or_test_star: yield_expr | testlist_star_expr
-close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star 
-                        | 
-annassign: ':' test cond_eqtest
-cond_eqtest: '=' test
-      | 
+small_stmt: expr_stmt {
+    $<ptr>$ = $<ptr>1;
+} | del_stmt {
+    $<ptr>$ = $<ptr>1;
+}
+| pass_stmt {
+    $<ptr>$ = $<ptr>1;
+}
+| flow_stmt {
+    $<ptr>$ = $<ptr>1;
+}
+| import_stmt {
+    $<ptr>$ = $<ptr>1;
+}
+| global_stmt {
+    $<ptr>$ = $<ptr>1;
+}
+ | nonlocal_stmt | assert_stmt
+expr_stmt: testlist_star_expr anna_or_auga_or_closeyield {
+    $<ptr>$ = new node("nt", "expr_statement");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>1);
+    ast.add_edge($<ptr>2);
+}
+yield_or_test: yield_expr {
+        $<ptr>$ = $<ptr>1;
+    }
+    
+    | testlist {
+        $<ptr>$ = $<ptr>1;
+    }
+yield_or_test_star: yield_expr {
+                $<ptr>$ = $<ptr1>$;
+            }
+
+ | testlist_star_expr {
+            $<ptr>$ = $<ptr>1;
+ }
+close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star {
+                    $<ptr>$ = new node("nt", "close_yield_or_test_star");
+                    $<ptr>2 = new node("DELIMITER", "=");
+                    ast.add_node($<ptr>$);
+                    ast.add_node($<ptr>2);
+                    ast.add_edge($<ptr>$, $<ptr>1);
+                    ast.add_edge($<ptr>$, $<ptr>2);
+                    ast.add_edge($<ptr>$, $<ptr>3);
+            }
+                        | {
+                            $<ptr>$ = NULL;
+                        }
+annassign: ':' test cond_eqtest {
+    $<ptr>$ = new node("nt", "annasign");
+    $<ptr>1 = new node("DELIMITER", ":");
+    ast.add_node($<ptr>$);
+    ast.add_node($<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
+}
+cond_eqtest: '=' test {
+        $<ptr>$ = new node("nt", "cond_eqtest");
+        $<ptr>1 = new node("OPERATOR", "=");
+        ast.add_node($<ptr>$);
+        ast.add_node($<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>2);
+    }
+      | {
+        $<ptr>$ = NULL;
+      }
 anna_or_auga_or_closeyield: annassign | augassign yield_or_test |
                      close_yield_or_test_star
-testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma
-test_or_starexp: test | star_expr
-close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp  | 
-cond_comma: ',' | 
+testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma {
+    $<ptr>$ = new node("nt", "testlist star expression");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
+}
+test_or_starexp: test {
+    $<ptr>$ = $<ptr>1;
+}
+ | star_expr {
+    $<ptr>$ = $<ptr>1;
+ }
+close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp {
+    $<ptr>2 = new node("Delimiter", ",");
+    $<ptr>$ = new node("nt", "close_commatest_or_starexp");
+    ast.add_node($<ptr>$);
+    ast.add_node($<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
+} 
+| {
+    $<ptr>$ = NULL
+}
+cond_comma: ','{
+    $<ptr>1 = new node("Delimiter", ",");
+    ast.add_node($<ptr>1);
+    $<ptr>$ = $<ptr>1
+} 
+| {
+    $<ptr>$ = NULL;
+}
 augassign: ADDASSIGN{
             auto p = new node("nt", "Operator");
             auto anode = new node("OPERATOR", "+=");
             ast.add_node(p);
             ast.add_node(anode);
-            ast.add_edge(p, anod)
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
         }
-         | SUBASSIGN | MULASSIGN | ATASSIGN | DIVASSIGN | MODASSIGN | ANDASSIGN | ORASSIGN | XORASSIGN |
-            LSASSIGN | RSASSIGN | POWASSIGN | IDIVASSIGN
+         | SUBASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "-=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+         }
+         | MULASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "*=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+         }
+          | ATASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "@=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+          }
+          | DIVASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "/=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+          }
+          | MODASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "%=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+          }
+          | ANDASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "&=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+          }
+          | ORASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "|=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+          }
+            | XORASSIGN {
+                auto p = new node("nt", "Operator");
+                auto anode = new node("OPERATOR", "^=");
+                ast.add_node(p);
+                ast.add_node(anode);
+                ast.add_edge(p, anode);
+                $<ptr>$ = p;
+                $<ptr>1 = anode;
+            }
+           | LSASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "<<=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+           } 
+           | RSASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", ">>=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+           }
+           | POWASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "**=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+           }
+           | IDIVASSIGN {
+            auto p = new node("nt", "Operator");
+            auto anode = new node("OPERATOR", "//=");
+            ast.add_node(p);
+            ast.add_node(anode);
+            ast.add_edge(p, anode);
+            $<ptr>$ = p;
+            $<ptr>1 = anode;
+           }
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
 del_stmt: DEL exprlist {
     auto p = new node("nt", "DelStatement");
@@ -165,8 +362,9 @@ del_stmt: DEL exprlist {
     ast.add_node(p);
     ast.add_node(delnode);
     ast.add_edge(p, delnode);
-    ast.add_edge(p, $<ptr>1);
+    ast.add_edge(p, $<ptr>2);
     $<ptr>$ = p;
+    $<ptr>1 = delnode;
 }
 pass_stmt: PASS{
     auto p = new node("nt", "PassStatement");
@@ -175,6 +373,7 @@ pass_stmt: PASS{
     ast.add_node(pnode);
     ast.add_edge(p, pnode);
     $<ptr>$ = p;
+    $<ptr>1 = pnode;
 }
 flow_stmt: break_stmt {
             $<ptr>$ = $<ptr>1;
@@ -194,20 +393,22 @@ flow_stmt: break_stmt {
 
 break_stmt: BREAK {
     auto p = new node("nt", "BreakStatement");
-    $<ptr>$ = p;
     ast.add_node(p);
     auto p1 = new node("KEYWORD", "break");
     ast.add_node(p1);
     ast.add_edge(p, p1);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
 }
 
 continue_stmt: CONTINUE {
     auto p = new node("nt", "ContinueStatement");
-    $<ptr>$ = p;
     ast.add_node(p);
     auto p1 = new node("KEYWORD", "continue");
     ast.add_node(p1);
     ast.add_edge(p, p1);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
 }
 
 return_stmt: RETURN cond_testlist{
@@ -218,30 +419,114 @@ return_stmt: RETURN cond_testlist{
     ast.add_edge(p, rnode);
     ast.add_edge(p, $<ptr>1);
     $<ptr>$ = p;
+    $<ptr>1 = rnode;
 }
 
 cond_testlist: testlist{
-      $<ptr>$ = $1;
+      $<ptr>$ = $<ptr>1;
 } | {
       $<ptr>$ = nullptr;
 }
 yield_stmt: yield_expr {
     $<ptr>$ = $<ptr>1
 }
-raise_stmt: RAISE cond_from_test
+raise_stmt: RAISE cond_from_test{
+    // 
+    auto p = new node("nt", "RaiseStatement");
+    auto rnode = new node("KEYWORD", "raise");
+    ast.add_node(p);
+    ast.add_node(rnode);
+    ast.add_edge(p, rnode);
+    ast.add_edge(p, $<ptr>2);
+    $<ptr>$ = p;
+    $<ptr>1 = rnode;
+} | RAISE cond_from_test {
+    auto p = new node("nt", "RaiseStatement");
+    auto rnode = new node("KEYWORD", "raise");
+    ast.add_node(p);
+    ast.add_node(rnode);
+    ast.add_edge(p, rnode);
+    $<ptr>$ = p;
+    <ptr>1 = rnode;
+}
 cond_from_test: test | test FROM test | 
 import_stmt: import_name | import_from
-import_name: IMPORT dotted_as_names
+import_name: IMPORT dotted_as_names{
+    // 
+    auto p = new node("nt", "ImportStatement");
+    auto inode = new node("KEYWORD", "import");
+    ast.add_node(p);
+    ast.add_node(inode);
+    ast.add_edge(p, inode);
+    ast.add_edge(p, $<ptr>2);
+    $<ptr>$ = p;
+    $<ptr>1 = inode;
+}
 // note below: the ('.' | ELLIPSIS) is necessary because ELLIPSIS is tokenized as ELLIPSIS
 import_from: FROM closeplusdotorellipsisname_or_plusdotellip
               IMPORT star_or_import_parentheses_or_import
               
-closeplusdotorellipsisname_or_plusdotellip: close_dot_or_ellipsis dotted_name | plus_dot_or_ellipsis
+closeplusdotorellipsisname_or_plusdotellip: close_dot_or_ellipsis dotted_name{
+    // 
+    $<ptr>$ = new node("nt", "closeplusdotorellipsisname_or_plusdotellip");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+} | plus_dot_or_ellipsis{
+    auto p = new node("nt", "ImportFromStatement");
+    auto p1 = new node("KEYWORD", "from");
+    ast.add_node(p);
+    ast.add_node(p1);
+    ast.add_edge(p, p1);
+    ast.add_edge(p, $<ptr>1);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
+} 
+/* | plus_dot_or_ellipsis{
+    // 
+    auto p = new node("nt", "ImportFromStatement");
+    auto p1 = new node("KEYWORD", "from");
+    ast.add_node(p);
+    ast.add_node(p1);
+    ast.add_edge(p, p1);
+    ast.add_edge(p, $<ptr>1);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
+} */
 star_or_import_parentheses_or_import: '*' | '(' import_as_names ')' | import_as_names
 plus_dot_or_ellipsis: '.' plus_dot_or_ellipsis | ELLIPSIS plus_dot_or_ellipsis | '.' | ELLIPSIS
-close_dot_or_ellipsis: plus_dot_or_ellipsis | 
-import_as_name: NAME | NAME AS NAME
-dotted_as_name: dotted_name | dotted_name AS NAME
+close_dot_or_ellipsis: plus_dot_or_ellipsis {
+           
+    } | 
+import_as_name: NAME{
+    // 
+    auto p = new node("nt", "ImportAsName");
+    auto p1 = new node("IDENTIFIER", $<val>1);
+    ast.add_node(p);
+    ast.add_node(p1);
+    ast.add_edge(p, p1);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
+} | NAME AS NAME{
+    auto p = new node("nt", "ImportAsName");
+    auto p1 = new node("IDENTIFIER", $<val>1);
+    auto p2 = new node("KEYWORD", "as");
+    auto p3 = new node("IDENTIFIER", $<val>3);
+    ast.add_node(p);
+    ast.add_node(p1);
+    ast.add_node(p2);
+    ast.add_node(p3);
+    ast.add_edge(p, p1);
+    ast.add_edge(p, p2);
+    ast.add_edge(p, p3);
+    $<ptr>$ = p;
+    $<ptr>1 = p1;
+    $<ptr>2 = p2;
+    $<ptr>3 = p3;
+}
+dotted_as_name: dotted_name{
+    
+} | dotted_name AS NAME
 import_as_names: import_as_name close_commaimportasname cond_comma
 close_commaimportasname: close_commaimportasname ',' import_as_name  | 
 dotted_as_names: dotted_as_name close_commadottedasname
@@ -351,30 +636,127 @@ close_comma_argument: close_comma_argument ',' argument  |
 // Illegal combinations and orderings are blocked in ast.c:
 // multiple (test comp_for) arguments are blocked; keyword unpackings
 // that precede iterable unpackings are blocked; etc.
-argument: test comp_for |
-          test |
-          test '=' test |
-          POW test |
-          '*' test 
+argument: test comp_for {
+        $<ptr>$ = new node("nt", "argument");
+        ast.add_node($<ptr>$);
+        ast.add_edge($<ptr>$, $<ptr>1);   
+        ast.add_edge($<ptr>$, $<ptr>2);
+    } |
+    test {
+        $<ptr>$ = new node("nt", "argument");
+        ast.add_node($<ptr>$);
+        ast.add_edge($<ptr>$, $<ptr>1);
+    } |
+    test '=' test {
+        $<ptr>$ = new node("nt", "argument");
+        ast.add_node($<ptr>$);
+        $<ptr>2 = new node("DELIMITER", "=");
+        ast.add_node($<ptr>2);
+        ast.add_edge($<ptr>$, $<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>2); 
+        ast.add_edge($<ptr>$, $<ptr>3);   
+    } |
+    POW test {
+        $<ptr>$ = new node("nt", "argument");
+        $<ptr>1 = new node("operator", "**");
+        ast.add_node($<ptr>$);
+        ast.add_node($<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>1);   
+        ast.add_edge($<ptr>$, $<ptr>2);   
+    } |
+    '*' test {
+        $<ptr>$ = new node("nt", "argument");
+        $<ptr>1 = new node("operator", "*");
+        ast.add_node($<ptr>$);
+        ast.add_node($<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>1);   
+        ast.add_edge($<ptr>$, $<ptr>2);   
+    }
 
-comp_iter: comp_for | comp_if
-comp_for: cond_async FOR exprlist IN or_test comp_iter
-cond_async: ASYNC | 
-comp_if: IF test_nocond | IF test_nocond comp_iter
+comp_iter: comp_for {
+        $<ptr>$ = new node("nt", "comp_for");
+        ast.add_edge($<ptr>$, $<ptr>1);       
+    } | comp_if {
+        $<ptr>$ = new node("nt", "comp_for");
+        ast.add_edge($<ptr>$, $<ptr>1);
+    }
+comp_for: cond_async FOR exprlist IN or_test comp_iter {
+        auto p = new node("nt", "comp_for");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        ast.add_edge(p, $<ptr>1);
+        auto p2 = new node("KEYWORD", "for");
+        $<ptr>2 = p2;
+        ast.add_node(p2);
+        ast.add_edge(p, p2);
+        ast.add_edge(p, $<ptr>3);
+        auto p4 = new node("KEYWORD", "in");
+        $<ptr>4 = p4;
+        ast.add_node(p4);
+        ast.add_edge(p, p4);
+        ast.add_edge(p, $<ptr>5);
+        ast.add_edge(p, $<ptr>6);    
+    }
+cond_async: ASYNC {
+        auto p = new node("nt", "cond_async");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "async");
+        $<ptr>1 = p1;
+        ast.add_node(p1);
+        ast.add_edge(p, p1);
+    } | {
+        $<ptr>$ = nullptr;
+    }
+
+
+comp_if: IF test_nocond {
+        auto p = new node("nt", "comp_if");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "if");
+        $<ptr>1 = p1;
+        ast.add_node(p1);
+        auto p2 = test_nocond("nt", "test_nocond");
+        $<ptr>2 = p2;
+        ast.add_node(p2);
+        ast.add_edge(p, p1);
+        ast.add_edge(p, p2);  
+    } | IF test_nocond comp_iter {
+        auto p = new node("nt", "comp_if");
+        $<ptr>$ = p;
+        ast.add_node(p);
+        auto p1 = new node("KEYWORD", "if");
+        $<ptr>1 = p1;
+        ast.add_node(p1);
+        auto p2 = test_nocond("nt", "test_nocond");
+        $<ptr>2 = p2;
+        ast.add_node(p2);
+        auto p3 = test_nocond("nt", "comp_iter");
+        $<ptr>3 = p3;
+        ast.add_node(p3);
+        ast.add_edge(p, p1);
+        ast.add_edge(p, p2);
+        ast.add_edge(p, p3); 
+    }
 
 // not used in grammar, but may appear in "node" passed from Parser to Compiler
 encoding_decl: NAME {
         auto p = new node("nt", "EncodingDeclaration");
         $<ptr>$ = p;
         ast.add_node(p);
-        auto p1 = new node("IDENTIFIER", )
+        auto p1 = new node("IDENTIFIER", $<val>1);
+        $<ptr>1 = p1;
+        ast.add_node(p1);
+        ast.add_edge(p, p1);   
     }
 
-yield_expr: YIELD yield_arg{
+yield_expr: YIELD yield_arg {
         auto p = new node("nt", "YieldExpression");
         $<ptr>$ = p;
         ast.add_node(p);
         auto p1 = new node("KEYWORD", "yield");
+        $<ptr>1 = p1;
         ast.add_node(p1);
         ast.add_edge(p, p1);
         ast.add_edge(p, $2);
@@ -384,16 +766,18 @@ yield_expr: YIELD yield_arg{
         $<ptr>$ = p;
         ast.add_node(p);
         auto p1 = new node("KEYWORD", "yield");
+        $<ptr>1 = p1;
         ast.add_node(p1);
         ast.add_edge(p, p1); 
     }
 
-yield_arg: FROM test{
+yield_arg: FROM test {
         auto p = new node("nt", "YieldArguments");
         $<ptr>$ = p;
         ast.add_node(p);
         auto p1 = new node("KEYWORD", "from");
         ast.add_node(p1);
+        $<ptr>1 = p1;
         ast.add_edge(p, p1);
         ast.add_edge(p, $2);
     } 
