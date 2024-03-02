@@ -6,6 +6,76 @@
 using std::stack;
 stack<int> indents;
 int dedpos = 0;
+
+  enum yytokentype
+  {
+    NEWLINE = 258,
+    ENDMARKER = 259,
+    ASYNC = 260,
+    NAME = 261,
+    DEL = 262,
+    PASS = 263,
+    BREAK = 264,
+    CONTINUE = 265,
+    RETURN = 266,
+    RAISE = 267,
+    FROM = 268,
+    IMPORT = 269,
+    AS = 270,
+    GLOBAL = 271,
+    NONLOCAL = 272,
+    ASSERT = 273,
+    IF = 274,
+    ELIF = 275,
+    ELSE = 276,
+    FOR = 277,
+    IN = 278,
+    WHILE = 279,
+    TRY = 280,
+    FINALLY = 281,
+    WITH = 282,
+    EXCEPT = 283,
+    LAMBDA = 284,
+    NOT = 285,
+    OR = 286,
+    AND = 287,
+    AWAIT = 288,
+    IS = 289,
+    INDENT = 290,
+    DEDENT = 291,
+    YIELD = 292,
+    TRUE = 293,
+    NUMBER = 294,
+    STRING = 295,
+    FALSE = 296,
+    NONE = 297,
+    CLASS = 298,
+    DEF = 299,
+    ARROWOP = 300,
+    POW = 301,
+    ADDASSIGN = 302,
+    SUBASSIGN = 303,
+    MULASSIGN = 304,
+    ATASSIGN = 305,
+    DIVASSIGN = 306,
+    MODASSIGN = 307,
+    ANDASSIGN = 308,
+    ORASSIGN = 309,
+    XORASSIGN = 310,
+    LSASSIGN = 311,
+    RSASSIGN = 312,
+    POWASSIGN = 313,
+    IDIVASSIGN = 314,
+    ELLIPSIS = 315,
+    EQUAL = 316,
+    GEQ = 317,
+    LEQ = 318,
+    LTORGT = 319,
+    NEQ = 320,
+    LEFTSHIFT = 321,
+    RIGHTSHIFT = 322,
+    IDIV = 323
+  };
 %}
 
 NEWLINE ([\n])
@@ -75,7 +145,12 @@ digit  [0-9]
 imagnumber ({floatnumber}|{digitpart})[jJ]
 
 %%
-
+ {
+    if(dedpos > 0){
+        --dedpos;
+        return DEDENT;
+    }
+ }
 ^[ ]*\n       {/* Ignore blank lines.*/}
 ^[ ]*[^ \n]+ {
     int pos = yyleng - 1;
@@ -92,21 +167,13 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         ctr++;
         indets.pop();
     }
-    for(int i = 0; i < ctr; i++){
-        unput('$');
+    if(indents.top() != pos){
+        printf("Indentation error\n");
+        yyterminate();
     }
     dedpos = ctr;
 }
 
-[$] {
-    if(dedpos > 0){
-        --dedpos;
-        return DEDENT;
-    }
-    else{
-        printf("Error, unrecognised token");
-    }
-}
 "async" {return ASYNC;}
 "name" {return NAME;}
 "del" {return DEL;}
@@ -177,5 +244,11 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 int main(int argc, char * argv[])
 {
     indents.push(0);
-
+    if(argc > 1){
+        FIlE *in = fopen(argv[1], "r");
+        yyin = in;
+    }
+    else yyin = stdin;
+    yylex();
+    
 }
