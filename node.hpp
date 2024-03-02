@@ -2,7 +2,8 @@
 
 using namespace std;
 
-struct node{
+class node{
+public:
     int id = -1;
     node* parent;     // index of parent node
     vector<node*> children;   // indexes of children nodes
@@ -10,8 +11,8 @@ struct node{
     node(string Type, string Name) : type(Type), name(Name){}
 };
 
-struct AST{
-
+class AST{
+public:
     int sz = 0;
     vector<node*> tree;
     string dotcode = "";
@@ -64,4 +65,11 @@ struct AST{
         cout<<dotcode;
     }
 
+};
+
+
+class data{
+public:
+    node * ptr;
+    string val;
 };

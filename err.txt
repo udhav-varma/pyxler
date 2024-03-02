@@ -1,0 +1,27 @@
+parser.y: warning: 4 nonterminals useless in grammar [-Wother]
+parser.y: warning: 7 rules useless in grammar [-Wother]
+parser.y:110.1-12: warning: nonterminal useless in grammar: single_input [-Wother]
+  110 | single_input: NEWLINE {
+      | ^~~~~~~~~~~~
+parser.y:136.1-10: warning: nonterminal useless in grammar: eval_input [-Wother]
+  136 | eval_input: testlist multiline ENDMARKER {
+      | ^~~~~~~~~~
+parser.y:143.1-9: warning: nonterminal useless in grammar: multiline [-Wother]
+  143 | multiline: multiline NEWLINE {
+      | ^~~~~~~~~
+parser.y:2273.1-13: warning: nonterminal useless in grammar: encoding_decl [-Wother]
+ 2273 | encoding_decl: NAME {
+      | ^~~~~~~~~~~~~
+parser.tab.cpp: In function ‘int yyparse()’:
+parser.tab.cpp:5746:20: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+ 5746 |       yyerror (YY_("syntax error"));
+      |                    ^~~~~~~~~~~~~~
+parser.tab.cpp:339:22: note: in definition of macro ‘YY_’
+  339 | #  define YY_(Msgid) Msgid
+      |                      ^~~~~
+parser.tab.cpp:5890:16: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+ 5890 |   yyerror (YY_("memory exhausted"));
+      |                ^~~~~~~~~~~~~~~~~~
+parser.tab.cpp:339:22: note: in definition of macro ‘YY_’
+  339 | #  define YY_(Msgid) Msgid
+      |                      ^~~~~

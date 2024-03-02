@@ -9,14 +9,28 @@
 //      eval_input is the input for the eval() functions.
 // NB: compound_stmt in single_input is followed by extra NEWLINE!
 %{
-      #include "node.cpp"
-      AST ast;
+      extern int yylex();
+      extern int yylineno;
+      void yyerror(char * s){
+        printf("Error! Line Number %d, message: %s\n", yylineno, s);
+      }
+      void yyerror(string s){
+        printf("Error! Line Number %d, message: %s\n", yylineno, s.c_str());
+      }
 %}
 
-%union{
-    Node * ptr;
-    string val;
+%code requires{
+    #ifndef PARSER
+    #include "node.hpp"
+    #endif
 }
+
+%code top{
+    #include "node.hpp"
+    AST ast;
+    #define PARSER
+}
+%define api.value.type {data}
 
 %token NEWLINE // done
 %token ENDMARKER
@@ -166,14 +180,14 @@ decorators: decorator {
     $<ptr>$ = $<ptr>1;
 }
 | decorators decorator{
-    $<ptr>$ = new node("nt", "decorators")
+    $<ptr>$ = new node("nt", "decorators");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 decorated: decorators defob {
-    $<ptr>$ = new node("nt", "decorated")
+    $<ptr>$ = new node("nt", "decorated");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -197,7 +211,7 @@ async_funcdef: ASYNC funcdef {
 }
 funcdef: DEF NAME parameters cond_arrowtest ':' suite {
     $<ptr>$ = new node("nt", "function definition");
-    ast.add_node($<ptr>$)
+    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -293,9 +307,9 @@ cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comm
         $<ptr>$ = new node("nt", "cond_star_or_startstar");
         ast.add_node($<ptr>$);
         // ast.add_node($<ptr>1);
-        ast.add_edge($<prt>$, $<ptr>1);
-        ast.add_edge($<prt>$, $<ptr>2);
-        ast.add_edge($<prt>$, $<ptr>3);
+        ast.add_edge($<ptr>$, $<ptr>1);
+        ast.add_edge($<ptr>$, $<ptr>2);
+        ast.add_edge($<ptr>$, $<ptr>3);
       }
       | {
         $<ptr>$ = NULL;
@@ -366,7 +380,7 @@ varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_cond
   }
   | POW vfpdef cond_comma {
     // $<ptr>1 = new node("OPERATOR", "**");
-    $<ptr>$ = new node("nt", "VarArgs")
+    $<ptr>$ = new node("nt", "VarArgs");
     ast.add_node($<ptr>$);
     // ast.add_node($<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -394,7 +408,7 @@ cond_vfpdef: vfpdef {
         $<ptr>$ = $<ptr>1;
     }
     | {
-        $<ptr>$ = NULL
+        $<ptr>$ = NULL;
     }
 cond_star_or_startstar_vf: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma
         {
@@ -447,7 +461,7 @@ cond_comma_or_condstarorstartstarvf: ',' cond_star_or_startstar_vf {
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 | {
-    $<ptr>$ = NULL
+    $<ptr>$ = NULL;
 } 
 
 stmt: simple_stmt {
@@ -458,7 +472,7 @@ stmt: simple_stmt {
 simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE {
         // $<ptr>4 = new node("NEWLINE", "NEWLINE");
         // ast.add_node($<ptr>4);
-        $<ptr>$ = new node("nt", "simple_stmt")
+        $<ptr>$ = new node("nt", "simple_stmt");
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
         ast.add_edge($<ptr>$, $<ptr>3);
@@ -523,7 +537,7 @@ yield_or_test: yield_expr {
         $<ptr>$ = $<ptr>1;
     }
 yield_or_test_star: yield_expr {
-                $<ptr>$ = $<ptr1>$;
+                $<ptr>$ = $<ptr>1;
             }
 
  | testlist_star_expr {
@@ -562,11 +576,11 @@ cond_eqtest: '=' test {
         $<ptr>$ = NULL;
       }
 anna_or_auga_or_closeyield: annassign {
-    $<ptr>$ = $<ptr>1
+    $<ptr>$ = $<ptr>1;
 } | augassign yield_or_test {
-    $<ptr>$ = $<ptr>1
+    $<ptr>$ = $<ptr>1;
 } | close_yield_or_test_star {
-    $<ptr>$ = $<ptr>1
+    $<ptr>$ = $<ptr>1;
 }
                      
 testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma {
@@ -592,12 +606,12 @@ close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp {
     ast.add_edge($<ptr>$, $<ptr>3);
 } 
 | {
-    $<ptr>$ = NULL
+    $<ptr>$ = NULL;
 }
 cond_comma: ','{
     // $<ptr>1 = new node("Delimiter", ",");
     // ast.add_node($<ptr>1);
-    $<ptr>$ = $<ptr>1
+    $<ptr>$ = $<ptr>1;
 } 
 | {
     $<ptr>$ = NULL;
@@ -743,16 +757,16 @@ flow_stmt: break_stmt {
             $<ptr>$ = $<ptr>1;
         } 
         | continue_stmt {
-            $<ptr>$ = $<ptr>1
+            $<ptr>$ = $<ptr>1;
         }
         | return_stmt {
-            $<ptr>$ = $<ptr>1
+            $<ptr>$ = $<ptr>1;
         }
         | raise_stmt {
-            $<ptr>$ = $<ptr>1
+            $<ptr>$ = $<ptr>1;
         }
         | yield_stmt{
-            $<ptr>$ = $<ptr>1
+            $<ptr>$ = $<ptr>1;
         }
 
 break_stmt: BREAK {
@@ -792,7 +806,7 @@ cond_testlist: testlist{
       $<ptr>$ = nullptr;
 }
 yield_stmt: yield_expr {
-    $<ptr>$ = $<ptr>1
+    $<ptr>$ = $<ptr>1;
 }
 raise_stmt: RAISE cond_from_test{
     auto p = new node("nt", "RaiseStatement");
@@ -870,13 +884,13 @@ star_or_import_parentheses_or_import: '*'{
     $<ptr>$ = new node("nt", "star_or_import_parentheses_or_import");
     // auto p1 = new node("KEYWORD", "(");
     // auto p3 = new node("KEYWORD", ")");
-    ast.add_node(p);
+    ast.add_node($<ptr>$);
     // ast.add_node(p1);
     // ast.add_node(p3);
     ast.add_edge($<ptr>$, $<ptr>1);   
     ast.add_edge($<ptr>$, $<ptr>2);   
     ast.add_edge($<ptr>$, $<ptr>3);  
-    ast.add_edge(p, $<ptr>3);
+    // ast.add_edge($<ptr>$, $<ptr>3);
     // $<ptr>1 = p1;
     // $<ptr>3 = p3;
 } | import_as_names{
@@ -884,7 +898,6 @@ star_or_import_parentheses_or_import: '*'{
     ast.add_node(p);
     ast.add_edge(p, $<ptr>1);
     $<ptr>$ = p;
-    $<ptr>1 = p1;
 }
 
 plus_dot_or_ellipsis: '.' plus_dot_or_ellipsis{
@@ -894,8 +907,8 @@ plus_dot_or_ellipsis: '.' plus_dot_or_ellipsis{
     ast.add_node(p);
     // ast.add_node(p1);
     ast.add_edge(p, $<ptr>1);
+    ast.add_edge(p, $<ptr>2);
     $<ptr>$ = p;
-    $<ptr>1 = p1;
 } | ELLIPSIS plus_dot_or_ellipsis{
     auto p = new node("nt", "plus_dot_or_ellipsis");
     // auto p1 = new node("Delimiter", "...");
@@ -1059,7 +1072,7 @@ global_stmt: GLOBAL NAME close_comma_name{
     // ast.add_node(p2);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-    $<ptr>$ = p;
+    ast.add_edge($<ptr>$, $<ptr>3);
     // $<ptr>1 = p1;
     // $<ptr>2 = p2;
 }
@@ -2245,12 +2258,12 @@ cond_async: ASYNC {
 
 comp_if: IF test_nocond {
         $<ptr>$ = new node("nt", "comp_if");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
     } | IF test_nocond comp_iter {
         $<ptr>$ = new node("nt", "comp_if");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
         ast.add_edge($<ptr>$, $<ptr>3);   
@@ -2259,38 +2272,35 @@ comp_if: IF test_nocond {
 // not used in grammar, but may appear in "node" passed from Parser to Compiler
 encoding_decl: NAME {
         $<ptr>$ = new node("nt", "EncodingDeclaration");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
     }
 
 yield_expr: YIELD yield_arg {
         $<ptr>$ = new node("nt", "YieldExpression");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
     } 
     | YIELD {
         $<ptr>$ = new node("nt", "YieldExpression");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
     }
 
 yield_arg: FROM test {
         $<ptr>$ = new node("nt", "YieldArguments");
-        ast.add_edge($<ptr>$);
+        ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
     } 
     | testlist {
         $<ptr>$ = $<ptr>1;
-        ast.add_edge($<ptr>$, $<ptr>1);   
     }
 
 %%
 
 
-int main(int argc, char *argv){
-
-
+int main(int argc, char *argv[]){
 
 }
