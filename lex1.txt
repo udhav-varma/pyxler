@@ -1,0 +1,60 @@
+IF
+Character  
+Character a
+Character  
+equal
+Character  
+number
+Character :
+newline
+here 4
+INDENT
+IF
+Character  
+Character b
+Character  
+equal
+Character  
+number
+Character :
+newline
+here 8
+INDENT
+IF
+Character  
+Character c
+Character  
+equal
+Character  
+number
+Character :
+newline
+empty
+here 8
+ELSE
+Character :
+newline
+empty
+IF
+Character  
+Character l
+Character  
+equal
+Character  
+number
+Character :
+newline
+here 4
+IF
+Character  
+Character t
+Character  
+equal
+Character  
+number
+Character :
+newline
+here 8
+INDENT
+PASS
+newline
