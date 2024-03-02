@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 struct node{
     int id;
     node* parent;     // index of parent node
@@ -27,13 +26,15 @@ struct AST{
         child->parent = parent;
     }
 
-    void dfs(int u){
+    void dfs(int i, node* node){
+
+        
 
     }
 
     void graphviz(){
         dotcode.append("digraph AST{");
-        dfs(0);
+        dfs(0, tree[0]);
         dotcode.append("}");
     }
 
