@@ -1,60 +1,51 @@
+Done token
+
 IF
+Done token
+
 Character  
-Character a
+Done token
+
+NAME
+Done token
+
 Character  
+Done token
+
 equal
+Done token
+
 Character  
+Done token
+
 number
+Done token
+
 Character :
+Done token
+
 newline
+Done token
+
+enter
 here 4
 INDENT
-IF
-Character  
-Character b
-Character  
-equal
-Character  
-number
-Character :
-newline
-here 8
-INDENT
-IF
-Character  
-Character c
-Character  
-equal
-Character  
-number
-Character :
-newline
-empty
-here 8
-ELSE
-Character :
-newline
-empty
-IF
-Character  
-Character l
-Character  
-equal
-Character  
-number
-Character :
-newline
-here 4
-IF
-Character  
-Character t
-Character  
-equal
-Character  
-number
-Character :
-newline
-here 8
-INDENT
+Done token
+
 PASS
+Done token
+
 newline
+Done token
+
+enter
+here 0
+NAME
+Done token
+
+DEDENT
+Done token
+
+Character :
+Done token
+

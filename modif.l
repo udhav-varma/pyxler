@@ -1,8 +1,7 @@
 %option noyywrap 
 %option yylineno 
 %{ 
-#include<iostream> 
-#include<stack> 
+#include<bits/stdc++.h>
 using namespace std;
 using std::stack; 
 stack<int> indents; 
@@ -24,7 +23,7 @@ int setspace()
     } 
     if(indents.top() != indent){ 
     printf("Indentation error\n"); 
-    return;
+    return 0;
     } 
     dedpos = ctr; 
     return 0;
@@ -151,7 +150,7 @@ nonzerodigit [1-9]
 bindigit [0-1] 
 octdigit [0-7] 
 hexdigit ({digit}|[a-f]|[A-F]) 
-decinteger (({nonzerodigit}((([_]?){digit})*))|(([0]+)(([_]?)[0])*)) 
+decinteger ({nonzerodigit}(([_]?{digit})*|([0]+)([_]?[0])*))
 bininteger ([0][bB](([_]?){bindigit})+) 
 octinteger ([0][oO](([_]?){octdigit})+) 
 hexinteger ([0][xX](([_]?){hexdigit})+) 
@@ -168,23 +167,19 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 
 %% 
     { 
-        if(!spaceset){
-            setspace();
-        }
-        cerr << "here\n";
-    if(dedpos > 0){ 
-        --dedpos; 
-        printf("DEDENT\n");
-        // return DEDENT;
-    } 
+        cerr << "entered " << yylineno << endl;
+        if(dedpos > 0){ 
+            --dedpos; 
+            printf("DEDENT\n");
+            return DEDENT;
+        } 
     } 
 ^[ ]*\n {printf("empty\n");/* Ignore blank lines.*/} 
 
 
 "async" {printf("ASYNC\n"); return ASYNC;} 
-{NAME} {printf("NAME\n"); return NAME;} 
 "del" {printf("DEL\n");return DEL;} 
-"pass" {printf("PASS\n");return PASS;} 
+"pass" {cerr << "there " << yylineno << '\n';if(!spaceset){ cerr << "enter\n"; setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;};printf("PASS\n");return PASS;} 
 "break" {printf("BREAK\n");return BREAK;} 
 "continue" {printf("CONTINUE\n");} 
 "return" {printf("RETURN\n");} 
@@ -195,7 +190,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 "global" {printf("GLOBAL\n");} 
 "nonlocal" {printf("NONLOCAL\n");} 
 "assert" {printf("ASSERT\n");} 
-"if" {printf("IF\n"); return IF;} 
+"if" {cerr << "here " << yylineno << '\n';if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; printf("IF\n"); return IF;} 
 "elif" {printf("ELIF\n");} 
 "else" {printf("ELSE\n"); return ELSE;} 
 "for" {printf("FOR\n");} 
@@ -247,12 +242,14 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 {EQUAL} {printf("equal\n"); return EQUAL;} 
 {NEQ} {printf("neq\n");} 
 ({integer}|{floatnumber}|{imagnumber}) {printf("number\n"); return NUMBER;} 
-. {printf("Character %c\n", yytext[0]); return yytext[0];}
+{NAME} {if(!spaceset){setspace(); for(int i = yyleng - 1; i >= 0; i--) unput(yytext[i]); return -1;}; printf("NAME\n"); return NAME;} 
+. {if(!spaceset) setspace(); printf("Character %c\n", yytext[0]); return yytext[0];}
 <<EOF>> {return 0;}
 ^[ ]*[^ \n]+ { 
-    // printf("enter\n");
+    printf("enter\n");
+    fflush(stdout);
 int pos = yyleng - 1; 
-while(pos >= 0 and yytext[pos] != ' '){ 
+while(pos >= 1 and yytext[pos] != ' '){ 
 unput(yytext[pos]); 
 --pos; 
 } 
@@ -273,6 +270,7 @@ yyin = in;
 else yyin = stdin; 
 while(yylex()){
     printf("Done token\n\n");
+    fflush(stdout);
 }
 
 } 
