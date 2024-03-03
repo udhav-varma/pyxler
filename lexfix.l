@@ -176,10 +176,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     return NEWLINE;
 }
 
-<INLINE>"\\"[ ]*\n {
-    cerr << "line joining\n";
-} 
-
+<INLINE>"\"[ ]* {;}
 <INLINE>[ ]*  {/*cerr << "space\n";*/}
 <INLINE>"async" { 
     yylval.ptr = new node("KEYWORD", "async");
@@ -288,7 +285,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "or";
     return OR;}
 <INLINE>"and" {
-    cerr << "returning end\n";
     yylval.ptr = new node("KEYWORD", "and");
     yylval.val = "and";
     return AND;}

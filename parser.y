@@ -106,7 +106,7 @@
 
 file_input: nstatement ENDMARKER{
     $<ptr>$ = new node("nt", "file_input");
-    cerr<<"nstatement \n";
+    cerr<<"nstatement - Parsing successful\n";
     cerr<<$<val>2<<" yoyoyoyo\n";
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -1803,20 +1803,25 @@ close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
 arith_expr: term close_plusminusterm{
     cerr << "debug statement " << 10 <<"\n";
     $<ptr>$ = new node("nt", "ArithExpr");
-    ast.add_node($<ptr>$);
+    // cerr << $<ptr>2->name << '\n';
+    // ast.add_node($<ptr>$);
+    // $<ptr>$ = $<ptr>2;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_plusminusterm: close_plusminusterm '+' term{
     $<ptr>$ = new node("nt", "ClosePlusMinusTerm");
-    ast.add_node($<ptr>$);
+    // ast.add_node($<ptr>$);
+    // $<ptr>$ = $<ptr>2;
+    // cerr << "VALUE E FEADSFEAK " << $<ptr>$->name << '\n';
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | close_plusminusterm '-' term{
     $<ptr>$ = new node("nt", "ClosePlusMinusTerm");
-    ast.add_node($<ptr>$);
+    // ast.add_node($<ptr>$);
+    $<ptr>$ = $<ptr>2;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
