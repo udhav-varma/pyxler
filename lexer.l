@@ -108,18 +108,46 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 
 
 <OUTLINE>{NEWLINE}|{COMMENT} {
+    cerr << "Empty line\n";
     space = 0;
     inside_line = 0;
 }
-
+<*><<EOF>> {
+    if(indents.size() > 1){
+        indents.pop();
+        yylval.val = "DEDENT";
+        yylval.ptr = new node("DEDENT", "DEDENT");
+        unput(yytext[0]);
+        return DEDENT;
+    }
+    cerr << "returning end\n";
+    yylval.val = "ENDMARKER";
+    yylval.ptr = new node("ENDMARKER", yylval.val);
+    return ENDMARKER;
+}
+<*>\000 {
+    if(indents.size() > 1){
+        indents.pop();
+        yylval.val = "DEDENT";
+        yylval.ptr = new node("DEDENT", "DEDENT");
+        unput(yytext[0]);
+        return DEDENT;
+    }
+    cerr << "returning end\n";
+    yylval.val = "ENDMARKER";
+    yylval.ptr = new node("ENDMARKER", yylval.val);
+    return ENDMARKER;   
+}
 <OUTLINE>. {
         cerr << "here ex\n";
         int pos = space;
-        cerr << "pos: " << pos << '\n';
+        cerr << "pos: " << pos << ' ' << int(yytext[0]) << ' ' << yyleng << '\n';
         if(pos > indents.top()){
             inside_line = true;
             unput(yytext[0]);
             indents.push(pos);
+            yylval.val = "INDENT";
+            yylval.ptr = new node(yylval.val, yylval.val);
             cerr << "return indent\n";
             return INDENT;
         }
@@ -131,6 +159,8 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         else if(pos < indents.top()){
             indents.pop();
             unput(yytext[0]);
+            yylval.val = "DEDENT";
+            yylval.ptr = new node(yylval.val, yylval.val);
             cerr<<"\n\nreturning dedent\n\n";
             return DEDENT;
         }
@@ -400,10 +430,5 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];}
 
-<*><<EOF>> {
-    cerr << "returning end\n";
-    yylval.val = "ENDMARKER";
-    yylval.ptr = new node("ENDMARKER", yylval.val);
-    return ENDMARKER;
-    }
+
 %%
