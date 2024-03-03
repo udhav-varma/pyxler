@@ -14,6 +14,7 @@ public:
 
 class AST{
 public:
+    ofstream logout;
     int sz = 0;
     vector<node*> tree;
     string dotcode = "";
@@ -150,6 +151,12 @@ public:
     }
 
     void dfs2(node* node){
+        logout << "Parse tree node: " << node->name << "\n";
+        logout << "Edges to: \n";
+        for(auto u: node->children){
+            logout << "node " << u->name << "\n";
+        }
+        logout << "\n";
         for(auto u: node->children){
             string s1 = "\t" + intToString(node->id) + " -> " + intToString(u->next->id) + "\n";
             dotcode.append(s1);
@@ -160,11 +167,11 @@ public:
     void graphviz(node * ptr){
         int id = 1;
         dotcode.append("digraph AST{\n");
+        logout = ofstream("logs.txt");
         idfs(ptr);
         dfs1(ptr, id);
         dfs2(ptr);
         dotcode.append("}\n");
-        
         ofstream fout("graph.dot");
         fout << dotcode;
         // fout.close();

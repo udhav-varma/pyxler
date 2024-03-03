@@ -1473,7 +1473,7 @@ case 48:
 YY_RULE_SETUP
 #line 383 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "+=");
+    yylval.ptr = new node("DELIMITER", "+=");
     yylval.val = "+=";
     return ADDASSIGN;}
 	YY_BREAK
@@ -1481,7 +1481,7 @@ case 49:
 YY_RULE_SETUP
 #line 387 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "-=");
+    yylval.ptr = new node("DELIMITER", "-=");
     yylval.val = "-=";
     return SUBASSIGN;}
 	YY_BREAK
@@ -1489,7 +1489,7 @@ case 50:
 YY_RULE_SETUP
 #line 391 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "*=");
+    yylval.ptr = new node("DELIMITER", "*=");
     yylval.val = "*=";
     return MULASSIGN;}
 	YY_BREAK
@@ -1497,7 +1497,7 @@ case 51:
 YY_RULE_SETUP
 #line 395 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "/=");
+    yylval.ptr = new node("DELIMITER", "/=");
     yylval.val = "/=";
     return DIVASSIGN;}
 	YY_BREAK
@@ -1505,7 +1505,7 @@ case 52:
 YY_RULE_SETUP
 #line 399 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "//=");
+    yylval.ptr = new node("DELIMITER", "//=");
     yylval.val = "//=";
     return IDIVASSIGN;}
 	YY_BREAK
@@ -1513,7 +1513,7 @@ case 53:
 YY_RULE_SETUP
 #line 403 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "%=");
+    yylval.ptr = new node("DELIMITER", "%=");
     yylval.val = "%=";
     return MODASSIGN;}
 	YY_BREAK
@@ -1521,7 +1521,7 @@ case 54:
 YY_RULE_SETUP
 #line 407 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "@=");
+    yylval.ptr = new node("DELIMITER", "@=");
     yylval.val = "@=";
     return ATASSIGN;}
 	YY_BREAK
@@ -1529,7 +1529,7 @@ case 55:
 YY_RULE_SETUP
 #line 411 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "&=");
+    yylval.ptr = new node("DELIMITER", "&=");
     yylval.val = "&=";
     return ANDASSIGN;}
 	YY_BREAK
@@ -1537,7 +1537,7 @@ case 56:
 YY_RULE_SETUP
 #line 415 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "|=");
+    yylval.ptr = new node("DELIMITER", "|=");
     yylval.val = "|=";
     return ORASSIGN;}
 	YY_BREAK
@@ -1545,7 +1545,7 @@ case 57:
 YY_RULE_SETUP
 #line 419 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "^=");
+    yylval.ptr = new node("DELIMITER", "^=");
     yylval.val = "^=";
     return XORASSIGN;}
 	YY_BREAK
@@ -1553,7 +1553,7 @@ case 58:
 YY_RULE_SETUP
 #line 423 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "<<=");
+    yylval.ptr = new node("DELIMITER", "<<=");
     yylval.val = "<<=";
     return LSASSIGN;}
 	YY_BREAK
@@ -1561,7 +1561,7 @@ case 59:
 YY_RULE_SETUP
 #line 427 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", ">>=");
+    yylval.ptr = new node("OPERDELIMITERATOR", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
 	YY_BREAK

@@ -380,51 +380,51 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     return NEWLINE;
 }
 <INLINE,BRACKET>{ADDASSIGN} {
-    yylval.ptr = new node("OPERATOR", "+=");
+    yylval.ptr = new node("DELIMITER", "+=");
     yylval.val = "+=";
     return ADDASSIGN;}
 <INLINE,BRACKET>{SUBASSIGN} {
-    yylval.ptr = new node("OPERATOR", "-=");
+    yylval.ptr = new node("DELIMITER", "-=");
     yylval.val = "-=";
     return SUBASSIGN;}
 <INLINE,BRACKET>{MULASSIGN} {
-    yylval.ptr = new node("OPERATOR", "*=");
+    yylval.ptr = new node("DELIMITER", "*=");
     yylval.val = "*=";
     return MULASSIGN;}
 <INLINE,BRACKET>{DIVASSIGN} {
-    yylval.ptr = new node("OPERATOR", "/=");
+    yylval.ptr = new node("DELIMITER", "/=");
     yylval.val = "/=";
     return DIVASSIGN;}
 <INLINE,BRACKET>{IDIVASSIGN} {
-    yylval.ptr = new node("OPERATOR", "//=");
+    yylval.ptr = new node("DELIMITER", "//=");
     yylval.val = "//=";
     return IDIVASSIGN;}
 <INLINE,BRACKET>{MODASSIGN} {
-    yylval.ptr = new node("OPERATOR", "%=");
+    yylval.ptr = new node("DELIMITER", "%=");
     yylval.val = "%=";
     return MODASSIGN;}
 <INLINE,BRACKET>{ATASSIGN} {
-    yylval.ptr = new node("OPERATOR", "@=");
+    yylval.ptr = new node("DELIMITER", "@=");
     yylval.val = "@=";
     return ATASSIGN;}
 <INLINE,BRACKET>{ANDASSIGN} {
-    yylval.ptr = new node("OPERATOR", "&=");
+    yylval.ptr = new node("DELIMITER", "&=");
     yylval.val = "&=";
     return ANDASSIGN;}
 <INLINE,BRACKET>{ORASSIGN} {
-    yylval.ptr = new node("OPERATOR", "|=");
+    yylval.ptr = new node("DELIMITER", "|=");
     yylval.val = "|=";
     return ORASSIGN;}
 <INLINE,BRACKET>{XORASSIGN} {
-    yylval.ptr = new node("OPERATOR", "^=");
+    yylval.ptr = new node("DELIMITER", "^=");
     yylval.val = "^=";
     return XORASSIGN;}
 <INLINE,BRACKET>{LSASSIGN} {
-    yylval.ptr = new node("OPERATOR", "<<=");
+    yylval.ptr = new node("DELIMITER", "<<=");
     yylval.val = "<<=";
     return LSASSIGN;}
 <INLINE,BRACKET>{RSASSIGN} {
-    yylval.ptr = new node("OPERATOR", ">>=");
+    yylval.ptr = new node("OPERDELIMITERATOR", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
 <INLINE,BRACKET>{POWASSIGN} {

@@ -1,0 +1,2719 @@
+Parse tree node: file input
+Edges to: 
+node new statement
+node ENDMARKER
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node function definition
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node Class Definition
+
+Parse tree node: new statement
+Edges to: 
+node new statement
+node simple statement
+
+Parse tree node: simple statement
+Edges to: 
+node Import Statement
+node NEWLINE
+
+Parse tree node: Import Statement
+Edges to: 
+node import
+node Dotted As Names
+
+Parse tree node: import
+Edges to: 
+
+Parse tree node: heapq
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node Import Statement
+node NEWLINE
+
+Parse tree node: Import Statement
+Edges to: 
+node import
+node Dotted As Names
+
+Parse tree node: import
+Edges to: 
+
+Parse tree node: itertools
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: Class Definition
+Edges to: 
+node class
+node Graph
+node :
+node Suite
+
+Parse tree node: class
+Edges to: 
+
+Parse tree node: Graph
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node function definition
+node function definition
+
+Parse tree node: function definition
+Edges to: 
+node def
+node __init__
+node parameters
+node :
+node Suite
+
+Parse tree node: def
+Edges to: 
+
+Parse tree node: __init__
+Edges to: 
+
+Parse tree node: parameters
+Edges to: 
+node (
+node Typed Arguments List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Typed Arguments List
+Edges to: 
+node self
+node close comma condition eqtest
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: close comma condition eqtest
+Edges to: 
+node ,
+node vertices
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: vertices
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node simple statement
+node simple statement
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node vertices
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: vertices
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: vertices
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node {
+node }
+
+Parse tree node: {
+Edges to: 
+
+Parse tree node: }
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: function definition
+Edges to: 
+node def
+node add_edge
+node parameters
+node :
+node Suite
+
+Parse tree node: def
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: parameters
+Edges to: 
+node (
+node Typed Arguments List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Typed Arguments List
+Edges to: 
+node self
+node close comma condition eqtest
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: close comma condition eqtest
+Edges to: 
+node close comma condition eqtest
+node ,
+node weight
+
+Parse tree node: close comma condition eqtest
+Edges to: 
+node close comma condition eqtest
+node ,
+node v
+
+Parse tree node: close comma condition eqtest
+Edges to: 
+node ,
+node u
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node If Statement
+node If Statement
+
+Parse tree node: If Statement
+Edges to: 
+node if
+node Or Test
+node :
+node Suite
+
+Parse tree node: if
+Edges to: 
+
+Parse tree node: Comparison
+Edges to: 
+node Expression
+node Close Comparison Operator Expression
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: Close Comparison Operator Expression
+Edges to: 
+node Not in
+node Expression
+
+Parse tree node: Not in
+Edges to: 
+node not
+node in
+
+Parse tree node: not
+Edges to: 
+
+Parse tree node: in
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node simple statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node {
+node }
+
+Parse tree node: {
+Edges to: 
+
+Parse tree node: }
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: If Statement
+Edges to: 
+node if
+node Or Test
+node :
+node Suite
+
+Parse tree node: if
+Edges to: 
+
+Parse tree node: Comparison
+Edges to: 
+node Expression
+node Close Comparison Operator Expression
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: Close Comparison Operator Expression
+Edges to: 
+node Not in
+node Expression
+
+Parse tree node: Not in
+Edges to: 
+node not
+node in
+
+Parse tree node: not
+Edges to: 
+
+Parse tree node: in
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node simple statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node {
+node }
+
+Parse tree node: {
+Edges to: 
+
+Parse tree node: }
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: Atomic Expression
+Edges to: 
+node self
+node Close Trailer
+
+Parse tree node: self
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: function definition
+Edges to: 
+node def
+node prim_mst
+node parameters
+node :
+node Suite
+
+Parse tree node: def
+Edges to: 
+
+Parse tree node: prim_mst
+Edges to: 
+
+Parse tree node: parameters
+Edges to: 
+node (
+node Typed Arguments List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node While Statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node simple statement
+node simple statement
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: visited
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node set
+node Close Trailer
+
+Parse tree node: set
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: edges
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node list
+node Close Trailer
+
+Parse tree node: list
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node map
+node Close Trailer
+
+Parse tree node: map
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Lambda Definition
+node Close Comma Argument
+
+Parse tree node: Lambda Definition
+Edges to: 
+node lambda
+node Variable Arguments List
+node :
+node Or Test
+
+Parse tree node: lambda
+Edges to: 
+
+Parse tree node: x
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node (
+node Test List Comparision
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Test List Comparision
+Edges to: 
+node Or Test
+node close commatest or star expression
+
+Parse tree node: Atomic Expression
+Edges to: 
+node x
+node Close Trailer
+
+Parse tree node: x
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: 1
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node close commatest or star expression
+node ,
+node Or Test
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node x
+node Close Trailer
+
+Parse tree node: x
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node graph
+node Close Trailer
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node items
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: items
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node heapq
+node Close Trailer
+
+Parse tree node: heapq
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node heapify
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: heapify
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: edges
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: total_weight
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node iter
+node Close Trailer
+
+Parse tree node: iter
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node (
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: While Statement
+Edges to: 
+node while
+node Or Test
+node :
+node Suite
+
+Parse tree node: while
+Edges to: 
+
+Parse tree node: edges
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node simple statement
+node If Statement
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: testlist star expression
+Edges to: 
+node Or Test
+node close commatest or star expression
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node close commatest or star expression
+node ,
+node Or Test
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node heapq
+node Close Trailer
+
+Parse tree node: heapq
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node heappop
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: heappop
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: edges
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: If Statement
+Edges to: 
+node if
+node Or Test
+node :
+node Suite
+
+Parse tree node: if
+Edges to: 
+
+Parse tree node: Comparison
+Edges to: 
+node Expression
+node Close Comparison Operator Expression
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: Close Comparison Operator Expression
+Edges to: 
+node Not in
+node Expression
+
+Parse tree node: Not in
+Edges to: 
+node not
+node in
+
+Parse tree node: not
+Edges to: 
+
+Parse tree node: in
+Edges to: 
+
+Parse tree node: visited
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node Plus Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node For Statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node Plus Statement
+node simple statement
+
+Parse tree node: Plus Statement
+Edges to: 
+node simple statement
+node simple statement
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node visited
+node Close Trailer
+
+Parse tree node: visited
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node +=
+
+Parse tree node: total_weight
+Edges to: 
+
+Parse tree node: +=
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node iter
+node Close Trailer
+
+Parse tree node: iter
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node itertools
+node Close Trailer
+
+Parse tree node: itertools
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node chain
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: chain
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node (
+node Test List Comparision
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Test List Comparision
+Edges to: 
+node Or Test
+node ,
+
+Parse tree node: Atom
+Edges to: 
+node (
+node Test List Comparision
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Test List Comparision
+Edges to: 
+node Or Test
+node close commatest or star expression
+
+Parse tree node: u
+Edges to: 
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: For Statement
+Edges to: 
+node for
+node Expression List
+node in
+node Test List
+node :
+node Suite
+
+Parse tree node: for
+Edges to: 
+
+Parse tree node: Expression List
+Edges to: 
+node Expression
+node Close Comma Expression Or Star Expression
+
+Parse tree node: neighbor
+Edges to: 
+
+Parse tree node: Close Comma Expression Or Star Expression
+Edges to: 
+node ,
+node Expression
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: in
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node graph
+node Close Trailer
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node graph
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node [
+node Subscript List
+node ]
+
+Parse tree node: [
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ]
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node items
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: items
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node If Statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: If Statement
+Edges to: 
+node if
+node Or Test
+node :
+node Suite
+
+Parse tree node: if
+Edges to: 
+
+Parse tree node: Comparison
+Edges to: 
+node Expression
+node Close Comparison Operator Expression
+
+Parse tree node: neighbor
+Edges to: 
+
+Parse tree node: Close Comparison Operator Expression
+Edges to: 
+node Not in
+node Expression
+
+Parse tree node: Not in
+Edges to: 
+node not
+node in
+
+Parse tree node: not
+Edges to: 
+
+Parse tree node: in
+Edges to: 
+
+Parse tree node: visited
+Edges to: 
+
+Parse tree node: :
+Edges to: 
+
+Parse tree node: Suite
+Edges to: 
+node NEWLINE
+node INDENT
+node simple statement
+node DEDENT
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: INDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node heapq
+node Close Trailer
+
+Parse tree node: heapq
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node heappush
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: heappush
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: edges
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: Atom
+Edges to: 
+node (
+node Test List Comparision
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Test List Comparision
+Edges to: 
+node Or Test
+node close commatest or star expression
+
+Parse tree node: weight
+Edges to: 
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node close commatest or star expression
+node ,
+node Or Test
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: v
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: neighbor
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node Return Statement
+node NEWLINE
+
+Parse tree node: Return Statement
+Edges to: 
+node return
+node Test List
+
+Parse tree node: return
+Edges to: 
+
+Parse tree node: Test List
+Edges to: 
+node Or Test
+node Close Comma Test
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: Close Comma Test
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: total_weight
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: DEDENT
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node Graph
+node Close Trailer
+
+Parse tree node: Graph
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: 4
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node g
+node Close Trailer
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add_edge
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node Close Comma Argument
+node ,
+node Or Test
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 1
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 2
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node g
+node Close Trailer
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add_edge
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: 0
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node Close Comma Argument
+node ,
+node Or Test
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 2
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 4
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node g
+node Close Trailer
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add_edge
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: 1
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node Close Comma Argument
+node ,
+node Or Test
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 2
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 1
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node g
+node Close Trailer
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add_edge
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: 1
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node Close Comma Argument
+node ,
+node Or Test
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 3
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 3
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node g
+node Close Trailer
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: Close Trailer
+Edges to: 
+node Close Trailer
+node Trailer
+
+Parse tree node: Trailer
+Edges to: 
+node .
+node add_edge
+
+Parse tree node: .
+Edges to: 
+
+Parse tree node: add_edge
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: 2
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node Close Comma Argument
+node ,
+node Or Test
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 3
+Edges to: 
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: 5
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: expression statement
+Edges to: 
+node testlist star expression
+node close yield or test star
+
+Parse tree node: testlist star expression
+Edges to: 
+node Or Test
+node close commatest or star expression
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: close commatest or star expression
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: total_weight
+Edges to: 
+
+Parse tree node: close yield or test star
+Edges to: 
+node =
+node testlist star expression
+
+Parse tree node: =
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node prim_mst
+node Close Trailer
+
+Parse tree node: prim_mst
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: g
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node print
+node Close Trailer
+
+Parse tree node: print
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: \"Minimum Spanning Tree Edges:\"
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: Atomic Expression
+Edges to: 
+node list
+node Close Trailer
+
+Parse tree node: list
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: mst_edges
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: simple statement
+Edges to: 
+node expression statement
+node NEWLINE
+
+Parse tree node: Atomic Expression
+Edges to: 
+node print
+node Close Trailer
+
+Parse tree node: print
+Edges to: 
+
+Parse tree node: Trailer
+Edges to: 
+node (
+node Argument List
+node )
+
+Parse tree node: (
+Edges to: 
+
+Parse tree node: Argument List
+Edges to: 
+node Or Test
+node Close Comma Argument
+
+Parse tree node: \"Total Weight of MST:\"
+Edges to: 
+
+Parse tree node: Close Comma Argument
+Edges to: 
+node ,
+node Or Test
+
+Parse tree node: ,
+Edges to: 
+
+Parse tree node: total_weight
+Edges to: 
+
+Parse tree node: )
+Edges to: 
+
+Parse tree node: NEWLINE
+Edges to: 
+
+Parse tree node: ENDMARKER
+Edges to: 
+
