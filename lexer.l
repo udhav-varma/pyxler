@@ -45,7 +45,7 @@ longbytes (([']['][']{longbytesitem}*['][']['])|(["]["]["]{longbytesitem}*["]["]
 shortbytes  (([']{shortbytesitem}*['])|(["]{shortbytesitem}*["]))
 bytesprefix    ("b"|"B"|"br"|"Br"|"bR"|"BR"|"rb"|"rB"|"Rb"|"RB")
 bytesliteral   {bytesprefix}({shortbytes}|{longbytes})
-stringescapeseq ([\][.])
+stringescapeseq ([\\].)
 longstringchar  [^\\]
 shortstringchar [^\\\n"]
 longstringitem  ({longstringchar}|{stringescapeseq})
