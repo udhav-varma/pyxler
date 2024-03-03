@@ -1,207 +1,1748 @@
 digraph AST{
-	1[label="file_input"]
-	2[label="IfStatement"]
-	3[color="purple" shape="rectangle"]
-	3[label="KEYWORD\n( if )"]
-	4[label="AndTest"]
-	5[label="Comparison"]
-	6[color="red" shape="rectangle"]
-	6[label="NUMBER\n( 1900 )"]
-	7[label="CloseCompOpExpr"]
-	8[label="CloseCompOpExpr"]
-	9[color="blue" shape="rectangle"]
-	9[label="DELIMITER\n( < )"]
-	10[color="green" shape="rectangle"]
-	10[label="IDENTIFIER\n( year )"]
-	11[color="blue" shape="rectangle"]
-	11[label="DELIMITER\n( < )"]
-	12[color="red" shape="rectangle"]
-	12[label="NUMBER\n( 2100 )"]
-	13[label="CloseAndNotTest"]
-	14[label="CloseAndNotTest"]
-	15[label="CloseAndNotTest"]
-	16[label="CloseAndNotTest"]
-	17[label="CloseAndNotTest"]
-	18[label="CloseAndNotTest"]
-	19[color="purple" shape="rectangle"]
-	19[label="KEYWORD\n( and )"]
-	20[label="Comparison"]
-	21[color="red" shape="rectangle"]
-	21[label="NUMBER\n( 1 )"]
-	22[label="CloseCompOpExpr"]
-	23[label="CloseCompOpExpr"]
-	24[color="VIOLET" shape="rectangle"]
-	24[label="OPERATOR\n( <= )"]
-	25[color="green" shape="rectangle"]
-	25[label="IDENTIFIER\n( month )"]
-	26[color="VIOLET" shape="rectangle"]
-	26[label="OPERATOR\n( <= )"]
-	27[color="red" shape="rectangle"]
-	27[label="NUMBER\n( 12 )"]
-	28[color="purple" shape="rectangle"]
-	28[label="KEYWORD\n( and )"]
-	29[label="Comparison"]
-	30[color="green" shape="rectangle"]
-	30[label="IDENTIFIER\n( x )"]
-	31[label="CloseCompOpExpr"]
-	32[color="VIOLET" shape="rectangle"]
-	32[label="OPERATOR\n( == )"]
-	33[color="yellow" shape="rectangle"]
-	33[label="\"huihuihui\""]
-	34[color="purple" shape="rectangle"]
-	34[label="KEYWORD\n( and )"]
-	35[label="Comparison"]
-	36[color="red" shape="rectangle"]
-	36[label="NUMBER\n( 1 )"]
-	37[label="CloseCompOpExpr"]
-	38[label="CloseCompOpExpr"]
-	39[color="VIOLET" shape="rectangle"]
-	39[label="OPERATOR\n( <= )"]
-	40[color="green" shape="rectangle"]
-	40[label="IDENTIFIER\n( day )"]
-	41[color="VIOLET" shape="rectangle"]
-	41[label="OPERATOR\n( <= )"]
-	42[color="red" shape="rectangle"]
-	42[label="NUMBER\n( 31 )"]
-	43[color="purple" shape="rectangle"]
-	43[label="KEYWORD\n( and )"]
-	44[label="Comparison"]
-	45[color="red" shape="rectangle"]
-	45[label="NUMBER\n( 0 )"]
-	46[label="CloseCompOpExpr"]
-	47[label="CloseCompOpExpr"]
-	48[color="VIOLET" shape="rectangle"]
-	48[label="OPERATOR\n( <= )"]
-	49[color="green" shape="rectangle"]
-	49[label="IDENTIFIER\n( hour )"]
-	50[color="blue" shape="rectangle"]
-	50[label="DELIMITER\n( < )"]
-	51[color="red" shape="rectangle"]
-	51[label="NUMBER\n( 24 )"]
-	52[color="purple" shape="rectangle"]
-	52[label="KEYWORD\n( and )"]
-	53[label="Comparison"]
-	54[color="red" shape="rectangle"]
-	54[label="NUMBER\n( 0 )"]
-	55[label="CloseCompOpExpr"]
-	56[label="CloseCompOpExpr"]
-	57[color="VIOLET" shape="rectangle"]
-	57[label="OPERATOR\n( <= )"]
-	58[color="green" shape="rectangle"]
-	58[label="IDENTIFIER\n( minute )"]
-	59[color="blue" shape="rectangle"]
-	59[label="DELIMITER\n( < )"]
-	60[color="red" shape="rectangle"]
-	60[label="NUMBER\n( 60 )"]
-	61[color="purple" shape="rectangle"]
-	61[label="KEYWORD\n( and )"]
-	62[label="Comparison"]
-	63[color="red" shape="rectangle"]
-	63[label="NUMBER\n( 0 )"]
-	64[label="CloseCompOpExpr"]
-	65[label="CloseCompOpExpr"]
-	66[color="VIOLET" shape="rectangle"]
-	66[label="OPERATOR\n( <= )"]
-	67[color="green" shape="rectangle"]
-	67[label="IDENTIFIER\n( second )"]
-	68[color="blue" shape="rectangle"]
-	68[label="DELIMITER\n( < )"]
-	69[color="red" shape="rectangle"]
-	69[label="NUMBER\n( 60 )"]
+	1[label="file input"]
+	2[label="new statement"]
+	3[label="new statement"]
+	4[label="new statement"]
+	5[label="new statement"]
+	6[label="new statement"]
+	7[label="new statement"]
+	8[label="new statement"]
+	9[label="new statement"]
+	10[label="new statement"]
+	11[label="new statement"]
+	12[label="new statement"]
+	13[label="new statement"]
+	14[label="simple statement"]
+	15[label="Import Statement"]
+	16[color="purple" shape="rectangle"]
+	16[label="KEYWORD\n( import )"]
+	17[color="green" shape="rectangle"]
+	17[label="IDENTIFIER\n( heapq )"]
+	18[color="maroon" shape="rectangle"]
+	18[label="NEWLINE"]
+	19[label="simple statement"]
+	20[label="Import Statement"]
+	21[color="purple" shape="rectangle"]
+	21[label="KEYWORD\n( import )"]
+	22[color="green" shape="rectangle"]
+	22[label="IDENTIFIER\n( itertools )"]
+	23[color="maroon" shape="rectangle"]
+	23[label="NEWLINE"]
+	24[label="Class Definition"]
+	25[color="purple" shape="rectangle"]
+	25[label="KEYWORD\n( class )"]
+	26[color="green" shape="rectangle"]
+	26[label="IDENTIFIER\n( Graph )"]
+	27[color="blue" shape="rectangle"]
+	27[label="DELIMITER\n( : )"]
+	28[label="Suite"]
+	29[color="maroon" shape="rectangle"]
+	29[label="NEWLINE"]
+	30[color="maroon" shape="rectangle"]
+	30[label="INDENT"]
+	31[label="Plus Statement"]
+	32[label="function definition"]
+	33[color="purple" shape="rectangle"]
+	33[label="KEYWORD\n( def )"]
+	34[color="green" shape="rectangle"]
+	34[label="IDENTIFIER\n( __init__ )"]
+	35[label="parameters"]
+	36[color="blue" shape="rectangle"]
+	36[label="DELIMITER\n( ( )"]
+	37[label="Typed Arguments List"]
+	38[color="green" shape="rectangle"]
+	38[label="IDENTIFIER\n( self )"]
+	39[label="close comma condition eqtest"]
+	40[color="blue" shape="rectangle"]
+	40[label="DELIMITER\n( , )"]
+	41[color="green" shape="rectangle"]
+	41[label="IDENTIFIER\n( vertices )"]
+	42[color="blue" shape="rectangle"]
+	42[label="DELIMITER\n( ) )"]
+	43[color="blue" shape="rectangle"]
+	43[label="DELIMITER\n( : )"]
+	44[label="Suite"]
+	45[color="maroon" shape="rectangle"]
+	45[label="NEWLINE"]
+	46[color="maroon" shape="rectangle"]
+	46[label="INDENT"]
+	47[label="Plus Statement"]
+	48[label="simple statement"]
+	49[label="expression statement"]
+	50[label="Atomic Expression"]
+	51[color="green" shape="rectangle"]
+	51[label="IDENTIFIER\n( self )"]
+	52[label="Trailer"]
+	53[color="blue" shape="rectangle"]
+	53[label="DELIMITER\n( . )"]
+	54[color="green" shape="rectangle"]
+	54[label="IDENTIFIER\n( vertices )"]
+	55[label="close yield or test star"]
+	56[color="blue" shape="rectangle"]
+	56[label="DELIMITER\n( = )"]
+	57[color="green" shape="rectangle"]
+	57[label="IDENTIFIER\n( vertices )"]
+	58[color="maroon" shape="rectangle"]
+	58[label="NEWLINE"]
+	59[label="simple statement"]
+	60[label="expression statement"]
+	61[label="Atomic Expression"]
+	62[color="green" shape="rectangle"]
+	62[label="IDENTIFIER\n( self )"]
+	63[label="Trailer"]
+	64[color="blue" shape="rectangle"]
+	64[label="DELIMITER\n( . )"]
+	65[color="green" shape="rectangle"]
+	65[label="IDENTIFIER\n( graph )"]
+	66[label="close yield or test star"]
+	67[color="blue" shape="rectangle"]
+	67[label="DELIMITER\n( = )"]
+	68[label="Atom"]
+	69[color="blue" shape="rectangle"]
+	69[label="DELIMITER\n( { )"]
 	70[color="blue" shape="rectangle"]
-	70[label="DELIMITER\n( : )"]
-	71[label="Suite"]
-	72[label="NEWLINE\n( NEWLINE )"]
-	73[color="yellow" shape="rectangle"]
-	73[label="INDENT"]
-	74[label="simple_stmt"]
-	75[label="ReturnStatement"]
-	76[color="purple" shape="rectangle"]
-	76[label="KEYWORD\n( return )"]
-	77[color="red" shape="rectangle"]
-	77[label="NUMBER\n( 1 )"]
-	78[label="NEWLINE\n( NEWLINE )"]
-	79[color="yellow" shape="rectangle"]
-	79[label="DEDENT"]
-	80[color="yellow" shape="rectangle"]
-	80[label="ENDMARKER"]
+	70[label="DELIMITER\n( } )"]
+	71[color="maroon" shape="rectangle"]
+	71[label="NEWLINE"]
+	72[color="maroon" shape="rectangle"]
+	72[label="DEDENT"]
+	73[label="function definition"]
+	74[color="purple" shape="rectangle"]
+	74[label="KEYWORD\n( def )"]
+	75[color="green" shape="rectangle"]
+	75[label="IDENTIFIER\n( add_edge )"]
+	76[label="parameters"]
+	77[color="blue" shape="rectangle"]
+	77[label="DELIMITER\n( ( )"]
+	78[label="Typed Arguments List"]
+	79[color="green" shape="rectangle"]
+	79[label="IDENTIFIER\n( self )"]
+	80[label="close comma condition eqtest"]
+	81[label="close comma condition eqtest"]
+	82[label="close comma condition eqtest"]
+	83[color="blue" shape="rectangle"]
+	83[label="DELIMITER\n( , )"]
+	84[color="green" shape="rectangle"]
+	84[label="IDENTIFIER\n( u )"]
+	85[color="blue" shape="rectangle"]
+	85[label="DELIMITER\n( , )"]
+	86[color="green" shape="rectangle"]
+	86[label="IDENTIFIER\n( v )"]
+	87[color="blue" shape="rectangle"]
+	87[label="DELIMITER\n( , )"]
+	88[color="green" shape="rectangle"]
+	88[label="IDENTIFIER\n( weight )"]
+	89[color="blue" shape="rectangle"]
+	89[label="DELIMITER\n( ) )"]
+	90[color="blue" shape="rectangle"]
+	90[label="DELIMITER\n( : )"]
+	91[label="Suite"]
+	92[color="maroon" shape="rectangle"]
+	92[label="NEWLINE"]
+	93[color="maroon" shape="rectangle"]
+	93[label="INDENT"]
+	94[label="Plus Statement"]
+	95[label="Plus Statement"]
+	96[label="Plus Statement"]
+	97[label="If Statement"]
+	98[color="purple" shape="rectangle"]
+	98[label="KEYWORD\n( if )"]
+	99[label="Comparison"]
+	100[color="green" shape="rectangle"]
+	100[label="IDENTIFIER\n( u )"]
+	101[label="Close Comparison Operator Expression"]
+	102[label="Not in"]
+	103[color="purple" shape="rectangle"]
+	103[label="KEYWORD\n( not )"]
+	104[color="purple" shape="rectangle"]
+	104[label="KEYWORD\n( in )"]
+	105[label="Atomic Expression"]
+	106[color="green" shape="rectangle"]
+	106[label="IDENTIFIER\n( self )"]
+	107[label="Trailer"]
+	108[color="blue" shape="rectangle"]
+	108[label="DELIMITER\n( . )"]
+	109[color="green" shape="rectangle"]
+	109[label="IDENTIFIER\n( graph )"]
+	110[color="blue" shape="rectangle"]
+	110[label="DELIMITER\n( : )"]
+	111[label="Suite"]
+	112[color="maroon" shape="rectangle"]
+	112[label="NEWLINE"]
+	113[color="maroon" shape="rectangle"]
+	113[label="INDENT"]
+	114[label="simple statement"]
+	115[label="expression statement"]
+	116[label="Atomic Expression"]
+	117[color="green" shape="rectangle"]
+	117[label="IDENTIFIER\n( self )"]
+	118[label="Close Trailer"]
+	119[label="Trailer"]
+	120[color="blue" shape="rectangle"]
+	120[label="DELIMITER\n( . )"]
+	121[color="green" shape="rectangle"]
+	121[label="IDENTIFIER\n( graph )"]
+	122[label="Trailer"]
+	123[color="blue" shape="rectangle"]
+	123[label="DELIMITER\n( [ )"]
+	124[color="green" shape="rectangle"]
+	124[label="IDENTIFIER\n( u )"]
+	125[color="blue" shape="rectangle"]
+	125[label="DELIMITER\n( ] )"]
+	126[label="close yield or test star"]
+	127[color="blue" shape="rectangle"]
+	127[label="DELIMITER\n( = )"]
+	128[label="Atom"]
+	129[color="blue" shape="rectangle"]
+	129[label="DELIMITER\n( { )"]
+	130[color="blue" shape="rectangle"]
+	130[label="DELIMITER\n( } )"]
+	131[color="maroon" shape="rectangle"]
+	131[label="NEWLINE"]
+	132[color="maroon" shape="rectangle"]
+	132[label="DEDENT"]
+	133[label="If Statement"]
+	134[color="purple" shape="rectangle"]
+	134[label="KEYWORD\n( if )"]
+	135[label="Comparison"]
+	136[color="green" shape="rectangle"]
+	136[label="IDENTIFIER\n( v )"]
+	137[label="Close Comparison Operator Expression"]
+	138[label="Not in"]
+	139[color="purple" shape="rectangle"]
+	139[label="KEYWORD\n( not )"]
+	140[color="purple" shape="rectangle"]
+	140[label="KEYWORD\n( in )"]
+	141[label="Atomic Expression"]
+	142[color="green" shape="rectangle"]
+	142[label="IDENTIFIER\n( self )"]
+	143[label="Trailer"]
+	144[color="blue" shape="rectangle"]
+	144[label="DELIMITER\n( . )"]
+	145[color="green" shape="rectangle"]
+	145[label="IDENTIFIER\n( graph )"]
+	146[color="blue" shape="rectangle"]
+	146[label="DELIMITER\n( : )"]
+	147[label="Suite"]
+	148[color="maroon" shape="rectangle"]
+	148[label="NEWLINE"]
+	149[color="maroon" shape="rectangle"]
+	149[label="INDENT"]
+	150[label="simple statement"]
+	151[label="expression statement"]
+	152[label="Atomic Expression"]
+	153[color="green" shape="rectangle"]
+	153[label="IDENTIFIER\n( self )"]
+	154[label="Close Trailer"]
+	155[label="Trailer"]
+	156[color="blue" shape="rectangle"]
+	156[label="DELIMITER\n( . )"]
+	157[color="green" shape="rectangle"]
+	157[label="IDENTIFIER\n( graph )"]
+	158[label="Trailer"]
+	159[color="blue" shape="rectangle"]
+	159[label="DELIMITER\n( [ )"]
+	160[color="green" shape="rectangle"]
+	160[label="IDENTIFIER\n( v )"]
+	161[color="blue" shape="rectangle"]
+	161[label="DELIMITER\n( ] )"]
+	162[label="close yield or test star"]
+	163[color="blue" shape="rectangle"]
+	163[label="DELIMITER\n( = )"]
+	164[label="Atom"]
+	165[color="blue" shape="rectangle"]
+	165[label="DELIMITER\n( { )"]
+	166[color="blue" shape="rectangle"]
+	166[label="DELIMITER\n( } )"]
+	167[color="maroon" shape="rectangle"]
+	167[label="NEWLINE"]
+	168[color="maroon" shape="rectangle"]
+	168[label="DEDENT"]
+	169[label="simple statement"]
+	170[label="expression statement"]
+	171[label="Atomic Expression"]
+	172[color="green" shape="rectangle"]
+	172[label="IDENTIFIER\n( self )"]
+	173[label="Close Trailer"]
+	174[label="Close Trailer"]
+	175[label="Trailer"]
+	176[color="blue" shape="rectangle"]
+	176[label="DELIMITER\n( . )"]
+	177[color="green" shape="rectangle"]
+	177[label="IDENTIFIER\n( graph )"]
+	178[label="Trailer"]
+	179[color="blue" shape="rectangle"]
+	179[label="DELIMITER\n( [ )"]
+	180[color="green" shape="rectangle"]
+	180[label="IDENTIFIER\n( u )"]
+	181[color="blue" shape="rectangle"]
+	181[label="DELIMITER\n( ] )"]
+	182[label="Trailer"]
+	183[color="blue" shape="rectangle"]
+	183[label="DELIMITER\n( [ )"]
+	184[color="green" shape="rectangle"]
+	184[label="IDENTIFIER\n( v )"]
+	185[color="blue" shape="rectangle"]
+	185[label="DELIMITER\n( ] )"]
+	186[label="close yield or test star"]
+	187[color="blue" shape="rectangle"]
+	187[label="DELIMITER\n( = )"]
+	188[color="green" shape="rectangle"]
+	188[label="IDENTIFIER\n( weight )"]
+	189[color="maroon" shape="rectangle"]
+	189[label="NEWLINE"]
+	190[label="simple statement"]
+	191[label="expression statement"]
+	192[label="Atomic Expression"]
+	193[color="green" shape="rectangle"]
+	193[label="IDENTIFIER\n( self )"]
+	194[label="Close Trailer"]
+	195[label="Close Trailer"]
+	196[label="Trailer"]
+	197[color="blue" shape="rectangle"]
+	197[label="DELIMITER\n( . )"]
+	198[color="green" shape="rectangle"]
+	198[label="IDENTIFIER\n( graph )"]
+	199[label="Trailer"]
+	200[color="blue" shape="rectangle"]
+	200[label="DELIMITER\n( [ )"]
+	201[color="green" shape="rectangle"]
+	201[label="IDENTIFIER\n( v )"]
+	202[color="blue" shape="rectangle"]
+	202[label="DELIMITER\n( ] )"]
+	203[label="Trailer"]
+	204[color="blue" shape="rectangle"]
+	204[label="DELIMITER\n( [ )"]
+	205[color="green" shape="rectangle"]
+	205[label="IDENTIFIER\n( u )"]
+	206[color="blue" shape="rectangle"]
+	206[label="DELIMITER\n( ] )"]
+	207[label="close yield or test star"]
+	208[color="blue" shape="rectangle"]
+	208[label="DELIMITER\n( = )"]
+	209[color="green" shape="rectangle"]
+	209[label="IDENTIFIER\n( weight )"]
+	210[color="maroon" shape="rectangle"]
+	210[label="NEWLINE"]
+	211[color="maroon" shape="rectangle"]
+	211[label="DEDENT"]
+	212[color="maroon" shape="rectangle"]
+	212[label="DEDENT"]
+	213[label="function definition"]
+	214[color="purple" shape="rectangle"]
+	214[label="KEYWORD\n( def )"]
+	215[color="green" shape="rectangle"]
+	215[label="IDENTIFIER\n( prim_mst )"]
+	216[label="parameters"]
+	217[color="blue" shape="rectangle"]
+	217[label="DELIMITER\n( ( )"]
+	218[color="green" shape="rectangle"]
+	218[label="IDENTIFIER\n( graph )"]
+	219[color="blue" shape="rectangle"]
+	219[label="DELIMITER\n( ) )"]
+	220[color="blue" shape="rectangle"]
+	220[label="DELIMITER\n( : )"]
+	221[label="Suite"]
+	222[color="maroon" shape="rectangle"]
+	222[label="NEWLINE"]
+	223[color="maroon" shape="rectangle"]
+	223[label="INDENT"]
+	224[label="Plus Statement"]
+	225[label="Plus Statement"]
+	226[label="Plus Statement"]
+	227[label="Plus Statement"]
+	228[label="Plus Statement"]
+	229[label="Plus Statement"]
+	230[label="simple statement"]
+	231[label="expression statement"]
+	232[color="green" shape="rectangle"]
+	232[label="IDENTIFIER\n( visited )"]
+	233[label="close yield or test star"]
+	234[color="blue" shape="rectangle"]
+	234[label="DELIMITER\n( = )"]
+	235[label="Atomic Expression"]
+	236[color="green" shape="rectangle"]
+	236[label="IDENTIFIER\n( set )"]
+	237[label="Trailer"]
+	238[color="blue" shape="rectangle"]
+	238[label="DELIMITER\n( ( )"]
+	239[color="blue" shape="rectangle"]
+	239[label="DELIMITER\n( ) )"]
+	240[color="maroon" shape="rectangle"]
+	240[label="NEWLINE"]
+	241[label="simple statement"]
+	242[label="expression statement"]
+	243[color="green" shape="rectangle"]
+	243[label="IDENTIFIER\n( edges )"]
+	244[label="close yield or test star"]
+	245[color="blue" shape="rectangle"]
+	245[label="DELIMITER\n( = )"]
+	246[label="Atomic Expression"]
+	247[color="green" shape="rectangle"]
+	247[label="IDENTIFIER\n( list )"]
+	248[label="Trailer"]
+	249[color="blue" shape="rectangle"]
+	249[label="DELIMITER\n( ( )"]
+	250[label="Atomic Expression"]
+	251[color="green" shape="rectangle"]
+	251[label="IDENTIFIER\n( map )"]
+	252[label="Trailer"]
+	253[color="blue" shape="rectangle"]
+	253[label="DELIMITER\n( ( )"]
+	254[label="Argument List"]
+	255[label="Lambda Definition"]
+	256[color="purple" shape="rectangle"]
+	256[label="KEYWORD\n( lambda )"]
+	257[color="green" shape="rectangle"]
+	257[label="IDENTIFIER\n( x )"]
+	258[color="blue" shape="rectangle"]
+	258[label="DELIMITER\n( : )"]
+	259[label="Atom"]
+	260[color="blue" shape="rectangle"]
+	260[label="DELIMITER\n( ( )"]
+	261[label="Test List Comparision"]
+	262[label="Atomic Expression"]
+	263[color="green" shape="rectangle"]
+	263[label="IDENTIFIER\n( x )"]
+	264[label="Trailer"]
+	265[color="blue" shape="rectangle"]
+	265[label="DELIMITER\n( [ )"]
+	266[color="red" shape="rectangle"]
+	266[label="NUMBER\n( 1 )"]
+	267[color="blue" shape="rectangle"]
+	267[label="DELIMITER\n( ] )"]
+	268[label="close commatest or star expression"]
+	269[label="close commatest or star expression"]
+	270[color="blue" shape="rectangle"]
+	270[label="DELIMITER\n( , )"]
+	271[color="red" shape="rectangle"]
+	271[label="NUMBER\n( 0 )"]
+	272[color="blue" shape="rectangle"]
+	272[label="DELIMITER\n( , )"]
+	273[label="Atomic Expression"]
+	274[color="green" shape="rectangle"]
+	274[label="IDENTIFIER\n( x )"]
+	275[label="Trailer"]
+	276[color="blue" shape="rectangle"]
+	276[label="DELIMITER\n( [ )"]
+	277[color="red" shape="rectangle"]
+	277[label="NUMBER\n( 0 )"]
+	278[color="blue" shape="rectangle"]
+	278[label="DELIMITER\n( ] )"]
+	279[color="blue" shape="rectangle"]
+	279[label="DELIMITER\n( ) )"]
+	280[label="Close Comma Argument"]
+	281[color="blue" shape="rectangle"]
+	281[label="DELIMITER\n( , )"]
+	282[label="Atomic Expression"]
+	283[color="green" shape="rectangle"]
+	283[label="IDENTIFIER\n( graph )"]
+	284[label="Close Trailer"]
+	285[label="Close Trailer"]
+	286[label="Close Trailer"]
+	287[label="Trailer"]
+	288[color="blue" shape="rectangle"]
+	288[label="DELIMITER\n( . )"]
+	289[color="green" shape="rectangle"]
+	289[label="IDENTIFIER\n( graph )"]
+	290[label="Trailer"]
+	291[color="blue" shape="rectangle"]
+	291[label="DELIMITER\n( [ )"]
+	292[color="red" shape="rectangle"]
+	292[label="NUMBER\n( 0 )"]
+	293[color="blue" shape="rectangle"]
+	293[label="DELIMITER\n( ] )"]
+	294[label="Trailer"]
+	295[color="blue" shape="rectangle"]
+	295[label="DELIMITER\n( . )"]
+	296[color="green" shape="rectangle"]
+	296[label="IDENTIFIER\n( items )"]
+	297[label="Trailer"]
+	298[color="blue" shape="rectangle"]
+	298[label="DELIMITER\n( ( )"]
+	299[color="blue" shape="rectangle"]
+	299[label="DELIMITER\n( ) )"]
+	300[color="blue" shape="rectangle"]
+	300[label="DELIMITER\n( ) )"]
+	301[color="blue" shape="rectangle"]
+	301[label="DELIMITER\n( ) )"]
+	302[color="maroon" shape="rectangle"]
+	302[label="NEWLINE"]
+	303[label="simple statement"]
+	304[label="Atomic Expression"]
+	305[color="green" shape="rectangle"]
+	305[label="IDENTIFIER\n( heapq )"]
+	306[label="Close Trailer"]
+	307[label="Trailer"]
+	308[color="blue" shape="rectangle"]
+	308[label="DELIMITER\n( . )"]
+	309[color="green" shape="rectangle"]
+	309[label="IDENTIFIER\n( heapify )"]
+	310[label="Trailer"]
+	311[color="blue" shape="rectangle"]
+	311[label="DELIMITER\n( ( )"]
+	312[color="green" shape="rectangle"]
+	312[label="IDENTIFIER\n( edges )"]
+	313[color="blue" shape="rectangle"]
+	313[label="DELIMITER\n( ) )"]
+	314[color="maroon" shape="rectangle"]
+	314[label="NEWLINE"]
+	315[label="simple statement"]
+	316[label="expression statement"]
+	317[color="green" shape="rectangle"]
+	317[label="IDENTIFIER\n( total_weight )"]
+	318[label="close yield or test star"]
+	319[color="blue" shape="rectangle"]
+	319[label="DELIMITER\n( = )"]
+	320[color="red" shape="rectangle"]
+	320[label="NUMBER\n( 0 )"]
+	321[color="maroon" shape="rectangle"]
+	321[label="NEWLINE"]
+	322[label="simple statement"]
+	323[label="expression statement"]
+	324[color="green" shape="rectangle"]
+	324[label="IDENTIFIER\n( mst_edges )"]
+	325[label="close yield or test star"]
+	326[color="blue" shape="rectangle"]
+	326[label="DELIMITER\n( = )"]
+	327[label="Atomic Expression"]
+	328[color="green" shape="rectangle"]
+	328[label="IDENTIFIER\n( iter )"]
+	329[label="Trailer"]
+	330[color="blue" shape="rectangle"]
+	330[label="DELIMITER\n( ( )"]
+	331[label="Atom"]
+	332[color="blue" shape="rectangle"]
+	332[label="DELIMITER\n( ( )"]
+	333[color="blue" shape="rectangle"]
+	333[label="DELIMITER\n( ) )"]
+	334[color="blue" shape="rectangle"]
+	334[label="DELIMITER\n( ) )"]
+	335[color="maroon" shape="rectangle"]
+	335[label="NEWLINE"]
+	336[label="While Statement"]
+	337[color="purple" shape="rectangle"]
+	337[label="KEYWORD\n( while )"]
+	338[color="green" shape="rectangle"]
+	338[label="IDENTIFIER\n( edges )"]
+	339[color="blue" shape="rectangle"]
+	339[label="DELIMITER\n( : )"]
+	340[label="Suite"]
+	341[color="maroon" shape="rectangle"]
+	341[label="NEWLINE"]
+	342[color="maroon" shape="rectangle"]
+	342[label="INDENT"]
+	343[label="Plus Statement"]
+	344[label="simple statement"]
+	345[label="expression statement"]
+	346[label="testlist star expression"]
+	347[color="green" shape="rectangle"]
+	347[label="IDENTIFIER\n( weight )"]
+	348[label="close commatest or star expression"]
+	349[label="close commatest or star expression"]
+	350[color="blue" shape="rectangle"]
+	350[label="DELIMITER\n( , )"]
+	351[color="green" shape="rectangle"]
+	351[label="IDENTIFIER\n( u )"]
+	352[color="blue" shape="rectangle"]
+	352[label="DELIMITER\n( , )"]
+	353[color="green" shape="rectangle"]
+	353[label="IDENTIFIER\n( v )"]
+	354[label="close yield or test star"]
+	355[color="blue" shape="rectangle"]
+	355[label="DELIMITER\n( = )"]
+	356[label="Atomic Expression"]
+	357[color="green" shape="rectangle"]
+	357[label="IDENTIFIER\n( heapq )"]
+	358[label="Close Trailer"]
+	359[label="Trailer"]
+	360[color="blue" shape="rectangle"]
+	360[label="DELIMITER\n( . )"]
+	361[color="green" shape="rectangle"]
+	361[label="IDENTIFIER\n( heappop )"]
+	362[label="Trailer"]
+	363[color="blue" shape="rectangle"]
+	363[label="DELIMITER\n( ( )"]
+	364[color="green" shape="rectangle"]
+	364[label="IDENTIFIER\n( edges )"]
+	365[color="blue" shape="rectangle"]
+	365[label="DELIMITER\n( ) )"]
+	366[color="maroon" shape="rectangle"]
+	366[label="NEWLINE"]
+	367[label="If Statement"]
+	368[color="purple" shape="rectangle"]
+	368[label="KEYWORD\n( if )"]
+	369[label="Comparison"]
+	370[color="green" shape="rectangle"]
+	370[label="IDENTIFIER\n( v )"]
+	371[label="Close Comparison Operator Expression"]
+	372[label="Not in"]
+	373[color="purple" shape="rectangle"]
+	373[label="KEYWORD\n( not )"]
+	374[color="purple" shape="rectangle"]
+	374[label="KEYWORD\n( in )"]
+	375[color="green" shape="rectangle"]
+	375[label="IDENTIFIER\n( visited )"]
+	376[color="blue" shape="rectangle"]
+	376[label="DELIMITER\n( : )"]
+	377[label="Suite"]
+	378[color="maroon" shape="rectangle"]
+	378[label="NEWLINE"]
+	379[color="maroon" shape="rectangle"]
+	379[label="INDENT"]
+	380[label="Plus Statement"]
+	381[label="Plus Statement"]
+	382[label="Plus Statement"]
+	383[label="Plus Statement"]
+	384[label="simple statement"]
+	385[label="Atomic Expression"]
+	386[color="green" shape="rectangle"]
+	386[label="IDENTIFIER\n( visited )"]
+	387[label="Close Trailer"]
+	388[label="Trailer"]
+	389[color="blue" shape="rectangle"]
+	389[label="DELIMITER\n( . )"]
+	390[color="green" shape="rectangle"]
+	390[label="IDENTIFIER\n( add )"]
+	391[label="Trailer"]
+	392[color="blue" shape="rectangle"]
+	392[label="DELIMITER\n( ( )"]
+	393[color="green" shape="rectangle"]
+	393[label="IDENTIFIER\n( v )"]
+	394[color="blue" shape="rectangle"]
+	394[label="DELIMITER\n( ) )"]
+	395[color="maroon" shape="rectangle"]
+	395[label="NEWLINE"]
+	396[label="simple statement"]
+	397[label="expression statement"]
+	398[color="green" shape="rectangle"]
+	398[label="IDENTIFIER\n( total_weight )"]
+	399[color="violet" shape="rectangle"]
+	399[label="OPERATOR\n( += )"]
+	400[color="maroon" shape="rectangle"]
+	400[label="NEWLINE"]
+	401[label="simple statement"]
+	402[label="expression statement"]
+	403[color="green" shape="rectangle"]
+	403[label="IDENTIFIER\n( mst_edges )"]
+	404[label="close yield or test star"]
+	405[color="blue" shape="rectangle"]
+	405[label="DELIMITER\n( = )"]
+	406[label="Atomic Expression"]
+	407[color="green" shape="rectangle"]
+	407[label="IDENTIFIER\n( iter )"]
+	408[label="Trailer"]
+	409[color="blue" shape="rectangle"]
+	409[label="DELIMITER\n( ( )"]
+	410[color="green" shape="rectangle"]
+	410[label="IDENTIFIER\n( mst_edges )"]
+	411[color="blue" shape="rectangle"]
+	411[label="DELIMITER\n( ) )"]
+	412[color="maroon" shape="rectangle"]
+	412[label="NEWLINE"]
+	413[label="simple statement"]
+	414[label="expression statement"]
+	415[color="green" shape="rectangle"]
+	415[label="IDENTIFIER\n( mst_edges )"]
+	416[label="close yield or test star"]
+	417[color="blue" shape="rectangle"]
+	417[label="DELIMITER\n( = )"]
+	418[label="Atomic Expression"]
+	419[color="green" shape="rectangle"]
+	419[label="IDENTIFIER\n( itertools )"]
+	420[label="Close Trailer"]
+	421[label="Trailer"]
+	422[color="blue" shape="rectangle"]
+	422[label="DELIMITER\n( . )"]
+	423[color="green" shape="rectangle"]
+	423[label="IDENTIFIER\n( chain )"]
+	424[label="Trailer"]
+	425[color="blue" shape="rectangle"]
+	425[label="DELIMITER\n( ( )"]
+	426[label="Argument List"]
+	427[color="green" shape="rectangle"]
+	427[label="IDENTIFIER\n( mst_edges )"]
+	428[label="Close Comma Argument"]
+	429[color="blue" shape="rectangle"]
+	429[label="DELIMITER\n( , )"]
+	430[label="Atom"]
+	431[color="blue" shape="rectangle"]
+	431[label="DELIMITER\n( ( )"]
+	432[label="Test List Comparision"]
+	433[label="Atom"]
+	434[color="blue" shape="rectangle"]
+	434[label="DELIMITER\n( ( )"]
+	435[label="Test List Comparision"]
+	436[color="green" shape="rectangle"]
+	436[label="IDENTIFIER\n( u )"]
+	437[label="close commatest or star expression"]
+	438[color="blue" shape="rectangle"]
+	438[label="DELIMITER\n( , )"]
+	439[color="green" shape="rectangle"]
+	439[label="IDENTIFIER\n( v )"]
+	440[color="blue" shape="rectangle"]
+	440[label="DELIMITER\n( ) )"]
+	441[color="blue" shape="rectangle"]
+	441[label="DELIMITER\n( , )"]
+	442[color="blue" shape="rectangle"]
+	442[label="DELIMITER\n( ) )"]
+	443[color="blue" shape="rectangle"]
+	443[label="DELIMITER\n( ) )"]
+	444[color="maroon" shape="rectangle"]
+	444[label="NEWLINE"]
+	445[label="For Statement"]
+	446[color="purple" shape="rectangle"]
+	446[label="KEYWORD\n( for )"]
+	447[label="Expression List"]
+	448[color="green" shape="rectangle"]
+	448[label="IDENTIFIER\n( neighbor )"]
+	449[label="Close Comma Expression Or Star Expression"]
+	450[color="blue" shape="rectangle"]
+	450[label="DELIMITER\n( , )"]
+	451[color="green" shape="rectangle"]
+	451[label="IDENTIFIER\n( weight )"]
+	452[color="purple" shape="rectangle"]
+	452[label="KEYWORD\n( in )"]
+	453[label="Atomic Expression"]
+	454[color="green" shape="rectangle"]
+	454[label="IDENTIFIER\n( graph )"]
+	455[label="Close Trailer"]
+	456[label="Close Trailer"]
+	457[label="Close Trailer"]
+	458[label="Trailer"]
+	459[color="blue" shape="rectangle"]
+	459[label="DELIMITER\n( . )"]
+	460[color="green" shape="rectangle"]
+	460[label="IDENTIFIER\n( graph )"]
+	461[label="Trailer"]
+	462[color="blue" shape="rectangle"]
+	462[label="DELIMITER\n( [ )"]
+	463[color="green" shape="rectangle"]
+	463[label="IDENTIFIER\n( v )"]
+	464[color="blue" shape="rectangle"]
+	464[label="DELIMITER\n( ] )"]
+	465[label="Trailer"]
+	466[color="blue" shape="rectangle"]
+	466[label="DELIMITER\n( . )"]
+	467[color="green" shape="rectangle"]
+	467[label="IDENTIFIER\n( items )"]
+	468[label="Trailer"]
+	469[color="blue" shape="rectangle"]
+	469[label="DELIMITER\n( ( )"]
+	470[color="blue" shape="rectangle"]
+	470[label="DELIMITER\n( ) )"]
+	471[color="blue" shape="rectangle"]
+	471[label="DELIMITER\n( : )"]
+	472[label="Suite"]
+	473[color="maroon" shape="rectangle"]
+	473[label="NEWLINE"]
+	474[color="maroon" shape="rectangle"]
+	474[label="INDENT"]
+	475[label="If Statement"]
+	476[color="purple" shape="rectangle"]
+	476[label="KEYWORD\n( if )"]
+	477[label="Comparison"]
+	478[color="green" shape="rectangle"]
+	478[label="IDENTIFIER\n( neighbor )"]
+	479[label="Close Comparison Operator Expression"]
+	480[label="Not in"]
+	481[color="purple" shape="rectangle"]
+	481[label="KEYWORD\n( not )"]
+	482[color="purple" shape="rectangle"]
+	482[label="KEYWORD\n( in )"]
+	483[color="green" shape="rectangle"]
+	483[label="IDENTIFIER\n( visited )"]
+	484[color="blue" shape="rectangle"]
+	484[label="DELIMITER\n( : )"]
+	485[label="Suite"]
+	486[color="maroon" shape="rectangle"]
+	486[label="NEWLINE"]
+	487[color="maroon" shape="rectangle"]
+	487[label="INDENT"]
+	488[label="simple statement"]
+	489[label="Atomic Expression"]
+	490[color="green" shape="rectangle"]
+	490[label="IDENTIFIER\n( heapq )"]
+	491[label="Close Trailer"]
+	492[label="Trailer"]
+	493[color="blue" shape="rectangle"]
+	493[label="DELIMITER\n( . )"]
+	494[color="green" shape="rectangle"]
+	494[label="IDENTIFIER\n( heappush )"]
+	495[label="Trailer"]
+	496[color="blue" shape="rectangle"]
+	496[label="DELIMITER\n( ( )"]
+	497[label="Argument List"]
+	498[color="green" shape="rectangle"]
+	498[label="IDENTIFIER\n( edges )"]
+	499[label="Close Comma Argument"]
+	500[color="blue" shape="rectangle"]
+	500[label="DELIMITER\n( , )"]
+	501[label="Atom"]
+	502[color="blue" shape="rectangle"]
+	502[label="DELIMITER\n( ( )"]
+	503[label="Test List Comparision"]
+	504[color="green" shape="rectangle"]
+	504[label="IDENTIFIER\n( weight )"]
+	505[label="close commatest or star expression"]
+	506[label="close commatest or star expression"]
+	507[color="blue" shape="rectangle"]
+	507[label="DELIMITER\n( , )"]
+	508[color="green" shape="rectangle"]
+	508[label="IDENTIFIER\n( v )"]
+	509[color="blue" shape="rectangle"]
+	509[label="DELIMITER\n( , )"]
+	510[color="green" shape="rectangle"]
+	510[label="IDENTIFIER\n( neighbor )"]
+	511[color="blue" shape="rectangle"]
+	511[label="DELIMITER\n( ) )"]
+	512[color="blue" shape="rectangle"]
+	512[label="DELIMITER\n( ) )"]
+	513[color="maroon" shape="rectangle"]
+	513[label="NEWLINE"]
+	514[color="maroon" shape="rectangle"]
+	514[label="DEDENT"]
+	515[color="maroon" shape="rectangle"]
+	515[label="DEDENT"]
+	516[color="maroon" shape="rectangle"]
+	516[label="DEDENT"]
+	517[color="maroon" shape="rectangle"]
+	517[label="DEDENT"]
+	518[label="simple statement"]
+	519[label="Return Statement"]
+	520[color="purple" shape="rectangle"]
+	520[label="KEYWORD\n( return )"]
+	521[label="Test List"]
+	522[color="green" shape="rectangle"]
+	522[label="IDENTIFIER\n( mst_edges )"]
+	523[label="Close Comma Test"]
+	524[color="blue" shape="rectangle"]
+	524[label="DELIMITER\n( , )"]
+	525[color="green" shape="rectangle"]
+	525[label="IDENTIFIER\n( total_weight )"]
+	526[color="maroon" shape="rectangle"]
+	526[label="NEWLINE"]
+	527[color="maroon" shape="rectangle"]
+	527[label="DEDENT"]
+	528[label="simple statement"]
+	529[label="expression statement"]
+	530[color="green" shape="rectangle"]
+	530[label="IDENTIFIER\n( g )"]
+	531[label="close yield or test star"]
+	532[color="blue" shape="rectangle"]
+	532[label="DELIMITER\n( = )"]
+	533[label="Atomic Expression"]
+	534[color="green" shape="rectangle"]
+	534[label="IDENTIFIER\n( Graph )"]
+	535[label="Trailer"]
+	536[color="blue" shape="rectangle"]
+	536[label="DELIMITER\n( ( )"]
+	537[color="red" shape="rectangle"]
+	537[label="NUMBER\n( 4 )"]
+	538[color="blue" shape="rectangle"]
+	538[label="DELIMITER\n( ) )"]
+	539[color="maroon" shape="rectangle"]
+	539[label="NEWLINE"]
+	540[label="simple statement"]
+	541[label="Atomic Expression"]
+	542[color="green" shape="rectangle"]
+	542[label="IDENTIFIER\n( g )"]
+	543[label="Close Trailer"]
+	544[label="Trailer"]
+	545[color="blue" shape="rectangle"]
+	545[label="DELIMITER\n( . )"]
+	546[color="green" shape="rectangle"]
+	546[label="IDENTIFIER\n( add_edge )"]
+	547[label="Trailer"]
+	548[color="blue" shape="rectangle"]
+	548[label="DELIMITER\n( ( )"]
+	549[label="Argument List"]
+	550[color="red" shape="rectangle"]
+	550[label="NUMBER\n( 0 )"]
+	551[label="Close Comma Argument"]
+	552[label="Close Comma Argument"]
+	553[color="blue" shape="rectangle"]
+	553[label="DELIMITER\n( , )"]
+	554[color="red" shape="rectangle"]
+	554[label="NUMBER\n( 1 )"]
+	555[color="blue" shape="rectangle"]
+	555[label="DELIMITER\n( , )"]
+	556[color="red" shape="rectangle"]
+	556[label="NUMBER\n( 2 )"]
+	557[color="blue" shape="rectangle"]
+	557[label="DELIMITER\n( ) )"]
+	558[color="maroon" shape="rectangle"]
+	558[label="NEWLINE"]
+	559[label="simple statement"]
+	560[label="Atomic Expression"]
+	561[color="green" shape="rectangle"]
+	561[label="IDENTIFIER\n( g )"]
+	562[label="Close Trailer"]
+	563[label="Trailer"]
+	564[color="blue" shape="rectangle"]
+	564[label="DELIMITER\n( . )"]
+	565[color="green" shape="rectangle"]
+	565[label="IDENTIFIER\n( add_edge )"]
+	566[label="Trailer"]
+	567[color="blue" shape="rectangle"]
+	567[label="DELIMITER\n( ( )"]
+	568[label="Argument List"]
+	569[color="red" shape="rectangle"]
+	569[label="NUMBER\n( 0 )"]
+	570[label="Close Comma Argument"]
+	571[label="Close Comma Argument"]
+	572[color="blue" shape="rectangle"]
+	572[label="DELIMITER\n( , )"]
+	573[color="red" shape="rectangle"]
+	573[label="NUMBER\n( 2 )"]
+	574[color="blue" shape="rectangle"]
+	574[label="DELIMITER\n( , )"]
+	575[color="red" shape="rectangle"]
+	575[label="NUMBER\n( 4 )"]
+	576[color="blue" shape="rectangle"]
+	576[label="DELIMITER\n( ) )"]
+	577[color="maroon" shape="rectangle"]
+	577[label="NEWLINE"]
+	578[label="simple statement"]
+	579[label="Atomic Expression"]
+	580[color="green" shape="rectangle"]
+	580[label="IDENTIFIER\n( g )"]
+	581[label="Close Trailer"]
+	582[label="Trailer"]
+	583[color="blue" shape="rectangle"]
+	583[label="DELIMITER\n( . )"]
+	584[color="green" shape="rectangle"]
+	584[label="IDENTIFIER\n( add_edge )"]
+	585[label="Trailer"]
+	586[color="blue" shape="rectangle"]
+	586[label="DELIMITER\n( ( )"]
+	587[label="Argument List"]
+	588[color="red" shape="rectangle"]
+	588[label="NUMBER\n( 1 )"]
+	589[label="Close Comma Argument"]
+	590[label="Close Comma Argument"]
+	591[color="blue" shape="rectangle"]
+	591[label="DELIMITER\n( , )"]
+	592[color="red" shape="rectangle"]
+	592[label="NUMBER\n( 2 )"]
+	593[color="blue" shape="rectangle"]
+	593[label="DELIMITER\n( , )"]
+	594[color="red" shape="rectangle"]
+	594[label="NUMBER\n( 1 )"]
+	595[color="blue" shape="rectangle"]
+	595[label="DELIMITER\n( ) )"]
+	596[color="maroon" shape="rectangle"]
+	596[label="NEWLINE"]
+	597[label="simple statement"]
+	598[label="Atomic Expression"]
+	599[color="green" shape="rectangle"]
+	599[label="IDENTIFIER\n( g )"]
+	600[label="Close Trailer"]
+	601[label="Trailer"]
+	602[color="blue" shape="rectangle"]
+	602[label="DELIMITER\n( . )"]
+	603[color="green" shape="rectangle"]
+	603[label="IDENTIFIER\n( add_edge )"]
+	604[label="Trailer"]
+	605[color="blue" shape="rectangle"]
+	605[label="DELIMITER\n( ( )"]
+	606[label="Argument List"]
+	607[color="red" shape="rectangle"]
+	607[label="NUMBER\n( 1 )"]
+	608[label="Close Comma Argument"]
+	609[label="Close Comma Argument"]
+	610[color="blue" shape="rectangle"]
+	610[label="DELIMITER\n( , )"]
+	611[color="red" shape="rectangle"]
+	611[label="NUMBER\n( 3 )"]
+	612[color="blue" shape="rectangle"]
+	612[label="DELIMITER\n( , )"]
+	613[color="red" shape="rectangle"]
+	613[label="NUMBER\n( 3 )"]
+	614[color="blue" shape="rectangle"]
+	614[label="DELIMITER\n( ) )"]
+	615[color="maroon" shape="rectangle"]
+	615[label="NEWLINE"]
+	616[label="simple statement"]
+	617[label="Atomic Expression"]
+	618[color="green" shape="rectangle"]
+	618[label="IDENTIFIER\n( g )"]
+	619[label="Close Trailer"]
+	620[label="Trailer"]
+	621[color="blue" shape="rectangle"]
+	621[label="DELIMITER\n( . )"]
+	622[color="green" shape="rectangle"]
+	622[label="IDENTIFIER\n( add_edge )"]
+	623[label="Trailer"]
+	624[color="blue" shape="rectangle"]
+	624[label="DELIMITER\n( ( )"]
+	625[label="Argument List"]
+	626[color="red" shape="rectangle"]
+	626[label="NUMBER\n( 2 )"]
+	627[label="Close Comma Argument"]
+	628[label="Close Comma Argument"]
+	629[color="blue" shape="rectangle"]
+	629[label="DELIMITER\n( , )"]
+	630[color="red" shape="rectangle"]
+	630[label="NUMBER\n( 3 )"]
+	631[color="blue" shape="rectangle"]
+	631[label="DELIMITER\n( , )"]
+	632[color="red" shape="rectangle"]
+	632[label="NUMBER\n( 5 )"]
+	633[color="blue" shape="rectangle"]
+	633[label="DELIMITER\n( ) )"]
+	634[color="maroon" shape="rectangle"]
+	634[label="NEWLINE"]
+	635[label="simple statement"]
+	636[label="expression statement"]
+	637[label="testlist star expression"]
+	638[color="green" shape="rectangle"]
+	638[label="IDENTIFIER\n( mst_edges )"]
+	639[label="close commatest or star expression"]
+	640[color="blue" shape="rectangle"]
+	640[label="DELIMITER\n( , )"]
+	641[color="green" shape="rectangle"]
+	641[label="IDENTIFIER\n( total_weight )"]
+	642[label="close yield or test star"]
+	643[color="blue" shape="rectangle"]
+	643[label="DELIMITER\n( = )"]
+	644[label="Atomic Expression"]
+	645[color="green" shape="rectangle"]
+	645[label="IDENTIFIER\n( prim_mst )"]
+	646[label="Trailer"]
+	647[color="blue" shape="rectangle"]
+	647[label="DELIMITER\n( ( )"]
+	648[color="green" shape="rectangle"]
+	648[label="IDENTIFIER\n( g )"]
+	649[color="blue" shape="rectangle"]
+	649[label="DELIMITER\n( ) )"]
+	650[color="maroon" shape="rectangle"]
+	650[label="NEWLINE"]
+	651[label="simple statement"]
+	652[label="Atomic Expression"]
+	653[color="green" shape="rectangle"]
+	653[label="IDENTIFIER\n( print )"]
+	654[label="Trailer"]
+	655[color="blue" shape="rectangle"]
+	655[label="DELIMITER\n( ( )"]
+	656[label="Argument List"]
+	657[color="maroon" shape="rectangle"]
+	657[label="\"Minimum Spanning Tree Edges:\""]
+	658[label="Close Comma Argument"]
+	659[color="blue" shape="rectangle"]
+	659[label="DELIMITER\n( , )"]
+	660[label="Atomic Expression"]
+	661[color="green" shape="rectangle"]
+	661[label="IDENTIFIER\n( list )"]
+	662[label="Trailer"]
+	663[color="blue" shape="rectangle"]
+	663[label="DELIMITER\n( ( )"]
+	664[color="green" shape="rectangle"]
+	664[label="IDENTIFIER\n( mst_edges )"]
+	665[color="blue" shape="rectangle"]
+	665[label="DELIMITER\n( ) )"]
+	666[color="blue" shape="rectangle"]
+	666[label="DELIMITER\n( ) )"]
+	667[color="maroon" shape="rectangle"]
+	667[label="NEWLINE"]
+	668[label="simple statement"]
+	669[label="Atomic Expression"]
+	670[color="green" shape="rectangle"]
+	670[label="IDENTIFIER\n( print )"]
+	671[label="Trailer"]
+	672[color="blue" shape="rectangle"]
+	672[label="DELIMITER\n( ( )"]
+	673[label="Argument List"]
+	674[color="maroon" shape="rectangle"]
+	674[label="\"Total Weight of MST:\""]
+	675[label="Close Comma Argument"]
+	676[color="blue" shape="rectangle"]
+	676[label="DELIMITER\n( , )"]
+	677[color="green" shape="rectangle"]
+	677[label="IDENTIFIER\n( total_weight )"]
+	678[color="blue" shape="rectangle"]
+	678[label="DELIMITER\n( ) )"]
+	679[color="maroon" shape="rectangle"]
+	679[label="NEWLINE"]
+	680[color="maroon" shape="rectangle"]
+	680[label="ENDMARKER"]
 	1 -> 2
 	2 -> 3
-	2 -> 4
+	3 -> 4
 	4 -> 5
 	5 -> 6
-	5 -> 7
+	6 -> 7
 	7 -> 8
 	8 -> 9
-	8 -> 10
-	7 -> 11
-	7 -> 12
-	4 -> 13
+	9 -> 10
+	10 -> 11
+	11 -> 12
+	12 -> 13
 	13 -> 14
 	14 -> 15
 	15 -> 16
-	16 -> 17
-	17 -> 18
-	18 -> 19
-	18 -> 20
+	15 -> 17
+	14 -> 18
+	13 -> 19
+	19 -> 20
 	20 -> 21
 	20 -> 22
-	22 -> 23
-	23 -> 24
-	23 -> 25
-	22 -> 26
-	22 -> 27
-	17 -> 28
-	17 -> 29
-	29 -> 30
-	29 -> 31
+	19 -> 23
+	12 -> 24
+	24 -> 25
+	24 -> 26
+	24 -> 27
+	24 -> 28
+	28 -> 29
+	28 -> 30
+	28 -> 31
 	31 -> 32
-	31 -> 33
-	16 -> 34
-	16 -> 35
+	32 -> 33
+	32 -> 34
+	32 -> 35
 	35 -> 36
 	35 -> 37
 	37 -> 38
-	38 -> 39
-	38 -> 40
-	37 -> 41
-	37 -> 42
-	15 -> 43
-	15 -> 44
+	37 -> 39
+	39 -> 40
+	39 -> 41
+	35 -> 42
+	32 -> 43
+	32 -> 44
 	44 -> 45
 	44 -> 46
-	46 -> 47
+	44 -> 47
 	47 -> 48
-	47 -> 49
-	46 -> 50
-	46 -> 51
-	14 -> 52
-	14 -> 53
-	53 -> 54
-	53 -> 55
+	48 -> 49
+	49 -> 50
+	50 -> 51
+	50 -> 52
+	52 -> 53
+	52 -> 54
+	49 -> 55
 	55 -> 56
-	56 -> 57
-	56 -> 58
-	55 -> 59
-	55 -> 60
-	13 -> 61
-	13 -> 62
-	62 -> 63
-	62 -> 64
-	64 -> 65
-	65 -> 66
-	65 -> 67
-	64 -> 68
-	64 -> 69
-	2 -> 70
-	2 -> 71
-	71 -> 72
-	71 -> 73
-	71 -> 74
-	74 -> 75
-	75 -> 76
-	75 -> 77
-	74 -> 78
-	71 -> 79
-	1 -> 80
+	55 -> 57
+	48 -> 58
+	47 -> 59
+	59 -> 60
+	60 -> 61
+	61 -> 62
+	61 -> 63
+	63 -> 64
+	63 -> 65
+	60 -> 66
+	66 -> 67
+	66 -> 68
+	68 -> 69
+	68 -> 70
+	59 -> 71
+	44 -> 72
+	31 -> 73
+	73 -> 74
+	73 -> 75
+	73 -> 76
+	76 -> 77
+	76 -> 78
+	78 -> 79
+	78 -> 80
+	80 -> 81
+	81 -> 82
+	82 -> 83
+	82 -> 84
+	81 -> 85
+	81 -> 86
+	80 -> 87
+	80 -> 88
+	76 -> 89
+	73 -> 90
+	73 -> 91
+	91 -> 92
+	91 -> 93
+	91 -> 94
+	94 -> 95
+	95 -> 96
+	96 -> 97
+	97 -> 98
+	97 -> 99
+	99 -> 100
+	99 -> 101
+	101 -> 102
+	102 -> 103
+	102 -> 104
+	101 -> 105
+	105 -> 106
+	105 -> 107
+	107 -> 108
+	107 -> 109
+	97 -> 110
+	97 -> 111
+	111 -> 112
+	111 -> 113
+	111 -> 114
+	114 -> 115
+	115 -> 116
+	116 -> 117
+	116 -> 118
+	118 -> 119
+	119 -> 120
+	119 -> 121
+	118 -> 122
+	122 -> 123
+	122 -> 124
+	122 -> 125
+	115 -> 126
+	126 -> 127
+	126 -> 128
+	128 -> 129
+	128 -> 130
+	114 -> 131
+	111 -> 132
+	96 -> 133
+	133 -> 134
+	133 -> 135
+	135 -> 136
+	135 -> 137
+	137 -> 138
+	138 -> 139
+	138 -> 140
+	137 -> 141
+	141 -> 142
+	141 -> 143
+	143 -> 144
+	143 -> 145
+	133 -> 146
+	133 -> 147
+	147 -> 148
+	147 -> 149
+	147 -> 150
+	150 -> 151
+	151 -> 152
+	152 -> 153
+	152 -> 154
+	154 -> 155
+	155 -> 156
+	155 -> 157
+	154 -> 158
+	158 -> 159
+	158 -> 160
+	158 -> 161
+	151 -> 162
+	162 -> 163
+	162 -> 164
+	164 -> 165
+	164 -> 166
+	150 -> 167
+	147 -> 168
+	95 -> 169
+	169 -> 170
+	170 -> 171
+	171 -> 172
+	171 -> 173
+	173 -> 174
+	174 -> 175
+	175 -> 176
+	175 -> 177
+	174 -> 178
+	178 -> 179
+	178 -> 180
+	178 -> 181
+	173 -> 182
+	182 -> 183
+	182 -> 184
+	182 -> 185
+	170 -> 186
+	186 -> 187
+	186 -> 188
+	169 -> 189
+	94 -> 190
+	190 -> 191
+	191 -> 192
+	192 -> 193
+	192 -> 194
+	194 -> 195
+	195 -> 196
+	196 -> 197
+	196 -> 198
+	195 -> 199
+	199 -> 200
+	199 -> 201
+	199 -> 202
+	194 -> 203
+	203 -> 204
+	203 -> 205
+	203 -> 206
+	191 -> 207
+	207 -> 208
+	207 -> 209
+	190 -> 210
+	91 -> 211
+	28 -> 212
+	11 -> 213
+	213 -> 214
+	213 -> 215
+	213 -> 216
+	216 -> 217
+	216 -> 218
+	216 -> 219
+	213 -> 220
+	213 -> 221
+	221 -> 222
+	221 -> 223
+	221 -> 224
+	224 -> 225
+	225 -> 226
+	226 -> 227
+	227 -> 228
+	228 -> 229
+	229 -> 230
+	230 -> 231
+	231 -> 232
+	231 -> 233
+	233 -> 234
+	233 -> 235
+	235 -> 236
+	235 -> 237
+	237 -> 238
+	237 -> 239
+	230 -> 240
+	229 -> 241
+	241 -> 242
+	242 -> 243
+	242 -> 244
+	244 -> 245
+	244 -> 246
+	246 -> 247
+	246 -> 248
+	248 -> 249
+	248 -> 250
+	250 -> 251
+	250 -> 252
+	252 -> 253
+	252 -> 254
+	254 -> 255
+	255 -> 256
+	255 -> 257
+	255 -> 258
+	255 -> 259
+	259 -> 260
+	259 -> 261
+	261 -> 262
+	262 -> 263
+	262 -> 264
+	264 -> 265
+	264 -> 266
+	264 -> 267
+	261 -> 268
+	268 -> 269
+	269 -> 270
+	269 -> 271
+	268 -> 272
+	268 -> 273
+	273 -> 274
+	273 -> 275
+	275 -> 276
+	275 -> 277
+	275 -> 278
+	259 -> 279
+	254 -> 280
+	280 -> 281
+	280 -> 282
+	282 -> 283
+	282 -> 284
+	284 -> 285
+	285 -> 286
+	286 -> 287
+	287 -> 288
+	287 -> 289
+	286 -> 290
+	290 -> 291
+	290 -> 292
+	290 -> 293
+	285 -> 294
+	294 -> 295
+	294 -> 296
+	284 -> 297
+	297 -> 298
+	297 -> 299
+	252 -> 300
+	248 -> 301
+	241 -> 302
+	228 -> 303
+	303 -> 304
+	304 -> 305
+	304 -> 306
+	306 -> 307
+	307 -> 308
+	307 -> 309
+	306 -> 310
+	310 -> 311
+	310 -> 312
+	310 -> 313
+	303 -> 314
+	227 -> 315
+	315 -> 316
+	316 -> 317
+	316 -> 318
+	318 -> 319
+	318 -> 320
+	315 -> 321
+	226 -> 322
+	322 -> 323
+	323 -> 324
+	323 -> 325
+	325 -> 326
+	325 -> 327
+	327 -> 328
+	327 -> 329
+	329 -> 330
+	329 -> 331
+	331 -> 332
+	331 -> 333
+	329 -> 334
+	322 -> 335
+	225 -> 336
+	336 -> 337
+	336 -> 338
+	336 -> 339
+	336 -> 340
+	340 -> 341
+	340 -> 342
+	340 -> 343
+	343 -> 344
+	344 -> 345
+	345 -> 346
+	346 -> 347
+	346 -> 348
+	348 -> 349
+	349 -> 350
+	349 -> 351
+	348 -> 352
+	348 -> 353
+	345 -> 354
+	354 -> 355
+	354 -> 356
+	356 -> 357
+	356 -> 358
+	358 -> 359
+	359 -> 360
+	359 -> 361
+	358 -> 362
+	362 -> 363
+	362 -> 364
+	362 -> 365
+	344 -> 366
+	343 -> 367
+	367 -> 368
+	367 -> 369
+	369 -> 370
+	369 -> 371
+	371 -> 372
+	372 -> 373
+	372 -> 374
+	371 -> 375
+	367 -> 376
+	367 -> 377
+	377 -> 378
+	377 -> 379
+	377 -> 380
+	380 -> 381
+	381 -> 382
+	382 -> 383
+	383 -> 384
+	384 -> 385
+	385 -> 386
+	385 -> 387
+	387 -> 388
+	388 -> 389
+	388 -> 390
+	387 -> 391
+	391 -> 392
+	391 -> 393
+	391 -> 394
+	384 -> 395
+	383 -> 396
+	396 -> 397
+	397 -> 398
+	397 -> 399
+	396 -> 400
+	382 -> 401
+	401 -> 402
+	402 -> 403
+	402 -> 404
+	404 -> 405
+	404 -> 406
+	406 -> 407
+	406 -> 408
+	408 -> 409
+	408 -> 410
+	408 -> 411
+	401 -> 412
+	381 -> 413
+	413 -> 414
+	414 -> 415
+	414 -> 416
+	416 -> 417
+	416 -> 418
+	418 -> 419
+	418 -> 420
+	420 -> 421
+	421 -> 422
+	421 -> 423
+	420 -> 424
+	424 -> 425
+	424 -> 426
+	426 -> 427
+	426 -> 428
+	428 -> 429
+	428 -> 430
+	430 -> 431
+	430 -> 432
+	432 -> 433
+	433 -> 434
+	433 -> 435
+	435 -> 436
+	435 -> 437
+	437 -> 438
+	437 -> 439
+	433 -> 440
+	432 -> 441
+	430 -> 442
+	424 -> 443
+	413 -> 444
+	380 -> 445
+	445 -> 446
+	445 -> 447
+	447 -> 448
+	447 -> 449
+	449 -> 450
+	449 -> 451
+	445 -> 452
+	445 -> 453
+	453 -> 454
+	453 -> 455
+	455 -> 456
+	456 -> 457
+	457 -> 458
+	458 -> 459
+	458 -> 460
+	457 -> 461
+	461 -> 462
+	461 -> 463
+	461 -> 464
+	456 -> 465
+	465 -> 466
+	465 -> 467
+	455 -> 468
+	468 -> 469
+	468 -> 470
+	445 -> 471
+	445 -> 472
+	472 -> 473
+	472 -> 474
+	472 -> 475
+	475 -> 476
+	475 -> 477
+	477 -> 478
+	477 -> 479
+	479 -> 480
+	480 -> 481
+	480 -> 482
+	479 -> 483
+	475 -> 484
+	475 -> 485
+	485 -> 486
+	485 -> 487
+	485 -> 488
+	488 -> 489
+	489 -> 490
+	489 -> 491
+	491 -> 492
+	492 -> 493
+	492 -> 494
+	491 -> 495
+	495 -> 496
+	495 -> 497
+	497 -> 498
+	497 -> 499
+	499 -> 500
+	499 -> 501
+	501 -> 502
+	501 -> 503
+	503 -> 504
+	503 -> 505
+	505 -> 506
+	506 -> 507
+	506 -> 508
+	505 -> 509
+	505 -> 510
+	501 -> 511
+	495 -> 512
+	488 -> 513
+	485 -> 514
+	472 -> 515
+	377 -> 516
+	340 -> 517
+	224 -> 518
+	518 -> 519
+	519 -> 520
+	519 -> 521
+	521 -> 522
+	521 -> 523
+	523 -> 524
+	523 -> 525
+	518 -> 526
+	221 -> 527
+	10 -> 528
+	528 -> 529
+	529 -> 530
+	529 -> 531
+	531 -> 532
+	531 -> 533
+	533 -> 534
+	533 -> 535
+	535 -> 536
+	535 -> 537
+	535 -> 538
+	528 -> 539
+	9 -> 540
+	540 -> 541
+	541 -> 542
+	541 -> 543
+	543 -> 544
+	544 -> 545
+	544 -> 546
+	543 -> 547
+	547 -> 548
+	547 -> 549
+	549 -> 550
+	549 -> 551
+	551 -> 552
+	552 -> 553
+	552 -> 554
+	551 -> 555
+	551 -> 556
+	547 -> 557
+	540 -> 558
+	8 -> 559
+	559 -> 560
+	560 -> 561
+	560 -> 562
+	562 -> 563
+	563 -> 564
+	563 -> 565
+	562 -> 566
+	566 -> 567
+	566 -> 568
+	568 -> 569
+	568 -> 570
+	570 -> 571
+	571 -> 572
+	571 -> 573
+	570 -> 574
+	570 -> 575
+	566 -> 576
+	559 -> 577
+	7 -> 578
+	578 -> 579
+	579 -> 580
+	579 -> 581
+	581 -> 582
+	582 -> 583
+	582 -> 584
+	581 -> 585
+	585 -> 586
+	585 -> 587
+	587 -> 588
+	587 -> 589
+	589 -> 590
+	590 -> 591
+	590 -> 592
+	589 -> 593
+	589 -> 594
+	585 -> 595
+	578 -> 596
+	6 -> 597
+	597 -> 598
+	598 -> 599
+	598 -> 600
+	600 -> 601
+	601 -> 602
+	601 -> 603
+	600 -> 604
+	604 -> 605
+	604 -> 606
+	606 -> 607
+	606 -> 608
+	608 -> 609
+	609 -> 610
+	609 -> 611
+	608 -> 612
+	608 -> 613
+	604 -> 614
+	597 -> 615
+	5 -> 616
+	616 -> 617
+	617 -> 618
+	617 -> 619
+	619 -> 620
+	620 -> 621
+	620 -> 622
+	619 -> 623
+	623 -> 624
+	623 -> 625
+	625 -> 626
+	625 -> 627
+	627 -> 628
+	628 -> 629
+	628 -> 630
+	627 -> 631
+	627 -> 632
+	623 -> 633
+	616 -> 634
+	4 -> 635
+	635 -> 636
+	636 -> 637
+	637 -> 638
+	637 -> 639
+	639 -> 640
+	639 -> 641
+	636 -> 642
+	642 -> 643
+	642 -> 644
+	644 -> 645
+	644 -> 646
+	646 -> 647
+	646 -> 648
+	646 -> 649
+	635 -> 650
+	3 -> 651
+	651 -> 652
+	652 -> 653
+	652 -> 654
+	654 -> 655
+	654 -> 656
+	656 -> 657
+	656 -> 658
+	658 -> 659
+	658 -> 660
+	660 -> 661
+	660 -> 662
+	662 -> 663
+	662 -> 664
+	662 -> 665
+	654 -> 666
+	651 -> 667
+	2 -> 668
+	668 -> 669
+	669 -> 670
+	669 -> 671
+	671 -> 672
+	671 -> 673
+	673 -> 674
+	673 -> 675
+	675 -> 676
+	675 -> 677
+	671 -> 678
+	668 -> 679
+	1 -> 680
 }

@@ -1150,7 +1150,7 @@ case 9:
 YY_RULE_SETUP
 #line 213 "lexer.l"
 {
-    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
@@ -1461,7 +1461,7 @@ case 47:
 YY_RULE_SETUP
 #line 375 "lexer.l"
 {
-    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;

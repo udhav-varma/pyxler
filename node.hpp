@@ -106,7 +106,7 @@ public:
             string s = "\t" + intToString(node->id) + "[label=\"" + node->type + "\\n( " + node->name + " )\"]\n";
             if(node->type==""){
                 s = "\t" + intToString(node->id) + "[label=\"" + node->name + "\"]\n";
-                string t = "\t" + intToString(node->id) + "[color=\"yellow\" shape=\"rectangle\"]\n";
+                string t = "\t" + intToString(node->id) + "[color=\"maroon\" shape=\"rectangle\"]\n";
                 dotcode.append(t);
             }
             else if(node->type=="NUMBER"){
@@ -134,7 +134,7 @@ public:
                 dotcode.append(t);
             }
             else if(node->type=="OPERATOR"){
-                string t = "\t" + intToString(node->id) + "[color=\"VIOLET\" shape=\"rectangle\"]\n";
+                string t = "\t" + intToString(node->id) + "[color=\"violet\" shape=\"rectangle\"]\n";
                 dotcode.append(t);
             }
             dotcode.append(s);

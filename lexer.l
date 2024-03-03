@@ -210,7 +210,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 }
 
 <INLINE,BRACKET>{NEWLINE} {
-    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
@@ -372,7 +372,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     return DEF;}
 
 <INLINE,BRACKET>{COMMENT} {
-    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;

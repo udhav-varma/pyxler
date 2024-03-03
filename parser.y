@@ -12,11 +12,12 @@
     extern int yylex();
     extern int yylineno;
     extern int yydebug;
+    extern FILE * yyin;
     void yyerror(char * s){
-    printf("Error! Line Number %d, message: %s\n", yylineno, s);
+    fprintf(stderr, "Error! Line Number %d, message: %s\n", yylineno, s);
     }
     void yyerror(string s){
-    printf("Error! Line Number %d, message: %s\n", yylineno, s.c_str());
+    fprintf(stderr, "Error! Line Number %d, message: %s\n", yylineno, s.c_str());
     }
     extern stack<int> indents;
     #define YYDEBUG 1
@@ -106,7 +107,7 @@
 %%
 
 file_input: nstatement ENDMARKER{
-    $<ptr>$ = new node("nt", "file_input");
+    $<ptr>$ = new node("nt", "file input");
     cerr<<"nstatement - Parsing successful\n";
     cerr<<$<val>2<<" yoyoyoyo\n";
     ast.add_node($<ptr>$);
@@ -117,28 +118,28 @@ file_input: nstatement ENDMARKER{
 }
 
 single_input: NEWLINE {
-    $<ptr>$ = new node("nt", "single_input");
+    $<ptr>$ = new node("nt", "single input");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }| simple_stmt {
-    $<ptr>$ = new node("nt", "single_input");
+    $<ptr>$ = new node("nt", "single input");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }| compound_stmt NEWLINE{
-    $<ptr>$ = new node("nt", "single_input");
+    $<ptr>$ = new node("nt", "single input");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
 
 nstatement: nstatement NEWLINE {
     cerr<<"nstatement -> nstatement newline\n";
-    $<ptr>$ = new node("nt", "nstatement");
+    $<ptr>$ = new node("nt", "new statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | nstatement stmt {
     cerr<<"nstatement -> nstatement stmt\n";
-    $<ptr>$ = new node("nt", "nstatement");
+    $<ptr>$ = new node("nt", "new statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -147,14 +148,14 @@ nstatement: nstatement NEWLINE {
     $<ptr>$ = NULL;
 }
 eval_input: testlist multiline ENDMARKER {
-    $<ptr>$ = new node("nt", "eval_input");
+    $<ptr>$ = new node("nt", "evaluation input");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 multiline: multiline NEWLINE {
-    $<ptr>$ = new node("nt", "multiline");
+    $<ptr>$ = new node("nt", "multiple line");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -177,7 +178,7 @@ cond_brack_cond_arglist: brack_cond_arglist {
     $<ptr>$ = NULL;
 }
 brack_cond_arglist: '(' cond_arglist ')' {
-    $<ptr>$ = new node("nt", "enclosed arg list");
+    $<ptr>$ = new node("nt", "enclosed argument list");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -217,7 +218,7 @@ defob: classdef {
 
      }
 async_funcdef: ASYNC funcdef {
-    $<ptr>$ = new node("nt", "Async Function Def");
+    $<ptr>$ = new node("nt", "Async Function Definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -234,7 +235,7 @@ funcdef: DEF NAME parameters cond_arrowtest ':' suite {
 
 }
 cond_arrowtest: ARROWOP test{
-    $<ptr>$ = new node("nt", "cond_arrowtest");
+    $<ptr>$ = new node("nt", "condition arrowtest");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -256,7 +257,7 @@ cond_typedargslist: typedargslist {
 }
 
 typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar{
-    $<ptr>$ = new node("nt", "typedargslist");
+    $<ptr>$ = new node("nt", "Typed Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -264,7 +265,7 @@ typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_co
     ast.add_edge($<ptr>$, $<ptr>4);
 }
   | '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma {
-    $<ptr>$ = new node("nt", "typedargslist");
+    $<ptr>$ = new node("nt", "Typed Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -272,7 +273,7 @@ typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_co
     ast.add_edge($<ptr>$, $<ptr>4);
   }
   | POW tfpdef cond_comma {
-    $<ptr>$ = new node("nt", "typedargslist");
+    $<ptr>$ = new node("nt", "Typed Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -282,7 +283,7 @@ conds_comma_startfpdefcondcomma: ',' {
         $<ptr>$ = $<ptr>1;
     }
     | ',' POW tfpdef cond_comma {
-        $<ptr>$ = new node("nt", "conds_comma_startfpdefcondcomma");
+        $<ptr>$ = new node("nt", "condition comma start condition comma");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -293,7 +294,7 @@ conds_comma_startfpdefcondcomma: ',' {
         $<ptr>$ = NULL;
     }
 cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma {
-            $<ptr>$ = new node("nt", "cond_start_or_starstar");
+            $<ptr>$ = new node("nt", "condition star or star star");
             ast.add_node($<ptr>$);
             ast.add_edge($<ptr>$, $<ptr>1);
             ast.add_edge($<ptr>$, $<ptr>2);
@@ -301,7 +302,7 @@ cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comm
             ast.add_edge($<ptr>$, $<ptr>4);
         }
       | POW tfpdef cond_comma {
-        $<ptr>$ = new node("nt", "cond_star_or_startstar");
+        $<ptr>$ = new node("nt", "condition star or star star");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -311,7 +312,7 @@ cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comm
         $<ptr>$ = NULL;
       }
 cond_comma_or_condstarorstartstar: ',' cond_star_or_startstar {
-        $<ptr>$ = new node("nt", "cond_comma_or_constartortarstar");
+        $<ptr>$ = new node("nt", "condition comma or condition star or star star");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -320,7 +321,7 @@ cond_comma_or_condstarorstartstar: ',' cond_star_or_startstar {
         $<ptr>$ = NULL;
     }
 close_comma_tfpdef_condeqtest: close_comma_tfpdef_condeqtest ',' tfpdef cond_eqtest {
-    $<ptr>$ = new node("nt", "close_comma_tfpdef_condeqtest");
+    $<ptr>$ = new node("nt", "close comma condition eqtest");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -339,7 +340,7 @@ tfpdef: NAME {
     $<ptr>$ = $<ptr>1;
 }
 | NAME ':' test {
-    $<ptr>$ = new node("nt", "tfpdef");
+    $<ptr>$ = new node("nt", "name colon test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -347,7 +348,7 @@ tfpdef: NAME {
 }
 
 varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_condstarorstartstarvf {
-    $<ptr>$ = new node("nt", "VarArgs");
+    $<ptr>$ = new node("nt", "Variable Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -355,7 +356,7 @@ varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_cond
     ast.add_edge($<ptr>$, $<ptr>4);
 }
   | '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma {
-    $<ptr>$ = new node("nt", "VarArgs");
+    $<ptr>$ = new node("nt", "Variable Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -363,7 +364,7 @@ varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_cond
     ast.add_edge($<ptr>$, $<ptr>4);
   }
   | POW vfpdef cond_comma {
-    $<ptr>$ = new node("nt", "VarArgs");
+    $<ptr>$ = new node("nt", "Variable Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -373,7 +374,7 @@ vfpdef: NAME {
     $<ptr>$ = $<ptr>1;
 };
 close_comma_vfpdef_condeqtest: close_comma_vfpdef_condeqtest ',' vfpdef cond_eqtest {
-    $<ptr>$ = new node("nt", "close_comma_vfpdef_condeqtest");
+    $<ptr>$ = new node("nt", "close comma vfpdef condeqtest");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -391,7 +392,7 @@ cond_vfpdef: vfpdef {
     }
 cond_star_or_startstar_vf: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma
         {
-            $<ptr>$ = new node("nt", "cond_star_or_startstar_vf");
+            $<ptr>$ = new node("nt", "condition star or start star vf");
             ast.add_node($<ptr>$);
             ast.add_edge($<ptr>$, $<ptr>1);
             ast.add_edge($<ptr>$, $<ptr>2);
@@ -399,7 +400,7 @@ cond_star_or_startstar_vf: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_c
             ast.add_edge($<ptr>$, $<ptr>4);
         }
       | POW vfpdef cond_comma {
-        $<ptr>$ = new node("nt", "cond_star_or_startstar_vf");
+        $<ptr>$ = new node("nt", "condition star or start star vf");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -412,7 +413,7 @@ conds_comma_starvfpdefcondcomma: ',' {
     $<ptr>$ = $<ptr>1;
 } 
 | ',' POW vfpdef cond_comma {
-        $<ptr>$ = new node("nt", "conds_comma_starvfpdefcondcomma");
+        $<ptr>$ = new node("nt", "condition comma star vfpdef condition comma");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -423,7 +424,7 @@ conds_comma_starvfpdefcondcomma: ',' {
         $<ptr>$ = NULL;
     }
 cond_comma_or_condstarorstartstarvf: ',' cond_star_or_startstar_vf {
-    $<ptr>$ = new node("nt", "comma or starstar");
+    $<ptr>$ = new node("nt", "comma or star star");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -440,14 +441,14 @@ stmt: simple_stmt {
 }
 simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE {
         cerr << "simple statement\n";
-        $<ptr>$ = new node("nt", "simple_stmt");
+        $<ptr>$ = new node("nt", "simple statement");
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
         ast.add_edge($<ptr>$, $<ptr>3);
         ast.add_edge($<ptr>$, $<ptr>4);
     }
 close_small_stmt: close_small_stmt ';' small_stmt {
-        $<ptr>$ = new node("nt", "close_small_stmt");
+        $<ptr>$ = new node("nt", "close small statement");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -474,7 +475,7 @@ small_stmt: expr_stmt {
     $<ptr>$ = $<ptr>1;
 }
 | import_stmt {
-    cerr<<" import stmt \n";
+    cerr<<" import statement \n";
     $<ptr>$ = $<ptr>1;
 }
 | global_stmt {
@@ -487,7 +488,7 @@ small_stmt: expr_stmt {
     $<ptr>$ = $<ptr>1;
   }
 expr_stmt: testlist_star_expr anna_or_auga_or_closeyield {
-    $<ptr>$ = new node("nt", "expr_statement");
+    $<ptr>$ = new node("nt", "expression statement");
     cerr << "here expr_stmt\n";
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -508,7 +509,7 @@ yield_or_test_star: yield_expr {
             $<ptr>$ = $<ptr>1;
  }
 close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star {
-                    $<ptr>$ = new node("nt", "close_yield_or_test_star");
+                    $<ptr>$ = new node("nt", "close yield or test star");
                     ast.add_node($<ptr>$);
                     ast.add_edge($<ptr>$, $<ptr>1);
                     ast.add_edge($<ptr>$, $<ptr>2);
@@ -518,14 +519,14 @@ close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star {
                             $<ptr>$ = NULL;
                         }
 annassign: ':' test cond_eqtest {
-    $<ptr>$ = new node("nt", "annasign");
+    $<ptr>$ = new node("nt", "Annotated Assignment");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 cond_eqtest: '=' test {
-        $<ptr>$ = new node("nt", "cond_eqtest");
+        $<ptr>$ = new node("nt", "condition equal test");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -556,7 +557,7 @@ test_or_starexp: test {
     $<ptr>$ = $<ptr>1;
  }
 close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp {
-    $<ptr>$ = new node("nt", "close_commatest_or_starexp");
+    $<ptr>$ = new node("nt", "close commatest or star expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -612,13 +613,13 @@ augassign: ADDASSIGN{
             }
 // For normal and annotated assignments, additional restrictions enforced by the interpreter
 del_stmt: DEL exprlist {
-    $<ptr>$ = new node("nt", "DelStatement");
+    $<ptr>$ = new node("nt", "Delete Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 pass_stmt: PASS{
-    $<ptr>$ = new node("nt", "PassStatement");
+    $<ptr>$ = new node("nt", "Pass Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
@@ -639,19 +640,19 @@ flow_stmt: break_stmt {
         }
 
 break_stmt: BREAK {
-    $<ptr>$ = new node("nt", "BreakStatement");
+    $<ptr>$ = new node("nt", "Break Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
 
 continue_stmt: CONTINUE {
-    $<ptr>$ = new node("nt", "ContinueStatement");
+    $<ptr>$ = new node("nt", "Continue Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
 
 return_stmt: RETURN cond_testlist{
-    $<ptr>$ = new node("nt", "ReturnStatement");
+    $<ptr>$ = new node("nt", "Return Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -666,7 +667,7 @@ yield_stmt: yield_expr {
     $<ptr>$ = $<ptr>1;
 }
 raise_stmt: RAISE cond_from_test{
-    $<ptr>$ = new node("nt", "RaiseStatement");
+    $<ptr>$ = new node("nt", "Raise Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -674,7 +675,7 @@ raise_stmt: RAISE cond_from_test{
 cond_from_test: test {
     $<ptr>$ = $<ptr>1;
 }| test FROM test {
-    $<ptr>$ = new node("nt", "cond_from_test");
+    $<ptr>$ = new node("nt", "condition from test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -684,7 +685,7 @@ cond_from_test: test {
 }
 
 import_stmt: import_name {
-    cerr << "import name\n";
+    cerr << "Import name\n";
     $<ptr>$ = $<ptr>1;
 }
 | import_from {
@@ -692,14 +693,14 @@ import_stmt: import_name {
 }
 import_name: IMPORT dotted_as_names{
     cerr<<"import\n";
-    $<ptr>$ = new node("nt", "ImportStatement");
+    $<ptr>$ = new node("nt", "Import Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 // note below: the ('.' | ELLIPSIS) is necessary because ELLIPSIS is tokenized as ELLIPSIS
 import_from: FROM closeplusdotorellipsisname_or_plusdotellip IMPORT star_or_import_parentheses_or_import {
-                    $<ptr>$ = new node("nt", "import_from");
+                    $<ptr>$ = new node("nt", "Import from");
                     ast.add_node($<ptr>$);
                     ast.add_edge($<ptr>$, $<ptr>1);   
                     ast.add_edge($<ptr>$, $<ptr>2);   
@@ -708,7 +709,7 @@ import_from: FROM closeplusdotorellipsisname_or_plusdotellip IMPORT star_or_impo
             }
               
 closeplusdotorellipsisname_or_plusdotellip: close_dot_or_ellipsis dotted_name{
-    $<ptr>$ = new node("nt", "closeplusdotorellipsisname_or_plusdotellip");
+    $<ptr>$ = new node("nt", "close plus dot or ellipsis name or plus dot ellip");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -719,7 +720,7 @@ closeplusdotorellipsisname_or_plusdotellip: close_dot_or_ellipsis dotted_name{
 star_or_import_parentheses_or_import: '*'{
     $<ptr>$ = $<ptr>1;
 } | '(' import_as_names ')'{
-    $<ptr>$ = new node("nt", "star_or_import_parentheses_or_import");
+    $<ptr>$ = new node("nt", "star or import parentheses or import");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);   
     ast.add_edge($<ptr>$, $<ptr>2);   
@@ -729,12 +730,12 @@ star_or_import_parentheses_or_import: '*'{
 }
 
 plus_dot_or_ellipsis: '.' plus_dot_or_ellipsis{
-    $<ptr>$ = new node("nt", "plus_dot_or_ellipsis");
+    $<ptr>$ = new node("nt", "plus dot or ellipsis");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | ELLIPSIS plus_dot_or_ellipsis{
-    $<ptr>$ = new node("nt", "plus_dot_or_ellipsis");
+    $<ptr>$ = new node("nt", "plus dot or ellipsis");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -753,7 +754,7 @@ close_dot_or_ellipsis: plus_dot_or_ellipsis{
 import_as_name: NAME{
     $<ptr>$ = $<ptr>1;
 } | NAME AS NAME{
-    $<ptr>$ = new node("nt", "ImportAsName");
+    $<ptr>$ = new node("nt", "Import As Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);   
     ast.add_edge($<ptr>$, $<ptr>2);   
@@ -763,7 +764,7 @@ import_as_name: NAME{
 dotted_as_name: dotted_name{
     $<ptr>$ = $<ptr>1;
 } | dotted_name AS NAME{
-    $<ptr>$ = new node("nt", "DottedAsName");
+    $<ptr>$ = new node("nt", "Dotted As Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -771,7 +772,7 @@ dotted_as_name: dotted_name{
 }
 
 import_as_names: import_as_name close_commaimportasname cond_comma{
-    $<ptr>$ = new node("nt", "ImportAsNames");
+    $<ptr>$ = new node("nt", "Import As Names");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);   
     ast.add_edge($<ptr>$, $<ptr>2);   
@@ -779,7 +780,7 @@ import_as_names: import_as_name close_commaimportasname cond_comma{
 }
 
 close_commaimportasname: close_commaimportasname ',' import_as_name{
-    $<ptr>$ = new node("nt", "CloseCommaImportAsName");
+    $<ptr>$ = new node("nt", "Close Comma Import As Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -789,7 +790,7 @@ close_commaimportasname: close_commaimportasname ',' import_as_name{
 }
 
 dotted_as_names: dotted_as_name close_commadottedasname{
-    $<ptr>$ = new node("nt", "DottedAsNames");
+    $<ptr>$ = new node("nt", "Dotted As Names");
     cerr<<"dotted_as_name reached\n";
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -797,7 +798,7 @@ dotted_as_names: dotted_as_name close_commadottedasname{
 }
 
 close_commadottedasname: close_commadottedasname ',' dotted_as_name{
-    $<ptr>$ = new node("nt", "CloseCommaDottedAsName");
+    $<ptr>$ = new node("nt", "Close Comma Dotted As Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -807,7 +808,7 @@ close_commadottedasname: close_commadottedasname ',' dotted_as_name{
 }  
 
 dotted_name: NAME close_dotted_name{
-    $<ptr>$ = new node("nt", "DottedName");
+    $<ptr>$ = new node("nt", "Dotted Name");
     cerr << "Dotted name reached\n";
     cerr << $<val>1 << '\n';
     ast.add_node($<ptr>$);
@@ -816,7 +817,7 @@ dotted_name: NAME close_dotted_name{
 }
 
 close_dotted_name: close_dotted_name '.' NAME{
-    $<ptr>$ = new node("nt", "CloseDottedName");
+    $<ptr>$ = new node("nt", "Close Dotted Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -827,20 +828,20 @@ close_dotted_name: close_dotted_name '.' NAME{
 } 
 
 global_stmt: GLOBAL NAME close_comma_name{
-    $<ptr>$ = new node("nt", "GlobalStatement");
+    $<ptr>$ = new node("nt", "Global Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 nonlocal_stmt: NONLOCAL NAME close_comma_name{
-    $<ptr>$ = new node("nt", "NonlocalStatement");
+    $<ptr>$ = new node("nt", "Nonlocal Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 close_comma_name: close_comma_name ',' NAME{
-    $<ptr>$ = new node("nt", "CloseCommaName");
+    $<ptr>$ = new node("nt", "Close Comma Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -850,12 +851,12 @@ close_comma_name: close_comma_name ',' NAME{
 }
 
 assert_stmt: ASSERT test{
-    $<ptr>$ = new node("nt", "AssertStatement");
+    $<ptr>$ = new node("nt", "Assert Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | ASSERT test ',' test{
-    $<ptr>$ = new node("nt", "AssertStatement");
+    $<ptr>$ = new node("nt", "Assert Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -884,7 +885,7 @@ compound_stmt: if_stmt{
 }
 
 async_stmt: ASYNC funcdef_or_withstmt_or_forstmt{
-    $<ptr>$ = new node("nt", "AsyncStatement");
+    $<ptr>$ = new node("nt", "Async Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -900,7 +901,7 @@ funcdef_or_withstmt_or_forstmt: funcdef{
 
 if_stmt: IF test ':' suite close_eliftestsuite cond_else_colon_suite{
     cerr<<"if stmt reached\n";
-    $<ptr>$ = new node("nt", "IfStatement");
+    $<ptr>$ = new node("nt", "If Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -911,7 +912,7 @@ if_stmt: IF test ':' suite close_eliftestsuite cond_else_colon_suite{
 }
 
 cond_else_colon_suite: ELSE ':' suite{
-    $<ptr>$ = new node("nt", "ElseColonSuite");
+    $<ptr>$ = new node("nt", "Else Colon Suite");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -921,7 +922,7 @@ cond_else_colon_suite: ELSE ':' suite{
 }
 
 close_eliftestsuite: close_eliftestsuite ELIF test ':' suite{
-    $<ptr>$ = new node("nt", "CloseElifTestSuite");
+    $<ptr>$ = new node("nt", "Close Elif Test Suite");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -933,14 +934,14 @@ close_eliftestsuite: close_eliftestsuite ELIF test ':' suite{
 }  
 
 while_stmt: WHILE test ':' suite{
-    $<ptr>$ = new node("nt", "WhileStatement");
+    $<ptr>$ = new node("nt", "While Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 } | WHILE test ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "WhileStatement");
+    $<ptr>$ = new node("nt", "While Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -951,7 +952,7 @@ while_stmt: WHILE test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>7);
 }
 for_stmt: FOR exprlist IN testlist ':' suite{
-    $<ptr>$ = new node("nt", "ForStatement");
+    $<ptr>$ = new node("nt", "For Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -960,7 +961,7 @@ for_stmt: FOR exprlist IN testlist ':' suite{
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
 } | FOR exprlist IN testlist ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "ForStatement");
+    $<ptr>$ = new node("nt", "For Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -973,7 +974,7 @@ for_stmt: FOR exprlist IN testlist ':' suite{
     ast.add_edge($<ptr>$, $<ptr>9);
 }
 try_stmt: TRY ':' suite plus_except_colsuite cond_else_colon_suite cond_finallycolsuite{
-    $<ptr>$ = new node("nt", "TryStatement");
+    $<ptr>$ = new node("nt", "Try Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -982,7 +983,7 @@ try_stmt: TRY ':' suite plus_except_colsuite cond_else_colon_suite cond_finallyc
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
 } | TRY ':' suite FINALLY ':' suite{
-    $<ptr>$ = new node("nt", "TryStatement");
+    $<ptr>$ = new node("nt", "Try Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -993,7 +994,7 @@ try_stmt: TRY ':' suite plus_except_colsuite cond_else_colon_suite cond_finallyc
 }
 
 cond_finallycolsuite: FINALLY ':' suite{
-    $<ptr>$ = new node("nt", "FinallyColonSuite");
+    $<ptr>$ = new node("nt", "Finally Colon Suite");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1003,13 +1004,13 @@ cond_finallycolsuite: FINALLY ':' suite{
 } 
 
 plus_except_colsuite: except_clause ':' suite{
-    $<ptr>$ = new node("nt", "PlusExceptColonSuite");
+    $<ptr>$ = new node("nt", "Plus Except Colon Suite");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | plus_except_colsuite except_clause ':' suite{
-    $<ptr>$ = new node("nt", "PlusExceptColonSuite");
+    $<ptr>$ = new node("nt", "Plus Except Colon Suite");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1018,7 +1019,7 @@ plus_except_colsuite: except_clause ':' suite{
 } 
 
 with_stmt: WITH with_item close_commawithitem  ':' suite{
-    $<ptr>$ = new node("nt", "WithStatement");
+    $<ptr>$ = new node("nt", "With Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1028,7 +1029,7 @@ with_stmt: WITH with_item close_commawithitem  ':' suite{
 }
 
 close_commawithitem: close_commawithitem ',' with_item{
-    $<ptr>$ = new node("nt", "CloseCommaWithItem");
+    $<ptr>$ = new node("nt", "Close Comma With Item");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1040,7 +1041,7 @@ close_commawithitem: close_commawithitem ',' with_item{
 with_item: test{
     $<ptr>$ = $<ptr>1;
 } | test AS expr{
-    $<ptr>$ = new node("nt", "WithItem");
+    $<ptr>$ = new node("nt", "With Item");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1049,7 +1050,7 @@ with_item: test{
 
 // NB compile.c makes sure that the default except clause is last 
 except_clause: EXCEPT cond_testasname{
-    $<ptr>$ = new node("nt", "ExceptClause");
+    $<ptr>$ = new node("nt", "Except Clause");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1058,7 +1059,7 @@ except_clause: EXCEPT cond_testasname{
 cond_testasname: test{
     $<ptr>$ = $<ptr>1;
 } | test AS NAME{
-    $<ptr>$ = new node("nt", "CondTestAsName");
+    $<ptr>$ = new node("nt", "Condition Test As Name");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1082,7 +1083,7 @@ suite: simple_stmt{
 plus_stmt: stmt{
     $<ptr>$ = $<ptr>1;
 } | plus_stmt stmt{
-    $<ptr>$ = new node("nt", "PlusStmt");
+    $<ptr>$ = new node("nt", "Plus Statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1109,14 +1110,14 @@ test_nocond: or_test{
 }
 
 lambdef: LAMBDA varargslist ':' test{
-    $<ptr>$ = new node("nt", "LambDef");
+    $<ptr>$ = new node("nt", "Lambda Definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 } | LAMBDA ':' test{
-    $<ptr>$ = new node("nt", "LambDef");
+    $<ptr>$ = new node("nt", "Lambda Definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1124,14 +1125,14 @@ lambdef: LAMBDA varargslist ':' test{
 }
 
 lambdef_nocond: LAMBDA varargslist ':' test_nocond{
-    $<ptr>$ = new node("nt", "LambDefNoCond");
+    $<ptr>$ = new node("nt", "Lambda Definition NO Condition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 } | LAMBDA ':' test_nocond{
-    $<ptr>$ = new node("nt", "LambDefNoCond");
+    $<ptr>$ = new node("nt", "Lambda Definition NO Condition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1140,14 +1141,14 @@ lambdef_nocond: LAMBDA varargslist ':' test_nocond{
 
 or_test: and_test close_or_and_test{
     cerr << "debug statement " << 2 <<" "<<($<ptr>1)->name<<"\n";
-    $<ptr>$ = new node("nt", "OrTest");
+    $<ptr>$ = new node("nt", "Or Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_or_and_test: close_or_and_test OR and_test{
-    $<ptr>$ = new node("nt", "CloseOrAndTest");
+    $<ptr>$ = new node("nt", "Close Or And Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1158,14 +1159,14 @@ close_or_and_test: close_or_and_test OR and_test{
 
 and_test: not_test close_and_not_test{
     cerr << "debug statement " << 3 <<"\n";
-    $<ptr>$ = new node("nt", "AndTest");
+    $<ptr>$ = new node("nt", "And Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_and_not_test: close_and_not_test AND not_test{
-    $<ptr>$ = new node("nt", "CloseAndNotTest");
+    $<ptr>$ = new node("nt", "Close And Not Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1176,14 +1177,14 @@ close_and_not_test: close_and_not_test AND not_test{
 
 not_test: close_not comparison{
     cerr << "debug statement " << 4 << "\n";
-    $<ptr>$ = new node("nt", "NotTest");
+    $<ptr>$ = new node("nt", "Not Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_not: close_not NOT{
-    $<ptr>$ = new node("nt", "CloseNot");
+    $<ptr>$ = new node("nt", "Close Not");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1200,7 +1201,7 @@ comparison: expr close_compopexpr{
 }
 
 close_compopexpr: close_compopexpr comp_op expr{
-    $<ptr>$ = new node("nt", "CloseCompOpExpr");
+    $<ptr>$ = new node("nt", "Close Comparison Operator Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1230,21 +1231,21 @@ comp_op: '<'{
 } | IN{
     $<ptr>$ = $<ptr>1;
 } | NOT IN{
-    $<ptr>$ = new node("nt", "CompOp");
+    $<ptr>$ = new node("nt", "Not in");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | IS{
     $<ptr>$ = $<ptr>1;
 } | IS NOT{
-    $<ptr>$ = new node("nt", "CompOp");
+    $<ptr>$ = new node("nt", "Is Not");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 star_expr: '*' expr{
-    $<ptr>$ = new node("nt", "StarExpr");
+    $<ptr>$ = new node("nt", "Star Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1252,13 +1253,13 @@ star_expr: '*' expr{
 
 expr: xor_expr close_orxorexp{
     cerr << "debug statement " << 6 <<"\n";
-    $<ptr>$ = new node("nt", "Expr");
+    $<ptr>$ = new node("nt", "Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 close_orxorexp: close_orxorexp '|' xor_expr{
-    $<ptr>$ = new node("nt", "CloseOrXorExpr");
+    $<ptr>$ = new node("nt", "Close Or Xor Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1269,14 +1270,14 @@ close_orxorexp: close_orxorexp '|' xor_expr{
 
 xor_expr: and_expr close_xor_and_expr{
     cerr << "debug statement " << 7 <<"\n";
-    $<ptr>$ = new node("nt", "XorExpr");
+    $<ptr>$ = new node("nt", "Xor Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_xor_and_expr: close_xor_and_expr '^' and_expr{
-    $<ptr>$ = new node("nt", "CloseXorAndExpr");
+    $<ptr>$ = new node("nt", "Close Xor And Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1287,14 +1288,14 @@ close_xor_and_expr: close_xor_and_expr '^' and_expr{
 
 and_expr: shift_expr close_andshiftexpr{
     cerr << "debug statement " << 8 <<"\n";
-    $<ptr>$ = new node("nt", "AndExpr");
+    $<ptr>$ = new node("nt", "And Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_andshiftexpr: close_andshiftexpr '&' shift_expr{
-    $<ptr>$ = new node("nt", "CloseAndShiftExpr");
+    $<ptr>$ = new node("nt", "Close And Shift Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1305,7 +1306,7 @@ $<ptr>$ = NULL;
 
 shift_expr: arith_expr close_lrs_arith_expr{
     cerr << "debug statement " << 9 <<"\n";
-    $<ptr>$ = new node("nt", "ShiftExpr");
+    $<ptr>$ = new node("nt", "Shift Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1318,7 +1319,7 @@ left_right_shift: LEFTSHIFT{
 }
 
 close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
-    $<ptr>$ = new node("nt", "CloseLrsArithExpr");
+    $<ptr>$ = new node("nt", "Close Leftright shift Arithmatic Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1329,19 +1330,18 @@ close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
 
 arith_expr: term close_plusminusterm{
     cerr << "debug statement " << 10 <<"\n";
-    $<ptr>$ = new node("nt", "ArithExpr");
+    $<ptr>$ = new node("nt", "Arithmatic Expression");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_plusminusterm: close_plusminusterm '+' term{
-    $<ptr>$ = new node("nt", "ClosePlusMinusTerm");
+    $<ptr>$ = new node("nt", "Close Plus Minus Term");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | close_plusminusterm '-' term{
-    $<ptr>$ = new node("nt", "ClosePlusMinusTerm");
-    $<ptr>$ = $<ptr>2;
+    $<ptr>$ = new node("nt", "Close Plus Minus Term");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -1370,7 +1370,7 @@ group_muldivremops: '*'{
 } 
 
 close_muldivopsfactor: close_muldivopsfactor group_muldivremops factor{
-    $<ptr>$ = new node("nt", "CloseMulDivOpsFactor");
+    $<ptr>$ = new node("nt", "Close Mul Div Ops Factor");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1388,7 +1388,7 @@ factor: close_plus_or_minus_or_not power{
 }
 
 close_plus_or_minus_or_not: close_plus_or_minus_or_not plus_or_minus_or_not{
-    $<ptr>$ = new node("nt", "ClosePlusOrMinusOrNot");
+    $<ptr>$ = new node("nt", "Close Plus Or Minus Or Not");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1417,21 +1417,21 @@ power: atom_expr POW factor{
 }
 
 atom_expr: AWAIT atom close_trailer{
-    $<ptr>$ = new node("nt", "AtomExpr");
+    $<ptr>$ = new node("nt", "Atomic Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | atom close_trailer{
     cerr << "debug statement " << 14 <<"\n";
-    $<ptr>$ = new node("nt", "AtomExpr");
+    $<ptr>$ = new node("nt", "Atomic Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 close_trailer: close_trailer trailer{
-    $<ptr>$ = new node("nt", "CloseTrailer");
+    $<ptr>$ = new node("nt", "Close Trailer");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1499,19 +1499,19 @@ cond_yield_or_testlist: yield_expr{
 multi_str: STRING{
     $<ptr>$ = $<ptr>1;
 } | STRING multi_str{
-    $<ptr>$ = new node("nt", "MultiStr");
+    $<ptr>$ = new node("nt", "Multiple String");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
 testlist_comp: test_or_starexp comp_for{
-    $<ptr>$ = new node("nt", "TestListComp");
+    $<ptr>$ = new node("nt", "Test List Comparision");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | test_or_starexp close_commatest_or_starexp cond_comma{
-    $<ptr>$ = new node("nt", "TestListComp");
+    $<ptr>$ = new node("nt", "Test List Comparision");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1539,7 +1539,7 @@ trailer: '(' cond_arglist ')' {
 }
 
 subscriptlist: subscript close_commasubscript cond_comma{
-    $<ptr>$ = new node("nt", "SubscriptList");
+    $<ptr>$ = new node("nt", "Subscript List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1547,7 +1547,7 @@ subscriptlist: subscript close_commasubscript cond_comma{
 }
 
 close_commasubscript: close_commasubscript ',' subscript{
-    $<ptr>$ = new node("nt", "CloseCommaSubscript");
+    $<ptr>$ = new node("nt", "Close Comma Subscript");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1581,7 +1581,7 @@ cond_sliceop: sliceop {
 }  
 
 sliceop: ':' test {
-    $<ptr>$ = new node("nt", "SliceOp");
+    $<ptr>$ = new node("nt", "Slice Operation");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1590,7 +1590,7 @@ sliceop: ':' test {
 }
 
 exprlist: expr_or_star_expr close_comma_expr_or_star_expr cond_comma{
-    $<ptr>$ = new node("nt", "ExprList");
+    $<ptr>$ = new node("nt", "Expression List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1604,7 +1604,7 @@ expr_or_star_expr: expr {
 }
 
 close_comma_expr_or_star_expr: close_comma_expr_or_star_expr ',' expr_or_star_expr {
-    $<ptr>$ = new node("nt", "CloseCommaExprOrStarExpr");
+    $<ptr>$ = new node("nt", "Close Comma Expression Or Star Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1614,7 +1614,7 @@ close_comma_expr_or_star_expr: close_comma_expr_or_star_expr ',' expr_or_star_ex
 }
 
 testlist: test close_comma_test cond_comma{
-    $<ptr>$ = new node("nt", "TestList");
+    $<ptr>$ = new node("nt", "Test List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1622,7 +1622,7 @@ testlist: test close_comma_test cond_comma{
 }
 
 close_comma_test: close_comma_test ',' test {
-    $<ptr>$ = new node("nt", "CloseCommaTest");
+    $<ptr>$ = new node("nt", "Close Comma Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1643,7 +1643,7 @@ dictorsetmaker:  testcoltest_or_starrexpr compfor_or_close_commatestcoltestorsta
 }
 
 testcoltest_or_starrexpr: test ':' test{
-    $<ptr>$ = new node("nt", "TestColTestOrStarRexpr");
+    $<ptr>$ = new node("nt", "Test Column Test Or Star expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1654,7 +1654,7 @@ testcoltest_or_starrexpr: test ':' test{
 
 
 close_commatestcoltestorstarrexpr: close_commatestcoltestorstarrexpr ',' testcoltest_or_starrexpr  {
-    $<ptr>$ = new node("nt", "CloseCommaTestColTestOrStarRexpr");
+    $<ptr>$ = new node("nt", "Close Comma Test Column Test Or Star expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1673,12 +1673,12 @@ compfor_or_close_commatestcoltestorstarexpr_condcomma: comp_for {
 }
 
 some_non_terminal: test_or_starexp comp_for{
-    $<ptr>$ = new node("nt", "SomeNonTerminal");
+    $<ptr>$ = new node("nt", "Some Non Terminal");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | test_or_starexp close_commatest_or_starexp cond_comma{
-    $<ptr>$ = new node("nt", "SomeNonTerminal");
+    $<ptr>$ = new node("nt", "Some Non Terminal");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1686,7 +1686,7 @@ some_non_terminal: test_or_starexp comp_for{
 }
 
 classdef: CLASS NAME cond_parentheses_arglist ':' suite{
-    $<ptr>$ = new node("nt", "ClassDef");
+    $<ptr>$ = new node("nt", "Class Definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1696,7 +1696,7 @@ classdef: CLASS NAME cond_parentheses_arglist ':' suite{
 }
 
 cond_parentheses_arglist: '(' cond_arglist ')'{
-    $<ptr>$ = new node("nt", "CondParenthesesArgList");
+    $<ptr>$ = new node("nt", "Condition Parentheses Argument List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1706,7 +1706,7 @@ cond_parentheses_arglist: '(' cond_arglist ')'{
 }
 
 arglist: argument close_comma_argument cond_comma{
-    $<ptr>$ = new node("nt", "ArgList");
+    $<ptr>$ = new node("nt", "Argument List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -1714,7 +1714,7 @@ arglist: argument close_comma_argument cond_comma{
 }
 
 close_comma_argument: close_comma_argument ',' argument {
-        $<ptr>$ = new node("nt", "CloseCommaArgument");
+        $<ptr>$ = new node("nt", "Close Comma Argument");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -1767,7 +1767,7 @@ comp_iter: comp_for {
         $<ptr>$ = $<ptr>1;
     }
 comp_for: cond_async FOR exprlist IN or_test comp_iter {
-        $<ptr>$ = new node("nt", "comp_for");
+        $<ptr>$ = new node("nt", "comp for");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
@@ -1784,12 +1784,12 @@ cond_async: ASYNC {
 
 
 comp_if: IF test_nocond {
-        $<ptr>$ = new node("nt", "comp_if");
+        $<ptr>$ = new node("nt", "comp if");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
     } | IF test_nocond comp_iter {
-        $<ptr>$ = new node("nt", "comp_if");
+        $<ptr>$ = new node("nt", "comp if");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
@@ -1802,7 +1802,7 @@ encoding_decl: NAME {
     }
 
 yield_expr: YIELD yield_arg {
-        $<ptr>$ = new node("nt", "YieldExpression");
+        $<ptr>$ = new node("nt", "Yield Expression");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
@@ -1812,7 +1812,7 @@ yield_expr: YIELD yield_arg {
     }
 
 yield_arg: FROM test {
-        $<ptr>$ = new node("nt", "YieldArguments");
+        $<ptr>$ = new node("nt", "Yield Arguments");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);   
         ast.add_edge($<ptr>$, $<ptr>2);   
@@ -1826,6 +1826,19 @@ yield_arg: FROM test {
 
 int main(int argc, char *argv[]){
     /* yydebug = 1  */
+    if(argc > 1){
+
+    }
+    else{
+        cerr << "No Input file specified.\nParsing Terminated\n";
+        return -1;
+    }
+    yyin = fopen(argv[1], "r");
+    if(yyin == NULL){
+        cerr << "Failed to open input file.\n Terminated\n";
+        return -1;
+    }
     indents.push(0);
-    yyparse();
+    if(!yyparse()) cerr << "Parsing successful\n";
+    return 0;
 }
