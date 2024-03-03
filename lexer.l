@@ -41,8 +41,8 @@ longbyteschar  ([^\\])
 shortbyteschar ([^\\\n"])
 longbytesitem  ({longbyteschar}|{bytesescapeseq})
 shortbytesitem ({shortbyteschar}|{bytesescapeseq})
-longbytes ((["][']['][']["]{longbytesitem}*["][']['][']["])|([']["]["]["][']{longbytesitem}*[']["]["]["][']))
-shortbytes  ((["][']["]{shortbytesitem}*["][']["])|([']["][']{shortbytesitem}*[']["][']))
+longbytes (([']['][']{longbytesitem}*['][']['])|(["]["]["]{longbytesitem}*["]["]["]))
+shortbytes  (([']{shortbytesitem}*['])|(["]{shortbytesitem}*["]))
 bytesprefix    ("b"|"B"|"br"|"Br"|"bR"|"BR"|"rb"|"rB"|"Rb"|"RB")
 bytesliteral   {bytesprefix}({shortbytes}|{longbytes})
 stringescapeseq ([\][.])
@@ -50,8 +50,8 @@ longstringchar  [^\\]
 shortstringchar [^\\\n"]
 longstringitem  ({longstringchar}|{stringescapeseq})
 shortstringitem ({shortstringchar}|{stringescapeseq})
-longstring   ((["][']['][']["]{longstringitem}*["][']['][']["])|([']["]["]["][']{longstringitem}*[']["]["]["][']))
-shortstring  ((["][']["]{shortstringitem}*["][']["])|([']["][']{shortstringitem}*[']["][']))
+longstring   (([']['][']{longstringitem}*['][']['])|(["]["]["]{longstringitem}*["]["]["]))
+shortstring  (([']{shortstringitem}*['])|(["]{shortstringitem}*["]))
 stringprefix    ("r"|"u"|"R"|"U"|"f"|"F"|"fr"|"Fr"|"fR"|"FR"|"rf"|"rF"|"Rf"|"RF")
 stringliteral   ({stringprefix}?)({shortstring}|{longstring})
 
@@ -84,14 +84,14 @@ nonzerodigit [1-9]
 bindigit [0-1]
 octdigit [0-7]
 hexdigit ({digit}|[a-f]|[A-F])
-decinteger ({nonzerodigit}(([_]?{digit})*|([0]+)([_]?[0])*))
+decinteger (({nonzerodigit}((("_"?){digit})*))|("0"+)((("_"?)"0")*))
 bininteger ([0][bB](([_]?){bindigit})+)
 octinteger ([0][oO](([_]?){octdigit})+)
 hexinteger ([0][xX](([_]?){hexdigit})+)
 integer ({decinteger}|{bininteger}|{octinteger}|{hexinteger})
 
 floatnumber ({pointfloat}|{exponentfloat})
-pointfloat (([{digitpart}]?{fraction})|({digitpart}[.]))
+pointfloat (({digitpart}?{fraction})|({digitpart}[.]))
 exponentfloat ({digitpart}|{pointfloat}){exponent}
 digitpart {digit}((([_]?){digit})*)
 fraction [.]{digitpart}
@@ -308,6 +308,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "False";
     return FALSE;}
 <INLINE>"None" {
+    cerr << "return keyword none\n";
     yylval.ptr = new node("KEYWORD", "None");
     yylval.val = "None";
     return NONE;}
@@ -316,6 +317,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "class";
     return CLASS;}
 <INLINE>"def" {
+    cerr << "returning def\n";
     yylval.ptr = new node("KEYWORD", "def");
     yylval.val = "def";
     return DEF;}
@@ -374,6 +376,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "**=";
     return POWASSIGN;}
 <INLINE>{ARROWOP} {
+    cerr << "returing arrow OP\n";
     yylval.ptr = new node("OPERATOR", "->");
     yylval.val = "->";
     return ARROWOP;}

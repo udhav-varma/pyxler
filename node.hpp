@@ -6,6 +6,7 @@ class node{
 public:
     int id = -1;
     node* parent;     // index of parent node
+    node* next;
     vector<node*> children;   // indexes of children nodes
     string type, name;
     node(string Type, string Name) : type(Type), name(Name){}
@@ -40,6 +41,19 @@ public:
         return s;
     };
 
+    void idfs(node* node)
+    {
+        for(auto u: node->children){
+            idfs(u);
+        }
+        if(node->children.size() != 1){
+            node->next = node;
+        }
+        else{
+            node->next = node->children[0]->next;
+        }
+    }
+
     void dfs1(node* node, int &i){
         if(node->id==-1){
             node->id = i++;
@@ -47,21 +61,22 @@ public:
             dotcode.append(s);
         }
         for(auto u: node->children){
-            dfs1(u, i);
+            dfs1(u->next, i);
         }
     }
 
     void dfs2(node* node){
         for(auto u: node->children){
-            string s1 = intToString(node->id) + " -> " + intToString(u->id) + "\n";
+            string s1 = intToString(node->id) + " -> " + intToString(u->next->id) + "\n";
             dotcode.append(s1);
-            dfs2(u);
+            dfs2(u->next);
         }
     }
 
     void graphviz(node * ptr){
         int id = 1;
         dotcode.append("digraph AST{\n");
+        idfs(ptr);
         dfs1(ptr, id);
         dfs2(ptr);
         dotcode.append("}\n");
