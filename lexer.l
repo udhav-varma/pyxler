@@ -113,7 +113,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 
 
 <OUTLINE>{NEWLINE}|{COMMENT} {
-    cerr << "Empty line\n";
     space = 0;
     inside_line = 0;
 }
@@ -125,7 +124,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         unput(yytext[0]);
         return DEDENT;
     }
-    cerr << "returning end\n";
     yylval.val = "ENDMARKER";
     yylval.ptr = new node("", yylval.val);
     return ENDMARKER;
@@ -138,22 +136,18 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         unput(yytext[0]);
         return DEDENT;
     }
-    cerr << "returning end\n";
     yylval.val = "ENDMARKER";
     yylval.ptr = new node("", yylval.val);
     return ENDMARKER;   
 }
 <OUTLINE>. {
-        cerr << "here ex\n";
         int pos = space;
-        cerr << "pos: " << pos << ' ' << int(yytext[0]) << ' ' << yyleng << '\n';
         if(pos > indents.top()){
             inside_line = true;
             unput(yytext[0]);
             indents.push(pos);
             yylval.val = "INDENT";
             yylval.ptr = new node("", yylval.val);
-            cerr << "return indent\n";
             return INDENT;
         }
         else if(pos == indents.top()){
@@ -166,7 +160,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
             unput(yytext[0]);
             yylval.val = "DEDENT";
             yylval.ptr = new node("", yylval.val);
-            cerr<<"\n\nreturning dedent\n\n";
             return DEDENT;
         }
     }
@@ -174,21 +167,16 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 
 <INLINE,BRACKET>("["|"("|"{") {
     sq_pos++;
-    cerr << YYSTATE << ' ';
     if(sq_pos > 0){
         BEGIN(BRACKET);
         inside_brack = true;
     }
-    cerr << YYSTATE << '\n';
-    cerr << "BRACK BEGIN " << sq_pos << '\n';
-    cerr << "here delimiter\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];
 }
 
 <BRACKET>{NEWLINE} {
-    cerr << "newline implicit line join\n";
     ;   // implicit line join
 }
 <BRACKET>{COMMENT} {
@@ -200,10 +188,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     if(sq_pos == 0){
         BEGIN(INLINE);
         inside_brack = false;
-        cerr << "BRACK_CLOSE\n";
     }
-    cerr << YYSTATE << '\n';
-    cerr << "here delimiter\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];
@@ -214,15 +199,13 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
-    cerr << "return newline token\n";
     return NEWLINE;
 }
 
 <INLINE,BRACKET>"\\"[ ]*\n {
-    cerr << "line joining\n";
 } 
 
-<INLINE,BRACKET>[ ]*  {/*cerr << "space\n";*/}
+<INLINE,BRACKET>[ ]*  {}
 
 
 <INLINE,BRACKET>"async" { 
@@ -258,7 +241,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "from";
     return FROM;}
 <INLINE,BRACKET>"import" {
-    // cerr<<"import detected\n";
     yylval.ptr = new node("KEYWORD", "import");
     yylval.val = "import";
     return IMPORT;}
@@ -279,7 +261,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "assert";
     return ASSERT;}
 <INLINE,BRACKET>"if" {
-    cerr<<"if read\n";
     yylval.ptr = new node("KEYWORD", "if");
     yylval.val = "if";
     return IF;}
@@ -332,7 +313,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "or";
     return OR;}
 <INLINE,BRACKET>"and" {
-    cerr << "returning end\n";
     yylval.ptr = new node("KEYWORD", "and");
     yylval.val = "and";
     return AND;}
@@ -357,7 +337,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "False";
     return FALSE;}
 <INLINE,BRACKET>"None" {
-    cerr << "return keyword none\n";
     yylval.ptr = new node("KEYWORD", "None");
     yylval.val = "None";
     return NONE;}
@@ -366,7 +345,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "class";
     return CLASS;}
 <INLINE,BRACKET>"def" {
-    cerr << "returning def\n";
     yylval.ptr = new node("KEYWORD", "def");
     yylval.val = "def";
     return DEF;}
@@ -376,7 +354,6 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
-    // cerr << "return newline token";
     return NEWLINE;
 }
 <INLINE,BRACKET>{ADDASSIGN} {
@@ -424,21 +401,19 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "<<=";
     return LSASSIGN;}
 <INLINE,BRACKET>{RSASSIGN} {
-    yylval.ptr = new node("OPERDELIMITERATOR", ">>=");
+    yylval.ptr = new node("DELIMITER", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
 <INLINE,BRACKET>{POWASSIGN} {
-    yylval.ptr = new node("OPERATOR", "**=");
+    yylval.ptr = new node("DELIMITER", "**=");
     yylval.val = "**=";
     return POWASSIGN;}
 <INLINE,BRACKET>{ARROWOP} {
-    cerr << "returing arrow OP\n";
-    yylval.ptr = new node("OPERATOR", "->");
+    yylval.ptr = new node("DELIMITER", "->");
     yylval.val = "->";
     return ARROWOP;}
 
 <INLINE,BRACKET>{stringliteral} { 
-    cerr << "return string " << yytext << '\n';
     yylval.ptr = new node("", string(yytext, yytext + yyleng));
     yylval.val = string(yytext, yytext + yyleng);
     return STRING;}
@@ -475,17 +450,14 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "!=";
     return NEQ;}
 <INLINE,BRACKET>({integer}|{floatnumber}|{imagnumber})  {
-    cerr << "here number "<< yytext <<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("NUMBER", yylval.val);
     return NUMBER;}
 <INLINE,BRACKET>{NAME} {
-    cerr << "here name "<<yytext<<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
     return NAME;}
 <INLINE,BRACKET>. {
-    cerr << "here delimiter "<<yytext<<"\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];}

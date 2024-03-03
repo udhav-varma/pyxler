@@ -39,7 +39,5 @@ else:
     print(f"Successfully ran graphviz dot tool. Find output at {output_loc}")
 
 if args.verbose:
-    f = open('./logs.txt', 'r')
-    content = f.read()
-    print(f.read())
-    f.close()
+    with open('./logs.txt') as f:
+        print(f.read())

@@ -1021,7 +1021,6 @@ case 2:
 YY_RULE_SETUP
 #line 116 "lexer.l"
 {
-    cerr << "Empty line\n";
     space = 0;
     inside_line = 0;
 }
@@ -1030,7 +1029,7 @@ case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(INLINE):
 case YY_STATE_EOF(OUTLINE):
 case YY_STATE_EOF(BRACKET):
-#line 121 "lexer.l"
+#line 120 "lexer.l"
 {
     if(indents.size() > 1){
         indents.pop();
@@ -1039,7 +1038,6 @@ case YY_STATE_EOF(BRACKET):
         unput(yytext[0]);
         return DEDENT;
     }
-    cerr << "returning end\n";
     yylval.val = "ENDMARKER";
     yylval.ptr = new node("", yylval.val);
     return ENDMARKER;
@@ -1047,7 +1045,7 @@ case YY_STATE_EOF(BRACKET):
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 134 "lexer.l"
+#line 132 "lexer.l"
 {
     if(indents.size() > 1){
         indents.pop();
@@ -1056,7 +1054,6 @@ YY_RULE_SETUP
         unput(yytext[0]);
         return DEDENT;
     }
-    cerr << "returning end\n";
     yylval.val = "ENDMARKER";
     yylval.ptr = new node("", yylval.val);
     return ENDMARKER;   
@@ -1064,18 +1061,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 147 "lexer.l"
+#line 144 "lexer.l"
 {
-        cerr << "here ex\n";
         int pos = space;
-        cerr << "pos: " << pos << ' ' << int(yytext[0]) << ' ' << yyleng << '\n';
         if(pos > indents.top()){
             inside_line = true;
             unput(yytext[0]);
             indents.push(pos);
             yylval.val = "INDENT";
             yylval.ptr = new node("", yylval.val);
-            cerr << "return indent\n";
             return INDENT;
         }
         else if(pos == indents.top()){
@@ -1088,24 +1082,19 @@ YY_RULE_SETUP
             unput(yytext[0]);
             yylval.val = "DEDENT";
             yylval.ptr = new node("", yylval.val);
-            cerr<<"\n\nreturning dedent\n\n";
             return DEDENT;
         }
     }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 176 "lexer.l"
+#line 169 "lexer.l"
 {
     sq_pos++;
-    cerr << YYSTATE << ' ';
     if(sq_pos > 0){
         BEGIN(BRACKET);
         inside_brack = true;
     }
-    cerr << YYSTATE << '\n';
-    cerr << "BRACK BEGIN " << sq_pos << '\n';
-    cerr << "here delimiter\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];
@@ -1114,32 +1103,28 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 191 "lexer.l"
+#line 180 "lexer.l"
 {
-    cerr << "newline implicit line join\n";
     ;   // implicit line join
 }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 195 "lexer.l"
+#line 183 "lexer.l"
 {
     ;   // implicit line join
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 199 "lexer.l"
+#line 187 "lexer.l"
 {
     sq_pos--;
     if(sq_pos == 0){
         BEGIN(INLINE);
         inside_brack = false;
-        cerr << "BRACK_CLOSE\n";
     }
-    cerr << YYSTATE << '\n';
-    cerr << "here delimiter\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];
@@ -1148,32 +1133,30 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 213 "lexer.l"
+#line 198 "lexer.l"
 {
     yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
-    cerr << "return newline token\n";
     return NEWLINE;
 }
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 222 "lexer.l"
+#line 206 "lexer.l"
 {
-    cerr << "line joining\n";
 } 
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 226 "lexer.l"
-{/*cerr << "space\n";*/}
+#line 209 "lexer.l"
+{}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 229 "lexer.l"
+#line 212 "lexer.l"
 { 
     yylval.ptr = new node("KEYWORD", "async");
     yylval.val = "async";
@@ -1181,7 +1164,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 233 "lexer.l"
+#line 216 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "del");
     yylval.val = "del";
@@ -1189,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 237 "lexer.l"
+#line 220 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "pass");
     yylval.val = "pass";
@@ -1197,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 241 "lexer.l"
+#line 224 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "break");
     yylval.val = "break";
@@ -1205,7 +1188,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 245 "lexer.l"
+#line 228 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "continue");
     yylval.val = "continue";
@@ -1213,7 +1196,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 249 "lexer.l"
+#line 232 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "return");
     yylval.val = "return";
@@ -1221,7 +1204,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 253 "lexer.l"
+#line 236 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "raise");
     yylval.val = "raise";
@@ -1229,7 +1212,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 257 "lexer.l"
+#line 240 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "from");
     yylval.val = "from";
@@ -1237,16 +1220,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 261 "lexer.l"
+#line 244 "lexer.l"
 {
-    // cerr<<"import detected\n";
     yylval.ptr = new node("KEYWORD", "import");
     yylval.val = "import";
     return IMPORT;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 266 "lexer.l"
+#line 248 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "as");
     yylval.val = "as";
@@ -1254,7 +1236,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 270 "lexer.l"
+#line 252 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "global");
     yylval.val = "global";
@@ -1262,7 +1244,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 274 "lexer.l"
+#line 256 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "nonlocal");
     yylval.val = "nonlocal";
@@ -1270,7 +1252,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 278 "lexer.l"
+#line 260 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "assert");
     yylval.val = "assert";
@@ -1278,16 +1260,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 282 "lexer.l"
+#line 264 "lexer.l"
 {
-    cerr<<"if read\n";
     yylval.ptr = new node("KEYWORD", "if");
     yylval.val = "if";
     return IF;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 287 "lexer.l"
+#line 268 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "elif");
     yylval.val = "elif";
@@ -1295,7 +1276,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 291 "lexer.l"
+#line 272 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "else");
     yylval.val = "else";
@@ -1303,7 +1284,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 295 "lexer.l"
+#line 276 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "for");
     yylval.val = "for";
@@ -1311,7 +1292,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 299 "lexer.l"
+#line 280 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "in");
     yylval.val = "in";
@@ -1319,7 +1300,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 303 "lexer.l"
+#line 284 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "while");
     yylval.val = "while";
@@ -1327,7 +1308,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 307 "lexer.l"
+#line 288 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "try");
     yylval.val = "try";
@@ -1335,7 +1316,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 311 "lexer.l"
+#line 292 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "finally");
     yylval.val = "finally";
@@ -1343,7 +1324,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 315 "lexer.l"
+#line 296 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "with");
     yylval.val = "with";
@@ -1351,7 +1332,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 319 "lexer.l"
+#line 300 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "except");
     yylval.val = "except";
@@ -1359,7 +1340,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 323 "lexer.l"
+#line 304 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "lambda");
     yylval.val = "lambda";
@@ -1367,7 +1348,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 327 "lexer.l"
+#line 308 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "not");
     yylval.val = "not";
@@ -1375,7 +1356,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 331 "lexer.l"
+#line 312 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "or");
     yylval.val = "or";
@@ -1383,16 +1364,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 335 "lexer.l"
+#line 316 "lexer.l"
 {
-    cerr << "returning end\n";
     yylval.ptr = new node("KEYWORD", "and");
     yylval.val = "and";
     return AND;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 340 "lexer.l"
+#line 320 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "await");
     yylval.val = "await";
@@ -1400,7 +1380,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 344 "lexer.l"
+#line 324 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "is");
     yylval.val = "is";
@@ -1408,7 +1388,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 348 "lexer.l"
+#line 328 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "yield");
     yylval.val = "yield";
@@ -1416,7 +1396,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 352 "lexer.l"
+#line 332 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "True");
     yylval.val = "True";
@@ -1424,7 +1404,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 356 "lexer.l"
+#line 336 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "False");
     yylval.val = "False";
@@ -1432,16 +1412,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 360 "lexer.l"
+#line 340 "lexer.l"
 {
-    cerr << "return keyword none\n";
     yylval.ptr = new node("KEYWORD", "None");
     yylval.val = "None";
     return NONE;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 365 "lexer.l"
+#line 344 "lexer.l"
 {
     yylval.ptr = new node("KEYWORD", "class");
     yylval.val = "class";
@@ -1449,9 +1428,8 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 369 "lexer.l"
+#line 348 "lexer.l"
 {
-    cerr << "returning def\n";
     yylval.ptr = new node("KEYWORD", "def");
     yylval.val = "def";
     return DEF;}
@@ -1459,19 +1437,18 @@ YY_RULE_SETUP
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 375 "lexer.l"
+#line 353 "lexer.l"
 {
     yylval.ptr = new node("", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
-    // cerr << "return newline token";
     return NEWLINE;
 }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 383 "lexer.l"
+#line 360 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "+=");
     yylval.val = "+=";
@@ -1479,7 +1456,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 387 "lexer.l"
+#line 364 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "-=");
     yylval.val = "-=";
@@ -1487,7 +1464,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 391 "lexer.l"
+#line 368 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "*=");
     yylval.val = "*=";
@@ -1495,7 +1472,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 395 "lexer.l"
+#line 372 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "/=");
     yylval.val = "/=";
@@ -1503,7 +1480,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 399 "lexer.l"
+#line 376 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "//=");
     yylval.val = "//=";
@@ -1511,7 +1488,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 403 "lexer.l"
+#line 380 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "%=");
     yylval.val = "%=";
@@ -1519,7 +1496,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 407 "lexer.l"
+#line 384 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "@=");
     yylval.val = "@=";
@@ -1527,7 +1504,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 411 "lexer.l"
+#line 388 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "&=");
     yylval.val = "&=";
@@ -1535,7 +1512,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 415 "lexer.l"
+#line 392 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "|=");
     yylval.val = "|=";
@@ -1543,7 +1520,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 419 "lexer.l"
+#line 396 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "^=");
     yylval.val = "^=";
@@ -1551,7 +1528,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 423 "lexer.l"
+#line 400 "lexer.l"
 {
     yylval.ptr = new node("DELIMITER", "<<=");
     yylval.val = "<<=";
@@ -1559,42 +1536,40 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 427 "lexer.l"
+#line 404 "lexer.l"
 {
-    yylval.ptr = new node("OPERDELIMITERATOR", ">>=");
+    yylval.ptr = new node("DELIMITER", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 431 "lexer.l"
+#line 408 "lexer.l"
 {
-    yylval.ptr = new node("OPERATOR", "**=");
+    yylval.ptr = new node("DELIMITER", "**=");
     yylval.val = "**=";
     return POWASSIGN;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 435 "lexer.l"
+#line 412 "lexer.l"
 {
-    cerr << "returing arrow OP\n";
-    yylval.ptr = new node("OPERATOR", "->");
+    yylval.ptr = new node("DELIMITER", "->");
     yylval.val = "->";
     return ARROWOP;}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 441 "lexer.l"
+#line 417 "lexer.l"
 { 
-    cerr << "return string " << yytext << '\n';
     yylval.ptr = new node("", string(yytext, yytext + yyleng));
     yylval.val = string(yytext, yytext + yyleng);
     return STRING;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 446 "lexer.l"
+#line 421 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "**");
     yylval.val = "**";
@@ -1602,7 +1577,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 450 "lexer.l"
+#line 425 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "//");
     yylval.val = "//";
@@ -1610,7 +1585,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 454 "lexer.l"
+#line 429 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "<<");
     yylval.val = "<<";
@@ -1618,7 +1593,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 458 "lexer.l"
+#line 433 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", ">>");
     yylval.val = ">>";
@@ -1626,7 +1601,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 462 "lexer.l"
+#line 437 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "<=");
     yylval.val = "<=";
@@ -1634,7 +1609,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 466 "lexer.l"
+#line 441 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", ">=");
     yylval.val = ">=";
@@ -1642,7 +1617,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 470 "lexer.l"
+#line 445 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "==");
     yylval.val = "==";
@@ -1650,7 +1625,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 474 "lexer.l"
+#line 449 "lexer.l"
 {
     yylval.ptr = new node("OPERATOR", "!=");
     yylval.val = "!=";
@@ -1658,37 +1633,34 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 478 "lexer.l"
+#line 453 "lexer.l"
 {
-    cerr << "here number "<< yytext <<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("NUMBER", yylval.val);
     return NUMBER;}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 483 "lexer.l"
+#line 457 "lexer.l"
 {
-    cerr << "here name "<<yytext<<"\n";
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
     return NAME;}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 488 "lexer.l"
+#line 461 "lexer.l"
 {
-    cerr << "here delimiter "<<yytext<<"\n";
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
     return yytext[0];}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 494 "lexer.l"
+#line 466 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1692 "lexer.cpp"
+#line 1664 "lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2703,6 +2675,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 494 "lexer.l"
+#line 466 "lexer.l"
 
 
