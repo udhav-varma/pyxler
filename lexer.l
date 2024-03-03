@@ -109,7 +109,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     if(inside_brack) BEGIN(BRACKET);
     else if(inside_line) BEGIN(INLINE);
     else BEGIN(OUTLINE);
-<OUTLINE>[ ] {space++; /*cerr<<"uninline space detected\n";*/}
+<OUTLINE>[ ] {space++;}
 
 
 <OUTLINE>{NEWLINE}|{COMMENT} {

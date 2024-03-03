@@ -1,8 +1,0 @@
-ast.add_node($<ptr>$);
-ast.add_edge($<ptr>$, $<ptr>1);   
-ast.add_edge($<ptr>$, $<ptr>2);   
-ast.add_edge($<ptr>$, $<ptr>3);   
-ast.add_edge($<ptr>$, $<ptr>4);   
-ast.add_edge($<ptr>$, $<ptr>5);   
-ast.add_edge($<ptr>$, $<ptr>6);   
-ast.add_edge($<ptr>$, $<ptr>7);   

@@ -270,3 +270,8 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/flex,c,c++,python
 lazygit*
+graph.pdf
+graph*
+mile
+*.yy*
+lexer.cpp
