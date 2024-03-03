@@ -106,10 +106,10 @@ term: factor (('*'|'@'|'/'|'%'|'//') factor)*
 factor: ('+'|'-'|'~') factor | power
 power: atom_expr ['**' factor]
 atom_expr: [AWAIT] atom trailer*
-atom: ('(' [yield_expr|testlist_comp] ')' |
-       '[' [testlist_comp] ']' |
-       '{' [dictorsetmaker] '}' |
-       NAME | NUMBER | STRING+ | '...' | 'None' | 'True' | 'False')
+atom: '(' [yield_expr|testlist_comp] ')' 
+      |'[' [testlist_comp] ']' 
+      |'{' [dictorsetmaker] '}' 
+      | NAME | NUMBER | STRING+ | '...' | 'None' | 'True' | 'False'
 testlist_comp: (test|star_expr) ( comp_for | (',' (test|star_expr))* [','] )
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME
 

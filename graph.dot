@@ -26,7 +26,7 @@ digraph AST{
 	21[label="KEYWORD\n( import )"]
 	22[color="green" shape="rectangle"]
 	22[label="IDENTIFIER\n( itertools )"]
-	23[color="maroon" shape="rectangle"]
+	23[color="maroon" shape="rectangle"]`
 	23[label="NEWLINE"]
 	24[label="Class Definition"]
 	25[color="purple" shape="rectangle"]
