@@ -10,6 +10,9 @@ int indent = 0;
 int space = 0;
 bool spaceset = false;
 int inside_line = 0;
+int sq_pos = 0;
+int cu_pos = 0;
+int br_pos = 0;
 // int setspace()
 // {
 //     spaceset = true;
@@ -101,6 +104,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 %x INLINE
 %x OUTLINE
 %x ARRAY
+%s BRACKET
 %%
 
     if(inside_line) BEGIN(INLINE);
@@ -167,6 +171,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         }
     }
 
+
 <INLINE>{NEWLINE} {
     yylval.ptr = new node("NEWLINE", "NEWLINE");
     yylval.val = "NEWLINE";
@@ -181,6 +186,8 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 } 
 
 <INLINE>[ ]*  {/*cerr << "space\n";*/}
+
+
 <INLINE>"async" { 
     yylval.ptr = new node("KEYWORD", "async");
     yylval.val = "async";
@@ -327,7 +334,14 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "def";
     return DEF;}
 
-<INLINE>{COMMENT} {}
+<INLINE>{COMMENT} {
+    yylval.ptr = new node("NEWLINE", "NEWLINE");
+    yylval.val = "NEWLINE";
+    inside_line = 0;
+    space = 0;
+    // cerr << "return newline token";
+    return NEWLINE;
+}
 <INLINE>{ADDASSIGN} {
     yylval.ptr = new node("OPERATOR", "+=");
     yylval.val = "+=";
