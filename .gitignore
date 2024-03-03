@@ -275,3 +275,4 @@ graph*
 mile
 *.yy*
 lexer.cpp
+*.tab*
