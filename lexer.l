@@ -104,7 +104,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 %x INLINE
 %x OUTLINE
 %x ARRAY
-%s BRACKET
+
 %%
 
     if(inside_line) BEGIN(INLINE);
