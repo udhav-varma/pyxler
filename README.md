@@ -2,7 +2,7 @@
 
 # Issues
 
-- [ ] line joining 
+- [x] line joining 
 - [ ] tabs
 - [ ] syntax error
 - [ ] escape sequence 
@@ -10,6 +10,6 @@
 - [ ] remove comments
 - [ ] testing
 - [ ] docs
-- [ ] grammar check
+- [x] grammar check
 - [ ] operator position issue
 - [ ] bison version issue ??
