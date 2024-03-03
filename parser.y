@@ -9,26 +9,23 @@
 //      eval_input is the input for the eval() functions.
 // NB: compound_stmt in single_input is followed by extra NEWLINE!
 %{
-      extern int yylex();
-      extern int yylineno;
-      extern int yydebug;
-      void yyerror(char * s){
-        printf("Error! Line Number %d, message: %s\n", yylineno, s);
-      }
-      void yyerror(string s){
-        printf("Error! Line Number %d, message: %s\n", yylineno, s.c_str());
-      }
-      extern stack<int> indents;
-      #define YYDEBUG 1
+    extern int yylex();
+    extern int yylineno;
+    extern int yydebug;
+    void yyerror(char * s){
+    printf("Error! Line Number %d, message: %s\n", yylineno, s);
+    }
+    void yyerror(string s){
+    printf("Error! Line Number %d, message: %s\n", yylineno, s.c_str());
+    }
+    extern stack<int> indents;
+    #define YYDEBUG 1
 %}
+
 
 %code requires{
     #ifndef PARSER
     #include "node.hpp"
-
-
-
-
     #endif
 }
 
@@ -138,7 +135,7 @@ nstatement: nstatement NEWLINE {
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}| nstatement stmt {
+} | nstatement stmt {
     cerr<<"nstatement -> nstatement stmt\n";
     $<ptr>$ = new node("nt", "nstatement");
     ast.add_node($<ptr>$);
@@ -545,6 +542,7 @@ small_stmt: expr_stmt {
   }
 expr_stmt: testlist_star_expr anna_or_auga_or_closeyield {
     $<ptr>$ = new node("nt", "expr_statement");
+    cerr << "here expr_stmt\n";
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -611,6 +609,7 @@ testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma {
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 test_or_starexp: test {
+    cerr<<"yo1\n";
     $<ptr>$ = $<ptr>1;
 }
  | star_expr {
@@ -1535,6 +1534,7 @@ test: or_test IF or_test ELSE test{
     $<ptr>$ = $<ptr>1;
 } | or_test{
     cerr << "debug statement " << 1 <<"\n";
+    cerr<<"test->or_test\n";
     // $<ptr>$ = new node("nt", "Test");
     // ast.add_node($<ptr>$);
     // ast.add_edge($<ptr>$, $<ptr>1);

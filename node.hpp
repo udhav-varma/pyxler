@@ -103,11 +103,44 @@ public:
                 }
             }
             node->name = newstr;
-            string s = intToString(node->id) + "[label=\"" + node->name + "\"]\n";
+            string s = "\t" + intToString(node->id) + "[label=\"" + node->type + "\\n( " + node->name + " )\"]\n";
+            if(node->type==""){
+                s = "\t" + intToString(node->id) + "[label=\"" + node->name + "\"]\n";
+                string t = "\t" + intToString(node->id) + "[color=\"yellow\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="NUMBER"){
+                string t = "\t" + intToString(node->id) + "[color=\"red\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="DELIMITER"){
+                string t = "\t" + intToString(node->id) + "[color=\"blue\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="IDENTIFIER"){
+                string t = "\t" + intToString(node->id) + "[color=\"green\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="STRING LITERAL"){
+                string t = "\t" + intToString(node->id) + "[color=\"cyan\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="KEYWORD"){
+                string t = "\t" + intToString(node->id) + "[color=\"purple\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="DELIMITER"){
+                string t = "\t" + intToString(node->id) + "[color=\"orange\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
+            else if(node->type=="OPERATOR"){
+                string t = "\t" + intToString(node->id) + "[color=\"VIOLET\" shape=\"rectangle\"]\n";
+                dotcode.append(t);
+            }
             dotcode.append(s);
         }
         else{
-            string s = intToString(node->id) + "[label=\"" + node->name + "\"]\n";
+            string s = "\t" + intToString(node->id) + "[label=\"" + node->name + "\"]\n";
             dotcode.append(s);
         }       
 
@@ -118,7 +151,7 @@ public:
 
     void dfs2(node* node){
         for(auto u: node->children){
-            string s1 = intToString(node->id) + " -> " + intToString(u->next->id) + "\n";
+            string s1 = "\t" + intToString(node->id) + " -> " + intToString(u->next->id) + "\n";
             dotcode.append(s1);
             dfs2(u->next);
         }
