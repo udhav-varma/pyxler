@@ -1,50 +1,49 @@
-import heapq
-import itertools
+def build_lps(pattern):
+    m = len(pattern)
+    lps = [0] * m
+    length = 0
+    i = 1
+    j = 1
+    j += i
 
-class Graph:
-    def __init__(self, vertices):
-        self.vertices = vertices
-        self.graph = {}
+    while i < m:
+        if pattern[i] == pattern[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = lps[length - 1]
+            else:
+                lps[i] = 0
+                i += 1
 
-    def add_edge(self, u, v, weight):
-        if u not in self.graph:
-            self.graph[u] = {}
-        if v not in self.graph:
-            self.graph[v] = {}
+    return lps
 
-        self.graph[u][v] = weight
-        self.graph[v][u] = weight
+def kmp_search(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    lps = build_lps(pattern)
+    print("Reached kmp")
+    i, j = 0, 0
 
-def prim_mst(graph):
-    visited = set()
-    edges = list(map(lambda x: (x[1], 0, x[0]), graph.graph[0].items()))
-    heapq.heapify(edges)
-    total_weight = 0
-    mst_edges = iter(())
+    while i < n:
+        if pattern[j] == text[i]:
+            i += 1
+            j += 1
 
-    while edges:
-        weight, u, v = heapq.heappop(edges)
+        if j == m:
+            print("Pattern found at index:", i - j)
+            j = lps[j - 1]
 
-        if v not in visited:
-            visited.add(v)
-            total_weight += weight
-            mst_edges = iter(mst_edges)
-            mst_edges = itertools.chain(mst_edges, ((u, v),))
-
-            for neighbor, weight in graph.graph[v].items():
-                if neighbor not in visited:
-                    heapq.heappush(edges, (weight, v, neighbor))
-
-    return mst_edges, total_weight
+        elif i < n and pattern[j] != text[i]:
+            if j != 0:
+                j = lps[j - 1]
+            else:
+                i += 1
 
 # Example Usage:
-g = Graph(4)
-g.add_edge(0, 1, 2)
-g.add_edge(0, 2, 4)
-g.add_edge(1, 2, 1)
-g.add_edge(1, 3, 3)
-g.add_edge(2, 3, 5)
+text = "ABABDABACDABABCABAB"
+pattern = "ABABCABAB"
 
-mst_edges, total_weight = prim_mst(g)
-print("Minimum Spanning Tree Edges:", list(mst_edges))
-print("Total Weight of MST:", total_weight)
+kmp_search(text, pattern)
