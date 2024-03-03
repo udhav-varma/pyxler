@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_PARSER_TAB_HPP_INCLUDED
 # define YY_YY_PARSER_TAB_HPP_INCLUDED
@@ -50,80 +51,85 @@ extern int yydebug;
     #include "node.hpp"
     #endif
 
-#line 54 "parser.tab.hpp"
+#line 55 "parser.tab.hpp"
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NEWLINE = 258,
-    ENDMARKER = 259,
-    ASYNC = 260,
-    NAME = 261,
-    DEL = 262,
-    PASS = 263,
-    BREAK = 264,
-    CONTINUE = 265,
-    RETURN = 266,
-    RAISE = 267,
-    FROM = 268,
-    IMPORT = 269,
-    AS = 270,
-    GLOBAL = 271,
-    NONLOCAL = 272,
-    ASSERT = 273,
-    IF = 274,
-    ELIF = 275,
-    ELSE = 276,
-    FOR = 277,
-    IN = 278,
-    WHILE = 279,
-    TRY = 280,
-    FINALLY = 281,
-    WITH = 282,
-    EXCEPT = 283,
-    LAMBDA = 284,
-    NOT = 285,
-    OR = 286,
-    AND = 287,
-    AWAIT = 288,
-    IS = 289,
-    INDENT = 290,
-    DEDENT = 291,
-    YIELD = 292,
-    TRUE = 293,
-    NUMBER = 294,
-    STRING = 295,
-    FALSE = 296,
-    NONE = 297,
-    CLASS = 298,
-    DEF = 299,
-    ARROWOP = 300,
-    POW = 301,
-    ADDASSIGN = 302,
-    SUBASSIGN = 303,
-    MULASSIGN = 304,
-    ATASSIGN = 305,
-    DIVASSIGN = 306,
-    MODASSIGN = 307,
-    ANDASSIGN = 308,
-    ORASSIGN = 309,
-    XORASSIGN = 310,
-    LSASSIGN = 311,
-    RSASSIGN = 312,
-    POWASSIGN = 313,
-    IDIVASSIGN = 314,
-    ELLIPSIS = 315,
-    EQUAL = 316,
-    GEQ = 317,
-    LEQ = 318,
-    LTORGT = 319,
-    NEQ = 320,
-    LEFTSHIFT = 321,
-    RIGHTSHIFT = 322,
-    IDIV = 323
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    NEWLINE = 258,                 /* NEWLINE  */
+    ENDMARKER = 259,               /* ENDMARKER  */
+    ASYNC = 260,                   /* ASYNC  */
+    NAME = 261,                    /* NAME  */
+    DEL = 262,                     /* DEL  */
+    PASS = 263,                    /* PASS  */
+    BREAK = 264,                   /* BREAK  */
+    CONTINUE = 265,                /* CONTINUE  */
+    RETURN = 266,                  /* RETURN  */
+    RAISE = 267,                   /* RAISE  */
+    FROM = 268,                    /* FROM  */
+    IMPORT = 269,                  /* IMPORT  */
+    AS = 270,                      /* AS  */
+    GLOBAL = 271,                  /* GLOBAL  */
+    NONLOCAL = 272,                /* NONLOCAL  */
+    ASSERT = 273,                  /* ASSERT  */
+    IF = 274,                      /* IF  */
+    ELIF = 275,                    /* ELIF  */
+    ELSE = 276,                    /* ELSE  */
+    FOR = 277,                     /* FOR  */
+    IN = 278,                      /* IN  */
+    WHILE = 279,                   /* WHILE  */
+    TRY = 280,                     /* TRY  */
+    FINALLY = 281,                 /* FINALLY  */
+    WITH = 282,                    /* WITH  */
+    EXCEPT = 283,                  /* EXCEPT  */
+    LAMBDA = 284,                  /* LAMBDA  */
+    NOT = 285,                     /* NOT  */
+    OR = 286,                      /* OR  */
+    AND = 287,                     /* AND  */
+    AWAIT = 288,                   /* AWAIT  */
+    IS = 289,                      /* IS  */
+    INDENT = 290,                  /* INDENT  */
+    DEDENT = 291,                  /* DEDENT  */
+    YIELD = 292,                   /* YIELD  */
+    TRUE = 293,                    /* TRUE  */
+    NUMBER = 294,                  /* NUMBER  */
+    STRING = 295,                  /* STRING  */
+    FALSE = 296,                   /* FALSE  */
+    NONE = 297,                    /* NONE  */
+    CLASS = 298,                   /* CLASS  */
+    DEF = 299,                     /* DEF  */
+    ARROWOP = 300,                 /* ARROWOP  */
+    POW = 301,                     /* POW  */
+    ADDASSIGN = 302,               /* ADDASSIGN  */
+    SUBASSIGN = 303,               /* SUBASSIGN  */
+    MULASSIGN = 304,               /* MULASSIGN  */
+    ATASSIGN = 305,                /* ATASSIGN  */
+    DIVASSIGN = 306,               /* DIVASSIGN  */
+    MODASSIGN = 307,               /* MODASSIGN  */
+    ANDASSIGN = 308,               /* ANDASSIGN  */
+    ORASSIGN = 309,                /* ORASSIGN  */
+    XORASSIGN = 310,               /* XORASSIGN  */
+    LSASSIGN = 311,                /* LSASSIGN  */
+    RSASSIGN = 312,                /* RSASSIGN  */
+    POWASSIGN = 313,               /* POWASSIGN  */
+    IDIVASSIGN = 314,              /* IDIVASSIGN  */
+    ELLIPSIS = 315,                /* ELLIPSIS  */
+    EQUAL = 316,                   /* EQUAL  */
+    GEQ = 317,                     /* GEQ  */
+    LEQ = 318,                     /* LEQ  */
+    LTORGT = 319,                  /* LTORGT  */
+    NEQ = 320,                     /* NEQ  */
+    LEFTSHIFT = 321,               /* LEFTSHIFT  */
+    RIGHTSHIFT = 322,              /* RIGHTSHIFT  */
+    IDIV = 323                     /* IDIV  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -136,6 +142,8 @@ typedef NODE YYSTYPE;
 
 extern YYSTYPE yylval;
 
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_PARSER_TAB_HPP_INCLUDED  */

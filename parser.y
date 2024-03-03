@@ -1446,19 +1446,17 @@ atom: '(' cond_yield_or_testlist ')' {
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }|'[' testlist_comp ']' {
+    cerr<<"err1\n";
     $<ptr>$ = new node("nt", "Atom");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-}| '[' ']' '{' dictorsetmaker '}' {
+}| '[' ']' {
     $<ptr>$ = new node("nt", "Atom");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-    ast.add_edge($<ptr>$, $<ptr>5);
 } | '{' dictorsetmaker '}' {
     $<ptr>$ = new node("nt", "Atom");
     ast.add_node($<ptr>$);
@@ -1525,6 +1523,7 @@ trailer: '(' cond_arglist ')' {
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | '[' subscriptlist ']' {
+    cerr<<"err3\n";
     $<ptr>$ = new node("nt", "Trailer");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
