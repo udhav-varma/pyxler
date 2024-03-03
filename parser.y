@@ -1341,7 +1341,6 @@ close_plusminusterm: close_plusminusterm '+' term{
     ast.add_edge($<ptr>$, $<ptr>3);
 } | close_plusminusterm '-' term{
     $<ptr>$ = new node("nt", "ClosePlusMinusTerm");
-    $<ptr>$ = $<ptr>2;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);

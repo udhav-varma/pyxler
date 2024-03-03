@@ -760,41 +760,41 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   108,   108,   132,   138,   144,   164,   172,   175,   178,
-     185,   188,   191,   194,   201,   207,   210,   214,   218,   224,
-     235,   241,   244,   251,   253,   257,   265,   273,   280,   283,
-     291,   294,   302,   309,   312,   318,   321,   328,   331,   334,
-     337,   340,   348,   356,   364,   371,   374,   382,   385,   388,
-     391,   400,   407,   410,   413,   421,   424,   430,   434,   437,
-     440,   448,   455,   458,   461,   464,   466,   469,   472,   475,
-     479,   482,   485,   488,   495,   499,   502,   506,   509,   516,
-     519,   526,   532,   535,   537,   539,   543,   550,   554,   557,
-     564,   567,   570,   573,   576,   579,   582,   585,   588,   591,
-     594,   597,   600,   603,   606,   609,   613,   619,   624,   627,
-     630,   633,   636,   640,   646,   652,   659,   661,   664,   667,
-     673,   675,   681,   685,   689,   692,   700,   709,   714,   718,
-     720,   726,   730,   735,   740,   742,   746,   748,   752,   754,
-     762,   764,   772,   780,   786,   790,   798,   804,   808,   817,
-     823,   828,   835,   841,   847,   851,   856,   865,   867,   869,
-     871,   873,   875,   877,   879,   881,   885,   892,   894,   896,
-     900,   912,   918,   922,   930,   934,   941,   952,   961,   974,
-     983,   994,  1000,  1004,  1010,  1019,  1029,  1035,  1039,  1041,
-    1050,  1057,  1059,  1065,  1069,  1072,  1081,  1083,  1089,  1097,
-    1099,  1104,  1106,  1110,  1117,  1125,  1132,  1140,  1148,  1154,
-    1158,  1166,  1172,  1176,  1184,  1189,  1193,  1201,  1207,  1215,
-    1217,  1219,  1221,  1223,  1225,  1227,  1229,  1231,  1236,  1238,
-    1245,  1252,  1259,  1265,  1269,  1277,  1283,  1287,  1295,  1301,
-    1305,  1313,  1315,  1319,  1325,  1329,  1336,  1341,  1347,  1351,
-    1359,  1361,  1363,  1365,  1367,  1371,  1377,  1381,  1389,  1394,
-    1399,  1401,  1403,  1407,  1413,  1418,  1424,  1432,  1437,  1441,
-    1447,  1453,  1461,  1467,  1472,  1474,  1478,  1480,  1482,  1484,
-    1486,  1490,  1492,  1494,  1498,  1500,  1507,  1512,  1520,  1526,
-    1532,  1540,  1548,  1554,  1558,  1560,  1569,  1571,  1576,  1578,
-    1582,  1587,  1591,  1599,  1601,  1605,  1611,  1615,  1623,  1629,
-    1635,  1640,  1644,  1650,  1655,  1661,  1665,  1667,  1674,  1679,
-    1687,  1697,  1703,  1707,  1715,  1721,  1734,  1740,  1743,  1750,
-    1756,  1763,  1765,  1768,  1778,  1780,  1785,  1790,  1803,  1809,
-    1813,  1819
+       0,   108,   108,   133,   139,   145,   165,   173,   176,   179,
+     186,   189,   192,   195,   202,   208,   211,   215,   219,   225,
+     236,   242,   245,   252,   254,   258,   266,   274,   281,   284,
+     292,   295,   303,   310,   313,   319,   322,   329,   332,   335,
+     338,   341,   349,   357,   365,   372,   375,   383,   386,   389,
+     392,   401,   408,   411,   414,   422,   425,   431,   435,   438,
+     441,   449,   456,   459,   462,   465,   467,   470,   473,   476,
+     480,   483,   486,   489,   496,   500,   503,   507,   510,   517,
+     520,   527,   533,   536,   538,   540,   544,   551,   555,   558,
+     565,   568,   571,   574,   577,   580,   583,   586,   589,   592,
+     595,   598,   601,   604,   607,   610,   614,   620,   625,   628,
+     631,   634,   637,   641,   647,   653,   660,   662,   665,   668,
+     674,   676,   682,   686,   690,   693,   701,   710,   715,   719,
+     721,   727,   731,   736,   741,   743,   747,   749,   753,   755,
+     763,   765,   773,   781,   787,   791,   799,   805,   809,   818,
+     824,   829,   836,   842,   848,   852,   857,   866,   868,   870,
+     872,   874,   876,   878,   880,   882,   886,   893,   895,   897,
+     901,   913,   919,   923,   931,   935,   942,   953,   962,   975,
+     984,   995,  1001,  1005,  1011,  1020,  1030,  1036,  1040,  1042,
+    1051,  1058,  1060,  1066,  1070,  1073,  1082,  1084,  1090,  1098,
+    1100,  1105,  1107,  1111,  1118,  1126,  1133,  1141,  1149,  1155,
+    1159,  1167,  1173,  1177,  1185,  1190,  1194,  1202,  1208,  1216,
+    1218,  1220,  1222,  1224,  1226,  1228,  1230,  1232,  1237,  1239,
+    1246,  1253,  1260,  1266,  1270,  1278,  1284,  1288,  1296,  1302,
+    1306,  1314,  1316,  1320,  1326,  1330,  1337,  1342,  1348,  1352,
+    1360,  1362,  1364,  1366,  1368,  1372,  1378,  1382,  1390,  1395,
+    1400,  1402,  1404,  1408,  1414,  1419,  1425,  1433,  1438,  1442,
+    1448,  1454,  1462,  1468,  1473,  1475,  1479,  1481,  1483,  1485,
+    1487,  1491,  1493,  1495,  1499,  1501,  1508,  1513,  1521,  1527,
+    1533,  1541,  1549,  1555,  1559,  1561,  1570,  1572,  1577,  1579,
+    1583,  1588,  1592,  1600,  1602,  1606,  1612,  1616,  1624,  1630,
+    1636,  1641,  1645,  1651,  1656,  1662,  1666,  1668,  1675,  1680,
+    1688,  1698,  1704,  1708,  1716,  1722,  1735,  1741,  1744,  1751,
+    1757,  1764,  1766,  1769,  1779,  1781,  1786,  1791,  1804,  1810,
+    1814,  1820
 };
 #endif
 
@@ -1786,12 +1786,13 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     ast.graphviz((yyval.ptr));
+    return 0;
 }
-#line 1791 "parser.tab.cpp"
+#line 1792 "parser.tab.cpp"
     break;
 
   case 3: /* nstatement: nstatement NEWLINE  */
-#line 132 "parser.y"
+#line 133 "parser.y"
                                {
     cerr<<"nstatement -> nstatement newline\n";
     (yyval.ptr) = new node("nt", "nstatement");
@@ -1799,11 +1800,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1803 "parser.tab.cpp"
+#line 1804 "parser.tab.cpp"
     break;
 
   case 4: /* nstatement: nstatement stmt  */
-#line 138 "parser.y"
+#line 139 "parser.y"
                     {
     cerr<<"nstatement -> nstatement stmt\n";
     (yyval.ptr) = new node("nt", "nstatement");
@@ -1811,20 +1812,20 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1815 "parser.tab.cpp"
+#line 1816 "parser.tab.cpp"
     break;
 
   case 5: /* nstatement: %empty  */
-#line 144 "parser.y"
+#line 145 "parser.y"
     {
     cerr << "Null rpodsdsdsfds\n";
     (yyval.ptr) = NULL;
 }
-#line 1824 "parser.tab.cpp"
+#line 1825 "parser.tab.cpp"
     break;
 
   case 6: /* decorator: '@' dotted_name cond_brack_cond_arglist NEWLINE  */
-#line 164 "parser.y"
+#line 165 "parser.y"
                                                            {
     (yyval.ptr) = new node("nt", "decorator");
     ast.add_node((yyval.ptr));
@@ -1833,27 +1834,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1837 "parser.tab.cpp"
+#line 1838 "parser.tab.cpp"
     break;
 
   case 7: /* cond_brack_cond_arglist: brack_cond_arglist  */
-#line 172 "parser.y"
+#line 173 "parser.y"
                                             {
     (yyval.ptr) = (yyvsp[0].ptr);    
 }
-#line 1845 "parser.tab.cpp"
+#line 1846 "parser.tab.cpp"
     break;
 
   case 8: /* cond_brack_cond_arglist: %empty  */
-#line 175 "parser.y"
+#line 176 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 1853 "parser.tab.cpp"
+#line 1854 "parser.tab.cpp"
     break;
 
   case 9: /* brack_cond_arglist: '(' cond_arglist ')'  */
-#line 178 "parser.y"
+#line 179 "parser.y"
                                          {
     (yyval.ptr) = new node("nt", "enclosed arg list");
     ast.add_node((yyval.ptr));
@@ -1861,94 +1862,94 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1865 "parser.tab.cpp"
+#line 1866 "parser.tab.cpp"
     break;
 
   case 10: /* cond_arglist: arglist  */
-#line 185 "parser.y"
+#line 186 "parser.y"
                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 1873 "parser.tab.cpp"
+#line 1874 "parser.tab.cpp"
     break;
 
   case 11: /* cond_arglist: %empty  */
-#line 188 "parser.y"
+#line 189 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 1881 "parser.tab.cpp"
+#line 1882 "parser.tab.cpp"
     break;
 
   case 12: /* decorators: decorator  */
-#line 191 "parser.y"
+#line 192 "parser.y"
                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 1889 "parser.tab.cpp"
+#line 1890 "parser.tab.cpp"
     break;
 
   case 13: /* decorators: decorators decorator  */
-#line 194 "parser.y"
+#line 195 "parser.y"
                       {
     (yyval.ptr) = new node("nt", "decorators");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1900 "parser.tab.cpp"
+#line 1901 "parser.tab.cpp"
     break;
 
   case 14: /* decorated: decorators defob  */
-#line 201 "parser.y"
+#line 202 "parser.y"
                             {
     (yyval.ptr) = new node("nt", "decorated");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1911 "parser.tab.cpp"
+#line 1912 "parser.tab.cpp"
     break;
 
   case 15: /* defob: classdef  */
-#line 207 "parser.y"
+#line 208 "parser.y"
                 {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 1919 "parser.tab.cpp"
+#line 1920 "parser.tab.cpp"
     break;
 
   case 16: /* defob: funcdef  */
-#line 210 "parser.y"
+#line 211 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 
 }
-#line 1928 "parser.tab.cpp"
+#line 1929 "parser.tab.cpp"
     break;
 
   case 17: /* defob: async_funcdef  */
-#line 214 "parser.y"
+#line 215 "parser.y"
                      {
     (yyval.ptr) = (yyvsp[0].ptr);
 
      }
-#line 1937 "parser.tab.cpp"
+#line 1938 "parser.tab.cpp"
     break;
 
   case 18: /* async_funcdef: ASYNC funcdef  */
-#line 218 "parser.y"
+#line 219 "parser.y"
                              {
     (yyval.ptr) = new node("nt", "Async Function Def");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1948 "parser.tab.cpp"
+#line 1949 "parser.tab.cpp"
     break;
 
   case 19: /* funcdef: DEF NAME parameters cond_arrowtest ':' suite  */
-#line 224 "parser.y"
+#line 225 "parser.y"
                                                       {
     (yyval.ptr) = new node("nt", "function definition");
     ast.add_node((yyval.ptr));
@@ -1960,30 +1961,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 
 }
-#line 1964 "parser.tab.cpp"
+#line 1965 "parser.tab.cpp"
     break;
 
   case 20: /* cond_arrowtest: ARROWOP test  */
-#line 235 "parser.y"
+#line 236 "parser.y"
                             {
     (yyval.ptr) = new node("nt", "cond_arrowtest");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1975 "parser.tab.cpp"
+#line 1976 "parser.tab.cpp"
     break;
 
   case 21: /* cond_arrowtest: %empty  */
-#line 241 "parser.y"
+#line 242 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 1983 "parser.tab.cpp"
+#line 1984 "parser.tab.cpp"
     break;
 
   case 22: /* parameters: '(' cond_typedargslist ')'  */
-#line 244 "parser.y"
+#line 245 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "parameters");
     ast.add_node((yyval.ptr));
@@ -1991,27 +1992,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 1995 "parser.tab.cpp"
+#line 1996 "parser.tab.cpp"
     break;
 
   case 23: /* cond_typedargslist: typedargslist  */
-#line 251 "parser.y"
+#line 252 "parser.y"
                                   {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2003 "parser.tab.cpp"
+#line 2004 "parser.tab.cpp"
     break;
 
   case 24: /* cond_typedargslist: %empty  */
-#line 253 "parser.y"
+#line 254 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 2011 "parser.tab.cpp"
+#line 2012 "parser.tab.cpp"
     break;
 
   case 25: /* typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar  */
-#line 257 "parser.y"
+#line 258 "parser.y"
                                                                                                  {
     (yyval.ptr) = new node("nt", "typedargslist");
     ast.add_node((yyval.ptr));
@@ -2020,11 +2021,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2024 "parser.tab.cpp"
+#line 2025 "parser.tab.cpp"
     break;
 
   case 26: /* typedargslist: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma  */
-#line 265 "parser.y"
+#line 266 "parser.y"
                                                                                   {
     (yyval.ptr) = new node("nt", "typedargslist");
     ast.add_node((yyval.ptr));
@@ -2033,11 +2034,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
   }
-#line 2037 "parser.tab.cpp"
+#line 2038 "parser.tab.cpp"
     break;
 
   case 27: /* typedargslist: POW tfpdef cond_comma  */
-#line 273 "parser.y"
+#line 274 "parser.y"
                           {
     (yyval.ptr) = new node("nt", "typedargslist");
     ast.add_node((yyval.ptr));
@@ -2045,19 +2046,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
   }
-#line 2049 "parser.tab.cpp"
+#line 2050 "parser.tab.cpp"
     break;
 
   case 28: /* conds_comma_startfpdefcondcomma: ','  */
-#line 280 "parser.y"
+#line 281 "parser.y"
                                      {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 2057 "parser.tab.cpp"
+#line 2058 "parser.tab.cpp"
     break;
 
   case 29: /* conds_comma_startfpdefcondcomma: ',' POW tfpdef cond_comma  */
-#line 283 "parser.y"
+#line 284 "parser.y"
                                 {
         (yyval.ptr) = new node("nt", "conds_comma_startfpdefcondcomma");
         ast.add_node((yyval.ptr));
@@ -2066,19 +2067,19 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2070 "parser.tab.cpp"
+#line 2071 "parser.tab.cpp"
     break;
 
   case 30: /* conds_comma_startfpdefcondcomma: %empty  */
-#line 291 "parser.y"
+#line 292 "parser.y"
       {
         (yyval.ptr) = NULL;
     }
-#line 2078 "parser.tab.cpp"
+#line 2079 "parser.tab.cpp"
     break;
 
   case 31: /* cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma  */
-#line 294 "parser.y"
+#line 295 "parser.y"
                                                                                                       {
             (yyval.ptr) = new node("nt", "cond_start_or_starstar");
             ast.add_node((yyval.ptr));
@@ -2087,11 +2088,11 @@ yyreduce:
             ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
             ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
         }
-#line 2091 "parser.tab.cpp"
+#line 2092 "parser.tab.cpp"
     break;
 
   case 32: /* cond_star_or_startstar: POW tfpdef cond_comma  */
-#line 302 "parser.y"
+#line 303 "parser.y"
                               {
         (yyval.ptr) = new node("nt", "cond_star_or_startstar");
         ast.add_node((yyval.ptr));
@@ -2099,38 +2100,38 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
       }
-#line 2103 "parser.tab.cpp"
+#line 2104 "parser.tab.cpp"
     break;
 
   case 33: /* cond_star_or_startstar: %empty  */
-#line 309 "parser.y"
+#line 310 "parser.y"
         {
         (yyval.ptr) = NULL;
       }
-#line 2111 "parser.tab.cpp"
+#line 2112 "parser.tab.cpp"
     break;
 
   case 34: /* cond_comma_or_condstarorstartstar: ',' cond_star_or_startstar  */
-#line 312 "parser.y"
+#line 313 "parser.y"
                                                               {
         (yyval.ptr) = new node("nt", "cond_comma_or_constartortarstar");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2122 "parser.tab.cpp"
+#line 2123 "parser.tab.cpp"
     break;
 
   case 35: /* cond_comma_or_condstarorstartstar: %empty  */
-#line 318 "parser.y"
+#line 319 "parser.y"
       {
         (yyval.ptr) = NULL;
     }
-#line 2130 "parser.tab.cpp"
+#line 2131 "parser.tab.cpp"
     break;
 
   case 36: /* close_comma_tfpdef_condeqtest: close_comma_tfpdef_condeqtest ',' tfpdef cond_eqtest  */
-#line 321 "parser.y"
+#line 322 "parser.y"
                                                                                     {
     (yyval.ptr) = new node("nt", "close_comma_tfpdef_condeqtest");
     ast.add_node((yyval.ptr));
@@ -2138,43 +2139,43 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-2].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
 }
-#line 2142 "parser.tab.cpp"
+#line 2143 "parser.tab.cpp"
     break;
 
   case 37: /* close_comma_tfpdef_condeqtest: %empty  */
-#line 328 "parser.y"
+#line 329 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2150 "parser.tab.cpp"
+#line 2151 "parser.tab.cpp"
     break;
 
   case 38: /* cond_tfpdef: tfpdef  */
-#line 331 "parser.y"
+#line 332 "parser.y"
                     {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2158 "parser.tab.cpp"
+#line 2159 "parser.tab.cpp"
     break;
 
   case 39: /* cond_tfpdef: %empty  */
-#line 334 "parser.y"
+#line 335 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2166 "parser.tab.cpp"
+#line 2167 "parser.tab.cpp"
     break;
 
   case 40: /* tfpdef: NAME  */
-#line 337 "parser.y"
+#line 338 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2174 "parser.tab.cpp"
+#line 2175 "parser.tab.cpp"
     break;
 
   case 41: /* tfpdef: NAME ':' test  */
-#line 340 "parser.y"
+#line 341 "parser.y"
                 {
     (yyval.ptr) = new node("nt", "tfpdef");
     ast.add_node((yyval.ptr));
@@ -2182,11 +2183,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2186 "parser.tab.cpp"
+#line 2187 "parser.tab.cpp"
     break;
 
   case 42: /* varargslist: vfpdef cond_eqtest close_comma_vfpdef_condeqtest cond_comma_or_condstarorstartstarvf  */
-#line 348 "parser.y"
+#line 349 "parser.y"
                                                                                                   {
     (yyval.ptr) = new node("nt", "VarArgs");
     ast.add_node((yyval.ptr));
@@ -2195,11 +2196,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2199 "parser.tab.cpp"
+#line 2200 "parser.tab.cpp"
     break;
 
   case 43: /* varargslist: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma  */
-#line 356 "parser.y"
+#line 357 "parser.y"
                                                                                   {
     (yyval.ptr) = new node("nt", "VarArgs");
     ast.add_node((yyval.ptr));
@@ -2208,11 +2209,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
   }
-#line 2212 "parser.tab.cpp"
+#line 2213 "parser.tab.cpp"
     break;
 
   case 44: /* varargslist: POW vfpdef cond_comma  */
-#line 364 "parser.y"
+#line 365 "parser.y"
                           {
     (yyval.ptr) = new node("nt", "VarArgs");
     ast.add_node((yyval.ptr));
@@ -2220,19 +2221,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
   }
-#line 2224 "parser.tab.cpp"
+#line 2225 "parser.tab.cpp"
     break;
 
   case 45: /* vfpdef: NAME  */
-#line 371 "parser.y"
+#line 372 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2232 "parser.tab.cpp"
+#line 2233 "parser.tab.cpp"
     break;
 
   case 46: /* close_comma_vfpdef_condeqtest: close_comma_vfpdef_condeqtest ',' vfpdef cond_eqtest  */
-#line 374 "parser.y"
+#line 375 "parser.y"
                                                                                     {
     (yyval.ptr) = new node("nt", "close_comma_vfpdef_condeqtest");
     ast.add_node((yyval.ptr));
@@ -2241,35 +2242,35 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2245 "parser.tab.cpp"
+#line 2246 "parser.tab.cpp"
     break;
 
   case 47: /* close_comma_vfpdef_condeqtest: %empty  */
-#line 382 "parser.y"
+#line 383 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2253 "parser.tab.cpp"
+#line 2254 "parser.tab.cpp"
     break;
 
   case 48: /* cond_vfpdef: vfpdef  */
-#line 385 "parser.y"
+#line 386 "parser.y"
                     {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 2261 "parser.tab.cpp"
+#line 2262 "parser.tab.cpp"
     break;
 
   case 49: /* cond_vfpdef: %empty  */
-#line 388 "parser.y"
+#line 389 "parser.y"
       {
         (yyval.ptr) = NULL;
     }
-#line 2269 "parser.tab.cpp"
+#line 2270 "parser.tab.cpp"
     break;
 
   case 50: /* cond_star_or_startstar_vf: '*' cond_vfpdef close_comma_vfpdef_condeqtest conds_comma_starvfpdefcondcomma  */
-#line 392 "parser.y"
+#line 393 "parser.y"
         {
             (yyval.ptr) = new node("nt", "cond_star_or_startstar_vf");
             ast.add_node((yyval.ptr));
@@ -2278,11 +2279,11 @@ yyreduce:
             ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
             ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
         }
-#line 2282 "parser.tab.cpp"
+#line 2283 "parser.tab.cpp"
     break;
 
   case 51: /* cond_star_or_startstar_vf: POW vfpdef cond_comma  */
-#line 400 "parser.y"
+#line 401 "parser.y"
                               {
         (yyval.ptr) = new node("nt", "cond_star_or_startstar_vf");
         ast.add_node((yyval.ptr));
@@ -2290,27 +2291,27 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
       }
-#line 2294 "parser.tab.cpp"
+#line 2295 "parser.tab.cpp"
     break;
 
   case 52: /* cond_star_or_startstar_vf: %empty  */
-#line 407 "parser.y"
+#line 408 "parser.y"
         {
         (yyval.ptr) = NULL;
       }
-#line 2302 "parser.tab.cpp"
+#line 2303 "parser.tab.cpp"
     break;
 
   case 53: /* conds_comma_starvfpdefcondcomma: ','  */
-#line 410 "parser.y"
+#line 411 "parser.y"
                                      {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2310 "parser.tab.cpp"
+#line 2311 "parser.tab.cpp"
     break;
 
   case 54: /* conds_comma_starvfpdefcondcomma: ',' POW vfpdef cond_comma  */
-#line 413 "parser.y"
+#line 414 "parser.y"
                             {
         (yyval.ptr) = new node("nt", "conds_comma_starvfpdefcondcomma");
         ast.add_node((yyval.ptr));
@@ -2319,55 +2320,55 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2323 "parser.tab.cpp"
+#line 2324 "parser.tab.cpp"
     break;
 
   case 55: /* conds_comma_starvfpdefcondcomma: %empty  */
-#line 421 "parser.y"
+#line 422 "parser.y"
       {
         (yyval.ptr) = NULL;
     }
-#line 2331 "parser.tab.cpp"
+#line 2332 "parser.tab.cpp"
     break;
 
   case 56: /* cond_comma_or_condstarorstartstarvf: ',' cond_star_or_startstar_vf  */
-#line 424 "parser.y"
+#line 425 "parser.y"
                                                                    {
     (yyval.ptr) = new node("nt", "comma or starstar");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2342 "parser.tab.cpp"
+#line 2343 "parser.tab.cpp"
     break;
 
   case 57: /* cond_comma_or_condstarorstartstarvf: %empty  */
-#line 430 "parser.y"
+#line 431 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2350 "parser.tab.cpp"
+#line 2351 "parser.tab.cpp"
     break;
 
   case 58: /* stmt: simple_stmt  */
-#line 434 "parser.y"
+#line 435 "parser.y"
                   {
     cerr<<"stmt reached\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2359 "parser.tab.cpp"
+#line 2360 "parser.tab.cpp"
     break;
 
   case 59: /* stmt: compound_stmt  */
-#line 437 "parser.y"
+#line 438 "parser.y"
                   {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2367 "parser.tab.cpp"
+#line 2368 "parser.tab.cpp"
     break;
 
   case 60: /* simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE  */
-#line 440 "parser.y"
+#line 441 "parser.y"
                                                                  {
         cerr << "simple statement\n";
         (yyval.ptr) = new node("nt", "simple_stmt");
@@ -2376,11 +2377,11 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2380 "parser.tab.cpp"
+#line 2381 "parser.tab.cpp"
     break;
 
   case 61: /* close_small_stmt: close_small_stmt ';' small_stmt  */
-#line 448 "parser.y"
+#line 449 "parser.y"
                                                   {
         (yyval.ptr) = new node("nt", "close_small_stmt");
         ast.add_node((yyval.ptr));
@@ -2388,100 +2389,100 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2392 "parser.tab.cpp"
+#line 2393 "parser.tab.cpp"
     break;
 
   case 62: /* close_small_stmt: %empty  */
-#line 455 "parser.y"
+#line 456 "parser.y"
           {
             (yyval.ptr) = NULL;
         }
-#line 2400 "parser.tab.cpp"
+#line 2401 "parser.tab.cpp"
     break;
 
   case 63: /* cond_semi_colon: ';'  */
-#line 458 "parser.y"
+#line 459 "parser.y"
                      {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 2408 "parser.tab.cpp"
+#line 2409 "parser.tab.cpp"
     break;
 
   case 64: /* cond_semi_colon: %empty  */
-#line 461 "parser.y"
+#line 462 "parser.y"
       {
         (yyval.ptr) = NULL;
     }
-#line 2416 "parser.tab.cpp"
+#line 2417 "parser.tab.cpp"
     break;
 
   case 65: /* small_stmt: expr_stmt  */
-#line 464 "parser.y"
+#line 465 "parser.y"
                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2424 "parser.tab.cpp"
+#line 2425 "parser.tab.cpp"
     break;
 
   case 66: /* small_stmt: del_stmt  */
-#line 466 "parser.y"
+#line 467 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2432 "parser.tab.cpp"
+#line 2433 "parser.tab.cpp"
     break;
 
   case 67: /* small_stmt: pass_stmt  */
-#line 469 "parser.y"
+#line 470 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2440 "parser.tab.cpp"
+#line 2441 "parser.tab.cpp"
     break;
 
   case 68: /* small_stmt: flow_stmt  */
-#line 472 "parser.y"
+#line 473 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2448 "parser.tab.cpp"
+#line 2449 "parser.tab.cpp"
     break;
 
   case 69: /* small_stmt: import_stmt  */
-#line 475 "parser.y"
+#line 476 "parser.y"
               {
     cerr<<" import stmt \n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2457 "parser.tab.cpp"
+#line 2458 "parser.tab.cpp"
     break;
 
   case 70: /* small_stmt: global_stmt  */
-#line 479 "parser.y"
+#line 480 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2465 "parser.tab.cpp"
+#line 2466 "parser.tab.cpp"
     break;
 
   case 71: /* small_stmt: nonlocal_stmt  */
-#line 482 "parser.y"
+#line 483 "parser.y"
                  {
     (yyval.ptr) = (yyvsp[0].ptr);
  }
-#line 2473 "parser.tab.cpp"
+#line 2474 "parser.tab.cpp"
     break;
 
   case 72: /* small_stmt: assert_stmt  */
-#line 485 "parser.y"
+#line 486 "parser.y"
                 {
     (yyval.ptr) = (yyvsp[0].ptr);
   }
-#line 2481 "parser.tab.cpp"
+#line 2482 "parser.tab.cpp"
     break;
 
   case 73: /* expr_stmt: testlist_star_expr anna_or_auga_or_closeyield  */
-#line 488 "parser.y"
+#line 489 "parser.y"
                                                          {
     (yyval.ptr) = new node("nt", "expr_statement");
     cerr << "here expr_stmt\n";
@@ -2489,43 +2490,43 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2493 "parser.tab.cpp"
+#line 2494 "parser.tab.cpp"
     break;
 
   case 74: /* yield_or_test: yield_expr  */
-#line 495 "parser.y"
+#line 496 "parser.y"
                           {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 2501 "parser.tab.cpp"
+#line 2502 "parser.tab.cpp"
     break;
 
   case 75: /* yield_or_test: testlist  */
-#line 499 "parser.y"
+#line 500 "parser.y"
                {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 2509 "parser.tab.cpp"
+#line 2510 "parser.tab.cpp"
     break;
 
   case 76: /* yield_or_test_star: yield_expr  */
-#line 502 "parser.y"
+#line 503 "parser.y"
                                {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2517 "parser.tab.cpp"
+#line 2518 "parser.tab.cpp"
     break;
 
   case 77: /* yield_or_test_star: testlist_star_expr  */
-#line 506 "parser.y"
+#line 507 "parser.y"
                       {
             (yyval.ptr) = (yyvsp[0].ptr);
  }
-#line 2525 "parser.tab.cpp"
+#line 2526 "parser.tab.cpp"
     break;
 
   case 78: /* close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star  */
-#line 509 "parser.y"
+#line 510 "parser.y"
                                                                           {
                     (yyval.ptr) = new node("nt", "close_yield_or_test_star");
                     ast.add_node((yyval.ptr));
@@ -2533,19 +2534,19 @@ yyreduce:
                     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
                     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
             }
-#line 2537 "parser.tab.cpp"
+#line 2538 "parser.tab.cpp"
     break;
 
   case 79: /* close_yield_or_test_star: %empty  */
-#line 516 "parser.y"
+#line 517 "parser.y"
                           {
                             (yyval.ptr) = NULL;
                         }
-#line 2545 "parser.tab.cpp"
+#line 2546 "parser.tab.cpp"
     break;
 
   case 80: /* annassign: ':' test cond_eqtest  */
-#line 519 "parser.y"
+#line 520 "parser.y"
                                 {
     (yyval.ptr) = new node("nt", "annasign");
     ast.add_node((yyval.ptr));
@@ -2553,54 +2554,54 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2557 "parser.tab.cpp"
+#line 2558 "parser.tab.cpp"
     break;
 
   case 81: /* cond_eqtest: '=' test  */
-#line 526 "parser.y"
+#line 527 "parser.y"
                       {
         (yyval.ptr) = new node("nt", "cond_eqtest");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 2568 "parser.tab.cpp"
+#line 2569 "parser.tab.cpp"
     break;
 
   case 82: /* cond_eqtest: %empty  */
-#line 532 "parser.y"
+#line 533 "parser.y"
         {
         (yyval.ptr) = NULL;
       }
-#line 2576 "parser.tab.cpp"
+#line 2577 "parser.tab.cpp"
     break;
 
   case 83: /* anna_or_auga_or_closeyield: annassign  */
-#line 535 "parser.y"
+#line 536 "parser.y"
                                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2584 "parser.tab.cpp"
+#line 2585 "parser.tab.cpp"
     break;
 
   case 84: /* anna_or_auga_or_closeyield: augassign yield_or_test  */
-#line 537 "parser.y"
+#line 538 "parser.y"
                             {
     (yyval.ptr) = (yyvsp[-1].ptr);
 }
-#line 2592 "parser.tab.cpp"
+#line 2593 "parser.tab.cpp"
     break;
 
   case 85: /* anna_or_auga_or_closeyield: close_yield_or_test_star  */
-#line 539 "parser.y"
+#line 540 "parser.y"
                              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2600 "parser.tab.cpp"
+#line 2601 "parser.tab.cpp"
     break;
 
   case 86: /* testlist_star_expr: test_or_starexp close_commatest_or_starexp cond_comma  */
-#line 543 "parser.y"
+#line 544 "parser.y"
                                                                           {
     (yyval.ptr) = new node("nt", "testlist star expression");
     ast.add_node((yyval.ptr));
@@ -2608,28 +2609,28 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2612 "parser.tab.cpp"
+#line 2613 "parser.tab.cpp"
     break;
 
   case 87: /* test_or_starexp: test  */
-#line 550 "parser.y"
+#line 551 "parser.y"
                       {
     cerr<<"yo1\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2621 "parser.tab.cpp"
+#line 2622 "parser.tab.cpp"
     break;
 
   case 88: /* test_or_starexp: star_expr  */
-#line 554 "parser.y"
+#line 555 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
  }
-#line 2629 "parser.tab.cpp"
+#line 2630 "parser.tab.cpp"
     break;
 
   case 89: /* close_commatest_or_starexp: close_commatest_or_starexp ',' test_or_starexp  */
-#line 557 "parser.y"
+#line 558 "parser.y"
                                                                            {
     (yyval.ptr) = new node("nt", "close_commatest_or_starexp");
     ast.add_node((yyval.ptr));
@@ -2637,274 +2638,274 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2641 "parser.tab.cpp"
+#line 2642 "parser.tab.cpp"
     break;
 
   case 90: /* close_commatest_or_starexp: %empty  */
-#line 564 "parser.y"
+#line 565 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2649 "parser.tab.cpp"
+#line 2650 "parser.tab.cpp"
     break;
 
   case 91: /* cond_comma: ','  */
-#line 567 "parser.y"
+#line 568 "parser.y"
                {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2657 "parser.tab.cpp"
+#line 2658 "parser.tab.cpp"
     break;
 
   case 92: /* cond_comma: %empty  */
-#line 570 "parser.y"
+#line 571 "parser.y"
   {
     (yyval.ptr) = NULL;
 }
-#line 2665 "parser.tab.cpp"
+#line 2666 "parser.tab.cpp"
     break;
 
   case 93: /* augassign: ADDASSIGN  */
-#line 573 "parser.y"
+#line 574 "parser.y"
                     {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2673 "parser.tab.cpp"
+#line 2674 "parser.tab.cpp"
     break;
 
   case 94: /* augassign: SUBASSIGN  */
-#line 576 "parser.y"
+#line 577 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2681 "parser.tab.cpp"
+#line 2682 "parser.tab.cpp"
     break;
 
   case 95: /* augassign: MULASSIGN  */
-#line 579 "parser.y"
+#line 580 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2689 "parser.tab.cpp"
+#line 2690 "parser.tab.cpp"
     break;
 
   case 96: /* augassign: ATASSIGN  */
-#line 582 "parser.y"
+#line 583 "parser.y"
                        {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2697 "parser.tab.cpp"
+#line 2698 "parser.tab.cpp"
     break;
 
   case 97: /* augassign: DIVASSIGN  */
-#line 585 "parser.y"
+#line 586 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2705 "parser.tab.cpp"
+#line 2706 "parser.tab.cpp"
     break;
 
   case 98: /* augassign: MODASSIGN  */
-#line 588 "parser.y"
+#line 589 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2713 "parser.tab.cpp"
+#line 2714 "parser.tab.cpp"
     break;
 
   case 99: /* augassign: ANDASSIGN  */
-#line 591 "parser.y"
+#line 592 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2721 "parser.tab.cpp"
+#line 2722 "parser.tab.cpp"
     break;
 
   case 100: /* augassign: ORASSIGN  */
-#line 594 "parser.y"
+#line 595 "parser.y"
                        {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2729 "parser.tab.cpp"
+#line 2730 "parser.tab.cpp"
     break;
 
   case 101: /* augassign: XORASSIGN  */
-#line 597 "parser.y"
+#line 598 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2737 "parser.tab.cpp"
+#line 2738 "parser.tab.cpp"
     break;
 
   case 102: /* augassign: LSASSIGN  */
-#line 600 "parser.y"
+#line 601 "parser.y"
                        {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2745 "parser.tab.cpp"
+#line 2746 "parser.tab.cpp"
     break;
 
   case 103: /* augassign: RSASSIGN  */
-#line 603 "parser.y"
+#line 604 "parser.y"
                        {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2753 "parser.tab.cpp"
+#line 2754 "parser.tab.cpp"
     break;
 
   case 104: /* augassign: POWASSIGN  */
-#line 606 "parser.y"
+#line 607 "parser.y"
                         {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2761 "parser.tab.cpp"
+#line 2762 "parser.tab.cpp"
     break;
 
   case 105: /* augassign: IDIVASSIGN  */
-#line 609 "parser.y"
+#line 610 "parser.y"
                          {
                 (yyval.ptr) = (yyvsp[0].ptr);
             }
-#line 2769 "parser.tab.cpp"
+#line 2770 "parser.tab.cpp"
     break;
 
   case 106: /* del_stmt: DEL exprlist  */
-#line 613 "parser.y"
+#line 614 "parser.y"
                        {
     (yyval.ptr) = new node("nt", "DelStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2780 "parser.tab.cpp"
+#line 2781 "parser.tab.cpp"
     break;
 
   case 107: /* pass_stmt: PASS  */
-#line 619 "parser.y"
+#line 620 "parser.y"
                {
     (yyval.ptr) = new node("nt", "PassStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2790 "parser.tab.cpp"
+#line 2791 "parser.tab.cpp"
     break;
 
   case 108: /* flow_stmt: break_stmt  */
-#line 624 "parser.y"
+#line 625 "parser.y"
                       {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2798 "parser.tab.cpp"
+#line 2799 "parser.tab.cpp"
     break;
 
   case 109: /* flow_stmt: continue_stmt  */
-#line 627 "parser.y"
+#line 628 "parser.y"
                         {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2806 "parser.tab.cpp"
+#line 2807 "parser.tab.cpp"
     break;
 
   case 110: /* flow_stmt: return_stmt  */
-#line 630 "parser.y"
+#line 631 "parser.y"
                       {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2814 "parser.tab.cpp"
+#line 2815 "parser.tab.cpp"
     break;
 
   case 111: /* flow_stmt: raise_stmt  */
-#line 633 "parser.y"
+#line 634 "parser.y"
                      {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2822 "parser.tab.cpp"
+#line 2823 "parser.tab.cpp"
     break;
 
   case 112: /* flow_stmt: yield_stmt  */
-#line 636 "parser.y"
+#line 637 "parser.y"
                     {
             (yyval.ptr) = (yyvsp[0].ptr);
         }
-#line 2830 "parser.tab.cpp"
+#line 2831 "parser.tab.cpp"
     break;
 
   case 113: /* break_stmt: BREAK  */
-#line 640 "parser.y"
+#line 641 "parser.y"
                   {
     (yyval.ptr) = new node("nt", "BreakStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2840 "parser.tab.cpp"
+#line 2841 "parser.tab.cpp"
     break;
 
   case 114: /* continue_stmt: CONTINUE  */
-#line 646 "parser.y"
+#line 647 "parser.y"
                         {
     (yyval.ptr) = new node("nt", "ContinueStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2850 "parser.tab.cpp"
+#line 2851 "parser.tab.cpp"
     break;
 
   case 115: /* return_stmt: RETURN cond_testlist  */
-#line 652 "parser.y"
+#line 653 "parser.y"
                                  {
     (yyval.ptr) = new node("nt", "ReturnStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2861 "parser.tab.cpp"
+#line 2862 "parser.tab.cpp"
     break;
 
   case 116: /* cond_testlist: testlist  */
-#line 659 "parser.y"
+#line 660 "parser.y"
                        {
       (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2869 "parser.tab.cpp"
+#line 2870 "parser.tab.cpp"
     break;
 
   case 117: /* cond_testlist: %empty  */
-#line 661 "parser.y"
+#line 662 "parser.y"
     {
       (yyval.ptr) = nullptr;
 }
-#line 2877 "parser.tab.cpp"
+#line 2878 "parser.tab.cpp"
     break;
 
   case 118: /* yield_stmt: yield_expr  */
-#line 664 "parser.y"
+#line 665 "parser.y"
                        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2885 "parser.tab.cpp"
+#line 2886 "parser.tab.cpp"
     break;
 
   case 119: /* raise_stmt: RAISE cond_from_test  */
-#line 667 "parser.y"
+#line 668 "parser.y"
                                 {
     (yyval.ptr) = new node("nt", "RaiseStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2896 "parser.tab.cpp"
+#line 2897 "parser.tab.cpp"
     break;
 
   case 120: /* cond_from_test: test  */
-#line 673 "parser.y"
+#line 674 "parser.y"
                      {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2904 "parser.tab.cpp"
+#line 2905 "parser.tab.cpp"
     break;
 
   case 121: /* cond_from_test: test FROM test  */
-#line 675 "parser.y"
+#line 676 "parser.y"
                   {
     (yyval.ptr) = new node("nt", "cond_from_test");
     ast.add_node((yyval.ptr));
@@ -2912,36 +2913,36 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2916 "parser.tab.cpp"
+#line 2917 "parser.tab.cpp"
     break;
 
   case 122: /* cond_from_test: %empty  */
-#line 681 "parser.y"
+#line 682 "parser.y"
    {    
     (yyval.ptr) = nullptr;
 }
-#line 2924 "parser.tab.cpp"
+#line 2925 "parser.tab.cpp"
     break;
 
   case 123: /* import_stmt: import_name  */
-#line 685 "parser.y"
+#line 686 "parser.y"
                          {
     cerr << "import name\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2933 "parser.tab.cpp"
+#line 2934 "parser.tab.cpp"
     break;
 
   case 124: /* import_stmt: import_from  */
-#line 689 "parser.y"
+#line 690 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2941 "parser.tab.cpp"
+#line 2942 "parser.tab.cpp"
     break;
 
   case 125: /* import_name: IMPORT dotted_as_names  */
-#line 692 "parser.y"
+#line 693 "parser.y"
                                    {
     cerr<<"import\n";
     (yyval.ptr) = new node("nt", "ImportStatement");
@@ -2949,11 +2950,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2953 "parser.tab.cpp"
+#line 2954 "parser.tab.cpp"
     break;
 
   case 126: /* import_from: FROM closeplusdotorellipsisname_or_plusdotellip IMPORT star_or_import_parentheses_or_import  */
-#line 700 "parser.y"
+#line 701 "parser.y"
                                                                                                          {
                     (yyval.ptr) = new node("nt", "import_from");
                     ast.add_node((yyval.ptr));
@@ -2962,38 +2963,38 @@ yyreduce:
                     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
                     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
             }
-#line 2966 "parser.tab.cpp"
+#line 2967 "parser.tab.cpp"
     break;
 
   case 127: /* closeplusdotorellipsisname_or_plusdotellip: close_dot_or_ellipsis dotted_name  */
-#line 709 "parser.y"
+#line 710 "parser.y"
                                                                              {
     (yyval.ptr) = new node("nt", "closeplusdotorellipsisname_or_plusdotellip");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 2977 "parser.tab.cpp"
+#line 2978 "parser.tab.cpp"
     break;
 
   case 128: /* closeplusdotorellipsisname_or_plusdotellip: plus_dot_or_ellipsis  */
-#line 714 "parser.y"
+#line 715 "parser.y"
                          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2985 "parser.tab.cpp"
+#line 2986 "parser.tab.cpp"
     break;
 
   case 129: /* star_or_import_parentheses_or_import: '*'  */
-#line 718 "parser.y"
+#line 719 "parser.y"
                                          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 2993 "parser.tab.cpp"
+#line 2994 "parser.tab.cpp"
     break;
 
   case 130: /* star_or_import_parentheses_or_import: '(' import_as_names ')'  */
-#line 720 "parser.y"
+#line 721 "parser.y"
                            {
     (yyval.ptr) = new node("nt", "star_or_import_parentheses_or_import");
     ast.add_node((yyval.ptr));
@@ -3001,81 +3002,81 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));  
 }
-#line 3005 "parser.tab.cpp"
+#line 3006 "parser.tab.cpp"
     break;
 
   case 131: /* star_or_import_parentheses_or_import: import_as_names  */
-#line 726 "parser.y"
+#line 727 "parser.y"
                    {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3013 "parser.tab.cpp"
+#line 3014 "parser.tab.cpp"
     break;
 
   case 132: /* plus_dot_or_ellipsis: '.' plus_dot_or_ellipsis  */
-#line 730 "parser.y"
+#line 731 "parser.y"
                                               {
     (yyval.ptr) = new node("nt", "plus_dot_or_ellipsis");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3024 "parser.tab.cpp"
+#line 3025 "parser.tab.cpp"
     break;
 
   case 133: /* plus_dot_or_ellipsis: ELLIPSIS plus_dot_or_ellipsis  */
-#line 735 "parser.y"
+#line 736 "parser.y"
                                  {
     (yyval.ptr) = new node("nt", "plus_dot_or_ellipsis");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3035 "parser.tab.cpp"
+#line 3036 "parser.tab.cpp"
     break;
 
   case 134: /* plus_dot_or_ellipsis: '.'  */
-#line 740 "parser.y"
+#line 741 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3043 "parser.tab.cpp"
+#line 3044 "parser.tab.cpp"
     break;
 
   case 135: /* plus_dot_or_ellipsis: ELLIPSIS  */
-#line 742 "parser.y"
+#line 743 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3051 "parser.tab.cpp"
+#line 3052 "parser.tab.cpp"
     break;
 
   case 136: /* close_dot_or_ellipsis: plus_dot_or_ellipsis  */
-#line 746 "parser.y"
+#line 747 "parser.y"
                                            {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3059 "parser.tab.cpp"
+#line 3060 "parser.tab.cpp"
     break;
 
   case 137: /* close_dot_or_ellipsis: %empty  */
-#line 748 "parser.y"
+#line 749 "parser.y"
     {
     (yyval.ptr) = nullptr;
 }
-#line 3067 "parser.tab.cpp"
+#line 3068 "parser.tab.cpp"
     break;
 
   case 138: /* import_as_name: NAME  */
-#line 752 "parser.y"
+#line 753 "parser.y"
                     {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3075 "parser.tab.cpp"
+#line 3076 "parser.tab.cpp"
     break;
 
   case 139: /* import_as_name: NAME AS NAME  */
-#line 754 "parser.y"
+#line 755 "parser.y"
                 {
     (yyval.ptr) = new node("nt", "ImportAsName");
     ast.add_node((yyval.ptr));
@@ -3083,19 +3084,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));  
 }
-#line 3087 "parser.tab.cpp"
+#line 3088 "parser.tab.cpp"
     break;
 
   case 140: /* dotted_as_name: dotted_name  */
-#line 762 "parser.y"
+#line 763 "parser.y"
                            {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3095 "parser.tab.cpp"
+#line 3096 "parser.tab.cpp"
     break;
 
   case 141: /* dotted_as_name: dotted_name AS NAME  */
-#line 764 "parser.y"
+#line 765 "parser.y"
                        {
     (yyval.ptr) = new node("nt", "DottedAsName");
     ast.add_node((yyval.ptr));
@@ -3103,11 +3104,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3107 "parser.tab.cpp"
+#line 3108 "parser.tab.cpp"
     break;
 
   case 142: /* import_as_names: import_as_name close_commaimportasname cond_comma  */
-#line 772 "parser.y"
+#line 773 "parser.y"
                                                                   {
     (yyval.ptr) = new node("nt", "ImportAsNames");
     ast.add_node((yyval.ptr));
@@ -3115,11 +3116,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr)); 
 }
-#line 3119 "parser.tab.cpp"
+#line 3120 "parser.tab.cpp"
     break;
 
   case 143: /* close_commaimportasname: close_commaimportasname ',' import_as_name  */
-#line 780 "parser.y"
+#line 781 "parser.y"
                                                                    {
     (yyval.ptr) = new node("nt", "CloseCommaImportAsName");
     ast.add_node((yyval.ptr));
@@ -3127,19 +3128,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3131 "parser.tab.cpp"
+#line 3132 "parser.tab.cpp"
     break;
 
   case 144: /* close_commaimportasname: %empty  */
-#line 786 "parser.y"
+#line 787 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3139 "parser.tab.cpp"
+#line 3140 "parser.tab.cpp"
     break;
 
   case 145: /* dotted_as_names: dotted_as_name close_commadottedasname  */
-#line 790 "parser.y"
+#line 791 "parser.y"
                                                        {
     (yyval.ptr) = new node("nt", "DottedAsNames");
     cerr<<"dotted_as_name reached\n";
@@ -3147,11 +3148,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3151 "parser.tab.cpp"
+#line 3152 "parser.tab.cpp"
     break;
 
   case 146: /* close_commadottedasname: close_commadottedasname ',' dotted_as_name  */
-#line 798 "parser.y"
+#line 799 "parser.y"
                                                                    {
     (yyval.ptr) = new node("nt", "CloseCommaDottedAsName");
     ast.add_node((yyval.ptr));
@@ -3159,19 +3160,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3163 "parser.tab.cpp"
+#line 3164 "parser.tab.cpp"
     break;
 
   case 147: /* close_commadottedasname: %empty  */
-#line 804 "parser.y"
+#line 805 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3171 "parser.tab.cpp"
+#line 3172 "parser.tab.cpp"
     break;
 
   case 148: /* dotted_name: NAME close_dotted_name  */
-#line 808 "parser.y"
+#line 809 "parser.y"
                                    {
     (yyval.ptr) = new node("nt", "DottedName");
     cerr << "Dotted name reached\n";
@@ -3180,11 +3181,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3184 "parser.tab.cpp"
+#line 3185 "parser.tab.cpp"
     break;
 
   case 149: /* close_dotted_name: close_dotted_name '.' NAME  */
-#line 817 "parser.y"
+#line 818 "parser.y"
                                              {
     (yyval.ptr) = new node("nt", "CloseDottedName");
     ast.add_node((yyval.ptr));
@@ -3192,20 +3193,20 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3196 "parser.tab.cpp"
+#line 3197 "parser.tab.cpp"
     break;
 
   case 150: /* close_dotted_name: %empty  */
-#line 823 "parser.y"
+#line 824 "parser.y"
     {
     cerr << "Null production\n";
     (yyval.ptr) = NULL;
 }
-#line 3205 "parser.tab.cpp"
+#line 3206 "parser.tab.cpp"
     break;
 
   case 151: /* global_stmt: GLOBAL NAME close_comma_name  */
-#line 828 "parser.y"
+#line 829 "parser.y"
                                          {
     (yyval.ptr) = new node("nt", "GlobalStatement");
     ast.add_node((yyval.ptr));
@@ -3213,22 +3214,22 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3217 "parser.tab.cpp"
+#line 3218 "parser.tab.cpp"
     break;
 
   case 152: /* nonlocal_stmt: NONLOCAL NAME close_comma_name  */
-#line 835 "parser.y"
+#line 836 "parser.y"
                                              {
     (yyval.ptr) = new node("nt", "NonlocalStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-2].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
 }
-#line 3228 "parser.tab.cpp"
+#line 3229 "parser.tab.cpp"
     break;
 
   case 153: /* close_comma_name: close_comma_name ',' NAME  */
-#line 841 "parser.y"
+#line 842 "parser.y"
                                            {
     (yyval.ptr) = new node("nt", "CloseCommaName");
     ast.add_node((yyval.ptr));
@@ -3236,30 +3237,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3240 "parser.tab.cpp"
+#line 3241 "parser.tab.cpp"
     break;
 
   case 154: /* close_comma_name: %empty  */
-#line 847 "parser.y"
+#line 848 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3248 "parser.tab.cpp"
+#line 3249 "parser.tab.cpp"
     break;
 
   case 155: /* assert_stmt: ASSERT test  */
-#line 851 "parser.y"
+#line 852 "parser.y"
                         {
     (yyval.ptr) = new node("nt", "AssertStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3259 "parser.tab.cpp"
+#line 3260 "parser.tab.cpp"
     break;
 
   case 156: /* assert_stmt: ASSERT test ',' test  */
-#line 856 "parser.y"
+#line 857 "parser.y"
                         {
     (yyval.ptr) = new node("nt", "AssertStatement");
     ast.add_node((yyval.ptr));
@@ -3268,118 +3269,118 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3272 "parser.tab.cpp"
+#line 3273 "parser.tab.cpp"
     break;
 
   case 157: /* compound_stmt: if_stmt  */
-#line 865 "parser.y"
+#line 866 "parser.y"
                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3280 "parser.tab.cpp"
+#line 3281 "parser.tab.cpp"
     break;
 
   case 158: /* compound_stmt: while_stmt  */
-#line 867 "parser.y"
+#line 868 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3288 "parser.tab.cpp"
+#line 3289 "parser.tab.cpp"
     break;
 
   case 159: /* compound_stmt: for_stmt  */
-#line 869 "parser.y"
+#line 870 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3296 "parser.tab.cpp"
+#line 3297 "parser.tab.cpp"
     break;
 
   case 160: /* compound_stmt: try_stmt  */
-#line 871 "parser.y"
+#line 872 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3304 "parser.tab.cpp"
+#line 3305 "parser.tab.cpp"
     break;
 
   case 161: /* compound_stmt: with_stmt  */
-#line 873 "parser.y"
+#line 874 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3312 "parser.tab.cpp"
+#line 3313 "parser.tab.cpp"
     break;
 
   case 162: /* compound_stmt: funcdef  */
-#line 875 "parser.y"
+#line 876 "parser.y"
            {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3320 "parser.tab.cpp"
+#line 3321 "parser.tab.cpp"
     break;
 
   case 163: /* compound_stmt: classdef  */
-#line 877 "parser.y"
+#line 878 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3328 "parser.tab.cpp"
+#line 3329 "parser.tab.cpp"
     break;
 
   case 164: /* compound_stmt: decorated  */
-#line 879 "parser.y"
+#line 880 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3336 "parser.tab.cpp"
+#line 3337 "parser.tab.cpp"
     break;
 
   case 165: /* compound_stmt: async_stmt  */
-#line 881 "parser.y"
+#line 882 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3344 "parser.tab.cpp"
+#line 3345 "parser.tab.cpp"
     break;
 
   case 166: /* async_stmt: ASYNC funcdef_or_withstmt_or_forstmt  */
-#line 885 "parser.y"
+#line 886 "parser.y"
                                                 {
     (yyval.ptr) = new node("nt", "AsyncStatement");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3355 "parser.tab.cpp"
+#line 3356 "parser.tab.cpp"
     break;
 
   case 167: /* funcdef_or_withstmt_or_forstmt: funcdef  */
-#line 892 "parser.y"
+#line 893 "parser.y"
                                        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3363 "parser.tab.cpp"
+#line 3364 "parser.tab.cpp"
     break;
 
   case 168: /* funcdef_or_withstmt_or_forstmt: with_stmt  */
-#line 894 "parser.y"
+#line 895 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3371 "parser.tab.cpp"
+#line 3372 "parser.tab.cpp"
     break;
 
   case 169: /* funcdef_or_withstmt_or_forstmt: for_stmt  */
-#line 896 "parser.y"
+#line 897 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3379 "parser.tab.cpp"
+#line 3380 "parser.tab.cpp"
     break;
 
   case 170: /* if_stmt: IF test ':' suite close_eliftestsuite cond_else_colon_suite  */
-#line 900 "parser.y"
+#line 901 "parser.y"
                                                                     {
     cerr<<"if stmt reached\n";
     (yyval.ptr) = new node("nt", "IfStatement");
@@ -3391,11 +3392,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3395 "parser.tab.cpp"
+#line 3396 "parser.tab.cpp"
     break;
 
   case 171: /* cond_else_colon_suite: ELSE ':' suite  */
-#line 912 "parser.y"
+#line 913 "parser.y"
                                      {
     (yyval.ptr) = new node("nt", "ElseColonSuite");
     ast.add_node((yyval.ptr));
@@ -3403,19 +3404,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3407 "parser.tab.cpp"
+#line 3408 "parser.tab.cpp"
     break;
 
   case 172: /* cond_else_colon_suite: %empty  */
-#line 918 "parser.y"
+#line 919 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3415 "parser.tab.cpp"
+#line 3416 "parser.tab.cpp"
     break;
 
   case 173: /* close_eliftestsuite: close_eliftestsuite ELIF test ':' suite  */
-#line 922 "parser.y"
+#line 923 "parser.y"
                                                             {
     (yyval.ptr) = new node("nt", "CloseElifTestSuite");
     ast.add_node((yyval.ptr));
@@ -3425,19 +3426,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3429 "parser.tab.cpp"
+#line 3430 "parser.tab.cpp"
     break;
 
   case 174: /* close_eliftestsuite: %empty  */
-#line 930 "parser.y"
+#line 931 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3437 "parser.tab.cpp"
+#line 3438 "parser.tab.cpp"
     break;
 
   case 175: /* while_stmt: WHILE test ':' suite  */
-#line 934 "parser.y"
+#line 935 "parser.y"
                                 {
     (yyval.ptr) = new node("nt", "WhileStatement");
     ast.add_node((yyval.ptr));
@@ -3446,11 +3447,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3450 "parser.tab.cpp"
+#line 3451 "parser.tab.cpp"
     break;
 
   case 176: /* while_stmt: WHILE test ':' suite ELSE ':' suite  */
-#line 941 "parser.y"
+#line 942 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "WhileStatement");
     ast.add_node((yyval.ptr));
@@ -3462,11 +3463,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3466 "parser.tab.cpp"
+#line 3467 "parser.tab.cpp"
     break;
 
   case 177: /* for_stmt: FOR exprlist IN testlist ':' suite  */
-#line 952 "parser.y"
+#line 953 "parser.y"
                                             {
     (yyval.ptr) = new node("nt", "ForStatement");
     ast.add_node((yyval.ptr));
@@ -3477,11 +3478,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3481 "parser.tab.cpp"
+#line 3482 "parser.tab.cpp"
     break;
 
   case 178: /* for_stmt: FOR exprlist IN testlist ':' suite ELSE ':' suite  */
-#line 961 "parser.y"
+#line 962 "parser.y"
                                                      {
     (yyval.ptr) = new node("nt", "ForStatement");
     ast.add_node((yyval.ptr));
@@ -3495,11 +3496,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3499 "parser.tab.cpp"
+#line 3500 "parser.tab.cpp"
     break;
 
   case 179: /* try_stmt: TRY ':' suite plus_except_colsuite cond_else_colon_suite cond_finallycolsuite  */
-#line 974 "parser.y"
+#line 975 "parser.y"
                                                                                        {
     (yyval.ptr) = new node("nt", "TryStatement");
     ast.add_node((yyval.ptr));
@@ -3510,11 +3511,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3514 "parser.tab.cpp"
+#line 3515 "parser.tab.cpp"
     break;
 
   case 180: /* try_stmt: TRY ':' suite FINALLY ':' suite  */
-#line 983 "parser.y"
+#line 984 "parser.y"
                                    {
     (yyval.ptr) = new node("nt", "TryStatement");
     ast.add_node((yyval.ptr));
@@ -3525,11 +3526,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3529 "parser.tab.cpp"
+#line 3530 "parser.tab.cpp"
     break;
 
   case 181: /* cond_finallycolsuite: FINALLY ':' suite  */
-#line 994 "parser.y"
+#line 995 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "FinallyColonSuite");
     ast.add_node((yyval.ptr));
@@ -3537,19 +3538,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3541 "parser.tab.cpp"
+#line 3542 "parser.tab.cpp"
     break;
 
   case 182: /* cond_finallycolsuite: %empty  */
-#line 1000 "parser.y"
+#line 1001 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3549 "parser.tab.cpp"
+#line 3550 "parser.tab.cpp"
     break;
 
   case 183: /* plus_except_colsuite: except_clause ':' suite  */
-#line 1004 "parser.y"
+#line 1005 "parser.y"
                                              {
     (yyval.ptr) = new node("nt", "PlusExceptColonSuite");
     ast.add_node((yyval.ptr));
@@ -3557,11 +3558,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3561 "parser.tab.cpp"
+#line 3562 "parser.tab.cpp"
     break;
 
   case 184: /* plus_except_colsuite: plus_except_colsuite except_clause ':' suite  */
-#line 1010 "parser.y"
+#line 1011 "parser.y"
                                                 {
     (yyval.ptr) = new node("nt", "PlusExceptColonSuite");
     ast.add_node((yyval.ptr));
@@ -3570,11 +3571,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3574 "parser.tab.cpp"
+#line 3575 "parser.tab.cpp"
     break;
 
   case 185: /* with_stmt: WITH with_item close_commawithitem ':' suite  */
-#line 1019 "parser.y"
+#line 1020 "parser.y"
                                                         {
     (yyval.ptr) = new node("nt", "WithStatement");
     ast.add_node((yyval.ptr));
@@ -3584,11 +3585,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3588 "parser.tab.cpp"
+#line 3589 "parser.tab.cpp"
     break;
 
   case 186: /* close_commawithitem: close_commawithitem ',' with_item  */
-#line 1029 "parser.y"
+#line 1030 "parser.y"
                                                       {
     (yyval.ptr) = new node("nt", "CloseCommaWithItem");
     ast.add_node((yyval.ptr));
@@ -3596,27 +3597,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3600 "parser.tab.cpp"
+#line 3601 "parser.tab.cpp"
     break;
 
   case 187: /* close_commawithitem: %empty  */
-#line 1035 "parser.y"
+#line 1036 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3608 "parser.tab.cpp"
+#line 3609 "parser.tab.cpp"
     break;
 
   case 188: /* with_item: test  */
-#line 1039 "parser.y"
+#line 1040 "parser.y"
                {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3616 "parser.tab.cpp"
+#line 3617 "parser.tab.cpp"
     break;
 
   case 189: /* with_item: test AS expr  */
-#line 1041 "parser.y"
+#line 1042 "parser.y"
                 {
     (yyval.ptr) = new node("nt", "WithItem");
     ast.add_node((yyval.ptr));
@@ -3624,30 +3625,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3628 "parser.tab.cpp"
+#line 3629 "parser.tab.cpp"
     break;
 
   case 190: /* except_clause: EXCEPT cond_testasname  */
-#line 1050 "parser.y"
+#line 1051 "parser.y"
                                      {
     (yyval.ptr) = new node("nt", "ExceptClause");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3639 "parser.tab.cpp"
+#line 3640 "parser.tab.cpp"
     break;
 
   case 191: /* cond_testasname: test  */
-#line 1057 "parser.y"
+#line 1058 "parser.y"
                      {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3647 "parser.tab.cpp"
+#line 3648 "parser.tab.cpp"
     break;
 
   case 192: /* cond_testasname: test AS NAME  */
-#line 1059 "parser.y"
+#line 1060 "parser.y"
                 {
     (yyval.ptr) = new node("nt", "CondTestAsName");
     ast.add_node((yyval.ptr));
@@ -3655,28 +3656,28 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3659 "parser.tab.cpp"
+#line 3660 "parser.tab.cpp"
     break;
 
   case 193: /* cond_testasname: %empty  */
-#line 1065 "parser.y"
+#line 1066 "parser.y"
    {
     (yyval.ptr) = NULL;
 }
-#line 3667 "parser.tab.cpp"
+#line 3668 "parser.tab.cpp"
     break;
 
   case 194: /* suite: simple_stmt  */
-#line 1069 "parser.y"
+#line 1070 "parser.y"
                   {
     cerr<<" yo yo yo 1\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3676 "parser.tab.cpp"
+#line 3677 "parser.tab.cpp"
     break;
 
   case 195: /* suite: NEWLINE INDENT plus_stmt DEDENT  */
-#line 1072 "parser.y"
+#line 1073 "parser.y"
                                    {
     cerr<<" yo yo yo 2\n";
     (yyval.ptr) = new node("nt", "Suite");
@@ -3686,30 +3687,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3690 "parser.tab.cpp"
+#line 3691 "parser.tab.cpp"
     break;
 
   case 196: /* plus_stmt: stmt  */
-#line 1081 "parser.y"
+#line 1082 "parser.y"
                {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3698 "parser.tab.cpp"
+#line 3699 "parser.tab.cpp"
     break;
 
   case 197: /* plus_stmt: plus_stmt stmt  */
-#line 1083 "parser.y"
+#line 1084 "parser.y"
                   {
     (yyval.ptr) = new node("nt", "PlusStmt");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3709 "parser.tab.cpp"
+#line 3710 "parser.tab.cpp"
     break;
 
   case 198: /* test: or_test IF or_test ELSE test  */
-#line 1089 "parser.y"
+#line 1090 "parser.y"
                                   {
     (yyval.ptr) = new node("nt", "Test");
     ast.add_node((yyval.ptr));
@@ -3719,45 +3720,45 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3723 "parser.tab.cpp"
+#line 3724 "parser.tab.cpp"
     break;
 
   case 199: /* test: lambdef  */
-#line 1097 "parser.y"
+#line 1098 "parser.y"
            {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3731 "parser.tab.cpp"
+#line 3732 "parser.tab.cpp"
     break;
 
   case 200: /* test: or_test  */
-#line 1099 "parser.y"
+#line 1100 "parser.y"
            {
     cerr << "debug statement " << 1 <<"\n";
     cerr<<"test->or_test\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3741 "parser.tab.cpp"
+#line 3742 "parser.tab.cpp"
     break;
 
   case 201: /* test_nocond: or_test  */
-#line 1104 "parser.y"
+#line 1105 "parser.y"
                     {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3749 "parser.tab.cpp"
+#line 3750 "parser.tab.cpp"
     break;
 
   case 202: /* test_nocond: lambdef_nocond  */
-#line 1106 "parser.y"
+#line 1107 "parser.y"
                   {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3757 "parser.tab.cpp"
+#line 3758 "parser.tab.cpp"
     break;
 
   case 203: /* lambdef: LAMBDA varargslist ':' test  */
-#line 1110 "parser.y"
+#line 1111 "parser.y"
                                     {
     (yyval.ptr) = new node("nt", "LambDef");
     ast.add_node((yyval.ptr));
@@ -3766,11 +3767,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3770 "parser.tab.cpp"
+#line 3771 "parser.tab.cpp"
     break;
 
   case 204: /* lambdef: LAMBDA ':' test  */
-#line 1117 "parser.y"
+#line 1118 "parser.y"
                    {
     (yyval.ptr) = new node("nt", "LambDef");
     ast.add_node((yyval.ptr));
@@ -3778,11 +3779,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3782 "parser.tab.cpp"
+#line 3783 "parser.tab.cpp"
     break;
 
   case 205: /* lambdef_nocond: LAMBDA varargslist ':' test_nocond  */
-#line 1125 "parser.y"
+#line 1126 "parser.y"
                                                   {
     (yyval.ptr) = new node("nt", "LambDefNoCond");
     ast.add_node((yyval.ptr));
@@ -3791,11 +3792,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3795 "parser.tab.cpp"
+#line 3796 "parser.tab.cpp"
     break;
 
   case 206: /* lambdef_nocond: LAMBDA ':' test_nocond  */
-#line 1132 "parser.y"
+#line 1133 "parser.y"
                           {
     (yyval.ptr) = new node("nt", "LambDefNoCond");
     ast.add_node((yyval.ptr));
@@ -3803,11 +3804,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3807 "parser.tab.cpp"
+#line 3808 "parser.tab.cpp"
     break;
 
   case 207: /* or_test: and_test close_or_and_test  */
-#line 1140 "parser.y"
+#line 1141 "parser.y"
                                    {
     cerr << "debug statement " << 2 <<" "<<((yyvsp[-1].ptr))->name<<"\n";
     (yyval.ptr) = new node("nt", "OrTest");
@@ -3815,11 +3816,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3819 "parser.tab.cpp"
+#line 3820 "parser.tab.cpp"
     break;
 
   case 208: /* close_or_and_test: close_or_and_test OR and_test  */
-#line 1148 "parser.y"
+#line 1149 "parser.y"
                                                 {
     (yyval.ptr) = new node("nt", "CloseOrAndTest");
     ast.add_node((yyval.ptr));
@@ -3827,19 +3828,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3831 "parser.tab.cpp"
+#line 3832 "parser.tab.cpp"
     break;
 
   case 209: /* close_or_and_test: %empty  */
-#line 1154 "parser.y"
+#line 1155 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3839 "parser.tab.cpp"
+#line 3840 "parser.tab.cpp"
     break;
 
   case 210: /* and_test: not_test close_and_not_test  */
-#line 1158 "parser.y"
+#line 1159 "parser.y"
                                      {
     cerr << "debug statement " << 3 <<"\n";
     (yyval.ptr) = new node("nt", "AndTest");
@@ -3847,11 +3848,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3851 "parser.tab.cpp"
+#line 3852 "parser.tab.cpp"
     break;
 
   case 211: /* close_and_not_test: close_and_not_test AND not_test  */
-#line 1166 "parser.y"
+#line 1167 "parser.y"
                                                    {
     (yyval.ptr) = new node("nt", "CloseAndNotTest");
     ast.add_node((yyval.ptr));
@@ -3859,19 +3860,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3863 "parser.tab.cpp"
+#line 3864 "parser.tab.cpp"
     break;
 
   case 212: /* close_and_not_test: %empty  */
-#line 1172 "parser.y"
+#line 1173 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3871 "parser.tab.cpp"
+#line 3872 "parser.tab.cpp"
     break;
 
   case 213: /* not_test: close_not comparison  */
-#line 1176 "parser.y"
+#line 1177 "parser.y"
                               {
     cerr << "debug statement " << 4 << "\n";
     (yyval.ptr) = new node("nt", "NotTest");
@@ -3879,30 +3880,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3883 "parser.tab.cpp"
+#line 3884 "parser.tab.cpp"
     break;
 
   case 214: /* close_not: close_not NOT  */
-#line 1184 "parser.y"
+#line 1185 "parser.y"
                         {
     (yyval.ptr) = new node("nt", "CloseNot");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3894 "parser.tab.cpp"
+#line 3895 "parser.tab.cpp"
     break;
 
   case 215: /* close_not: %empty  */
-#line 1189 "parser.y"
+#line 1190 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3902 "parser.tab.cpp"
+#line 3903 "parser.tab.cpp"
     break;
 
   case 216: /* comparison: expr close_compopexpr  */
-#line 1193 "parser.y"
+#line 1194 "parser.y"
                                  {
     cerr << "debug statement " << 5 <<"\n";
     (yyval.ptr) = new node("nt", "Comparison");
@@ -3910,11 +3911,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3914 "parser.tab.cpp"
+#line 3915 "parser.tab.cpp"
     break;
 
   case 217: /* close_compopexpr: close_compopexpr comp_op expr  */
-#line 1201 "parser.y"
+#line 1202 "parser.y"
                                                {
     (yyval.ptr) = new node("nt", "CloseCompOpExpr");
     ast.add_node((yyval.ptr));
@@ -3922,124 +3923,124 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 3926 "parser.tab.cpp"
+#line 3927 "parser.tab.cpp"
     break;
 
   case 218: /* close_compopexpr: %empty  */
-#line 1207 "parser.y"
+#line 1208 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 3934 "parser.tab.cpp"
+#line 3935 "parser.tab.cpp"
     break;
 
   case 219: /* comp_op: '<'  */
-#line 1215 "parser.y"
+#line 1216 "parser.y"
             {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3942 "parser.tab.cpp"
+#line 3943 "parser.tab.cpp"
     break;
 
   case 220: /* comp_op: '>'  */
-#line 1217 "parser.y"
+#line 1218 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3950 "parser.tab.cpp"
+#line 3951 "parser.tab.cpp"
     break;
 
   case 221: /* comp_op: EQUAL  */
-#line 1219 "parser.y"
+#line 1220 "parser.y"
          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3958 "parser.tab.cpp"
+#line 3959 "parser.tab.cpp"
     break;
 
   case 222: /* comp_op: GEQ  */
-#line 1221 "parser.y"
+#line 1222 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3966 "parser.tab.cpp"
+#line 3967 "parser.tab.cpp"
     break;
 
   case 223: /* comp_op: LEQ  */
-#line 1223 "parser.y"
+#line 1224 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3974 "parser.tab.cpp"
+#line 3975 "parser.tab.cpp"
     break;
 
   case 224: /* comp_op: LTORGT  */
-#line 1225 "parser.y"
+#line 1226 "parser.y"
           {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3982 "parser.tab.cpp"
+#line 3983 "parser.tab.cpp"
     break;
 
   case 225: /* comp_op: NEQ  */
-#line 1227 "parser.y"
+#line 1228 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3990 "parser.tab.cpp"
+#line 3991 "parser.tab.cpp"
     break;
 
   case 226: /* comp_op: IN  */
-#line 1229 "parser.y"
+#line 1230 "parser.y"
       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 3998 "parser.tab.cpp"
+#line 3999 "parser.tab.cpp"
     break;
 
   case 227: /* comp_op: NOT IN  */
-#line 1231 "parser.y"
+#line 1232 "parser.y"
           {
     (yyval.ptr) = new node("nt", "CompOp");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4009 "parser.tab.cpp"
+#line 4010 "parser.tab.cpp"
     break;
 
   case 228: /* comp_op: IS  */
-#line 1236 "parser.y"
+#line 1237 "parser.y"
       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4017 "parser.tab.cpp"
+#line 4018 "parser.tab.cpp"
     break;
 
   case 229: /* comp_op: IS NOT  */
-#line 1238 "parser.y"
+#line 1239 "parser.y"
           {
     (yyval.ptr) = new node("nt", "CompOp");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4028 "parser.tab.cpp"
+#line 4029 "parser.tab.cpp"
     break;
 
   case 230: /* star_expr: '*' expr  */
-#line 1245 "parser.y"
+#line 1246 "parser.y"
                    {
     (yyval.ptr) = new node("nt", "StarExpr");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4039 "parser.tab.cpp"
+#line 4040 "parser.tab.cpp"
     break;
 
   case 231: /* expr: xor_expr close_orxorexp  */
-#line 1252 "parser.y"
+#line 1253 "parser.y"
                              {
     cerr << "debug statement " << 6 <<"\n";
     (yyval.ptr) = new node("nt", "Expr");
@@ -4047,11 +4048,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4051 "parser.tab.cpp"
+#line 4052 "parser.tab.cpp"
     break;
 
   case 232: /* close_orxorexp: close_orxorexp '|' xor_expr  */
-#line 1259 "parser.y"
+#line 1260 "parser.y"
                                            {
     (yyval.ptr) = new node("nt", "CloseOrXorExpr");
     ast.add_node((yyval.ptr));
@@ -4059,19 +4060,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4063 "parser.tab.cpp"
+#line 4064 "parser.tab.cpp"
     break;
 
   case 233: /* close_orxorexp: %empty  */
-#line 1265 "parser.y"
+#line 1266 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4071 "parser.tab.cpp"
+#line 4072 "parser.tab.cpp"
     break;
 
   case 234: /* xor_expr: and_expr close_xor_and_expr  */
-#line 1269 "parser.y"
+#line 1270 "parser.y"
                                      {
     cerr << "debug statement " << 7 <<"\n";
     (yyval.ptr) = new node("nt", "XorExpr");
@@ -4079,11 +4080,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4083 "parser.tab.cpp"
+#line 4084 "parser.tab.cpp"
     break;
 
   case 235: /* close_xor_and_expr: close_xor_and_expr '^' and_expr  */
-#line 1277 "parser.y"
+#line 1278 "parser.y"
                                                    {
     (yyval.ptr) = new node("nt", "CloseXorAndExpr");
     ast.add_node((yyval.ptr));
@@ -4091,19 +4092,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4095 "parser.tab.cpp"
+#line 4096 "parser.tab.cpp"
     break;
 
   case 236: /* close_xor_and_expr: %empty  */
-#line 1283 "parser.y"
+#line 1284 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4103 "parser.tab.cpp"
+#line 4104 "parser.tab.cpp"
     break;
 
   case 237: /* and_expr: shift_expr close_andshiftexpr  */
-#line 1287 "parser.y"
+#line 1288 "parser.y"
                                        {
     cerr << "debug statement " << 8 <<"\n";
     (yyval.ptr) = new node("nt", "AndExpr");
@@ -4111,11 +4112,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4115 "parser.tab.cpp"
+#line 4116 "parser.tab.cpp"
     break;
 
   case 238: /* close_andshiftexpr: close_andshiftexpr '&' shift_expr  */
-#line 1295 "parser.y"
+#line 1296 "parser.y"
                                                      {
     (yyval.ptr) = new node("nt", "CloseAndShiftExpr");
     ast.add_node((yyval.ptr));
@@ -4123,19 +4124,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4127 "parser.tab.cpp"
+#line 4128 "parser.tab.cpp"
     break;
 
   case 239: /* close_andshiftexpr: %empty  */
-#line 1301 "parser.y"
+#line 1302 "parser.y"
      {
 (yyval.ptr) = NULL;
 }
-#line 4135 "parser.tab.cpp"
+#line 4136 "parser.tab.cpp"
     break;
 
   case 240: /* shift_expr: arith_expr close_lrs_arith_expr  */
-#line 1305 "parser.y"
+#line 1306 "parser.y"
                                            {
     cerr << "debug statement " << 9 <<"\n";
     (yyval.ptr) = new node("nt", "ShiftExpr");
@@ -4143,27 +4144,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4147 "parser.tab.cpp"
+#line 4148 "parser.tab.cpp"
     break;
 
   case 241: /* left_right_shift: LEFTSHIFT  */
-#line 1313 "parser.y"
+#line 1314 "parser.y"
                            {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4155 "parser.tab.cpp"
+#line 4156 "parser.tab.cpp"
     break;
 
   case 242: /* left_right_shift: RIGHTSHIFT  */
-#line 1315 "parser.y"
+#line 1316 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4163 "parser.tab.cpp"
+#line 4164 "parser.tab.cpp"
     break;
 
   case 243: /* close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr  */
-#line 1319 "parser.y"
+#line 1320 "parser.y"
                                                                       {
     (yyval.ptr) = new node("nt", "CloseLrsArithExpr");
     ast.add_node((yyval.ptr));
@@ -4171,61 +4172,61 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4175 "parser.tab.cpp"
+#line 4176 "parser.tab.cpp"
     break;
 
   case 244: /* close_lrs_arith_expr: %empty  */
-#line 1325 "parser.y"
+#line 1326 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4183 "parser.tab.cpp"
+#line 4184 "parser.tab.cpp"
     break;
 
   case 245: /* arith_expr: term close_plusminusterm  */
-#line 1329 "parser.y"
+#line 1330 "parser.y"
                                     {
     cerr << "debug statement " << 10 <<"\n";
     (yyval.ptr) = new node("nt", "ArithExpr");
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4194 "parser.tab.cpp"
+#line 4195 "parser.tab.cpp"
     break;
 
   case 246: /* close_plusminusterm: close_plusminusterm '+' term  */
-#line 1336 "parser.y"
+#line 1337 "parser.y"
                                                  {
     (yyval.ptr) = new node("nt", "ClosePlusMinusTerm");
     ast.add_edge((yyval.ptr), (yyvsp[-2].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4205 "parser.tab.cpp"
+#line 4206 "parser.tab.cpp"
     break;
 
   case 247: /* close_plusminusterm: close_plusminusterm '-' term  */
-#line 1341 "parser.y"
+#line 1342 "parser.y"
                                 {
     (yyval.ptr) = new node("nt", "ClosePlusMinusTerm");
-    (yyval.ptr) = (yyvsp[-1].ptr);
+    // $<ptr>$ = $<ptr>2;
     ast.add_edge((yyval.ptr), (yyvsp[-2].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4217 "parser.tab.cpp"
+#line 4218 "parser.tab.cpp"
     break;
 
   case 248: /* close_plusminusterm: %empty  */
-#line 1347 "parser.y"
+#line 1348 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4225 "parser.tab.cpp"
+#line 4226 "parser.tab.cpp"
     break;
 
   case 249: /* term: factor close_muldivopsfactor  */
-#line 1351 "parser.y"
+#line 1352 "parser.y"
                                   {
     cerr << "debug statement " << 11 <<"\n";
     (yyval.ptr) = new node("nt", "Term");
@@ -4233,51 +4234,51 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4237 "parser.tab.cpp"
+#line 4238 "parser.tab.cpp"
     break;
 
   case 250: /* group_muldivremops: '*'  */
-#line 1359 "parser.y"
+#line 1360 "parser.y"
                        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4245 "parser.tab.cpp"
+#line 4246 "parser.tab.cpp"
     break;
 
   case 251: /* group_muldivremops: '@'  */
-#line 1361 "parser.y"
+#line 1362 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4253 "parser.tab.cpp"
+#line 4254 "parser.tab.cpp"
     break;
 
   case 252: /* group_muldivremops: '/'  */
-#line 1363 "parser.y"
+#line 1364 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4261 "parser.tab.cpp"
+#line 4262 "parser.tab.cpp"
     break;
 
   case 253: /* group_muldivremops: '%'  */
-#line 1365 "parser.y"
+#line 1366 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4269 "parser.tab.cpp"
+#line 4270 "parser.tab.cpp"
     break;
 
   case 254: /* group_muldivremops: IDIV  */
-#line 1367 "parser.y"
+#line 1368 "parser.y"
         {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4277 "parser.tab.cpp"
+#line 4278 "parser.tab.cpp"
     break;
 
   case 255: /* close_muldivopsfactor: close_muldivopsfactor group_muldivremops factor  */
-#line 1371 "parser.y"
+#line 1372 "parser.y"
                                                                       {
     (yyval.ptr) = new node("nt", "CloseMulDivOpsFactor");
     ast.add_node((yyval.ptr));
@@ -4285,19 +4286,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4289 "parser.tab.cpp"
+#line 4290 "parser.tab.cpp"
     break;
 
   case 256: /* close_muldivopsfactor: %empty  */
-#line 1377 "parser.y"
+#line 1378 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4297 "parser.tab.cpp"
+#line 4298 "parser.tab.cpp"
     break;
 
   case 257: /* factor: close_plus_or_minus_or_not power  */
-#line 1381 "parser.y"
+#line 1382 "parser.y"
                                         {
     cerr << "debug statement " << 12 <<"\n";
     (yyval.ptr) = new node("nt", "Factor");
@@ -4305,54 +4306,54 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4309 "parser.tab.cpp"
+#line 4310 "parser.tab.cpp"
     break;
 
   case 258: /* close_plus_or_minus_or_not: close_plus_or_minus_or_not plus_or_minus_or_not  */
-#line 1389 "parser.y"
+#line 1390 "parser.y"
                                                                            {
     (yyval.ptr) = new node("nt", "ClosePlusOrMinusOrNot");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4320 "parser.tab.cpp"
+#line 4321 "parser.tab.cpp"
     break;
 
   case 259: /* close_plus_or_minus_or_not: %empty  */
-#line 1394 "parser.y"
+#line 1395 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4328 "parser.tab.cpp"
+#line 4329 "parser.tab.cpp"
     break;
 
   case 260: /* plus_or_minus_or_not: '+'  */
-#line 1399 "parser.y"
+#line 1400 "parser.y"
                          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4336 "parser.tab.cpp"
+#line 4337 "parser.tab.cpp"
     break;
 
   case 261: /* plus_or_minus_or_not: '-'  */
-#line 1401 "parser.y"
+#line 1402 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4344 "parser.tab.cpp"
+#line 4345 "parser.tab.cpp"
     break;
 
   case 262: /* plus_or_minus_or_not: '~'  */
-#line 1403 "parser.y"
+#line 1404 "parser.y"
        {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4352 "parser.tab.cpp"
+#line 4353 "parser.tab.cpp"
     break;
 
   case 263: /* power: atom_expr POW factor  */
-#line 1407 "parser.y"
+#line 1408 "parser.y"
                            {
     (yyval.ptr) = new node("nt", "Power");
     ast.add_node((yyval.ptr));
@@ -4360,20 +4361,20 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4364 "parser.tab.cpp"
+#line 4365 "parser.tab.cpp"
     break;
 
   case 264: /* power: atom_expr  */
-#line 1413 "parser.y"
+#line 1414 "parser.y"
              {
     cerr << "debug statement " << 13 <<"\n";
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4373 "parser.tab.cpp"
+#line 4374 "parser.tab.cpp"
     break;
 
   case 265: /* atom_expr: AWAIT atom close_trailer  */
-#line 1418 "parser.y"
+#line 1419 "parser.y"
                                    {
     (yyval.ptr) = new node("nt", "AtomExpr");
     ast.add_node((yyval.ptr));
@@ -4381,11 +4382,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4385 "parser.tab.cpp"
+#line 4386 "parser.tab.cpp"
     break;
 
   case 266: /* atom_expr: atom close_trailer  */
-#line 1424 "parser.y"
+#line 1425 "parser.y"
                       {
     cerr << "debug statement " << 14 <<"\n";
     (yyval.ptr) = new node("nt", "AtomExpr");
@@ -4393,30 +4394,30 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4397 "parser.tab.cpp"
+#line 4398 "parser.tab.cpp"
     break;
 
   case 267: /* close_trailer: close_trailer trailer  */
-#line 1432 "parser.y"
+#line 1433 "parser.y"
                                     {
     (yyval.ptr) = new node("nt", "CloseTrailer");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4408 "parser.tab.cpp"
+#line 4409 "parser.tab.cpp"
     break;
 
   case 268: /* close_trailer: %empty  */
-#line 1437 "parser.y"
+#line 1438 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4416 "parser.tab.cpp"
+#line 4417 "parser.tab.cpp"
     break;
 
   case 269: /* atom: '(' cond_yield_or_testlist ')'  */
-#line 1441 "parser.y"
+#line 1442 "parser.y"
                                      {
     (yyval.ptr) = new node("nt", "Atom");
     ast.add_node((yyval.ptr));
@@ -4424,11 +4425,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4428 "parser.tab.cpp"
+#line 4429 "parser.tab.cpp"
     break;
 
   case 270: /* atom: '[' testlist_comp ']'  */
-#line 1447 "parser.y"
+#line 1448 "parser.y"
                         {
     (yyval.ptr) = new node("nt", "Atom");
     ast.add_node((yyval.ptr));
@@ -4436,11 +4437,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4440 "parser.tab.cpp"
+#line 4441 "parser.tab.cpp"
     break;
 
   case 271: /* atom: '[' ']' '{' dictorsetmaker '}'  */
-#line 1453 "parser.y"
+#line 1454 "parser.y"
                                   {
     (yyval.ptr) = new node("nt", "Atom");
     ast.add_node((yyval.ptr));
@@ -4450,11 +4451,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4454 "parser.tab.cpp"
+#line 4455 "parser.tab.cpp"
     break;
 
   case 272: /* atom: '{' dictorsetmaker '}'  */
-#line 1461 "parser.y"
+#line 1462 "parser.y"
                            {
     (yyval.ptr) = new node("nt", "Atom");
     ast.add_node((yyval.ptr));
@@ -4462,134 +4463,134 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4466 "parser.tab.cpp"
+#line 4467 "parser.tab.cpp"
     break;
 
   case 273: /* atom: '{' '}'  */
-#line 1467 "parser.y"
+#line 1468 "parser.y"
             {
     (yyval.ptr) = new node("nt", "Atom");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4477 "parser.tab.cpp"
+#line 4478 "parser.tab.cpp"
     break;
 
   case 274: /* atom: NAME  */
-#line 1472 "parser.y"
+#line 1473 "parser.y"
          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4485 "parser.tab.cpp"
+#line 4486 "parser.tab.cpp"
     break;
 
   case 275: /* atom: NUMBER  */
-#line 1474 "parser.y"
+#line 1475 "parser.y"
            {
     cerr << "debug statement " << 15 <<"\n";
     cerr << "number reached " << (yyvsp[0].val) << '\n';
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4495 "parser.tab.cpp"
+#line 4496 "parser.tab.cpp"
     break;
 
   case 276: /* atom: multi_str  */
-#line 1478 "parser.y"
+#line 1479 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4503 "parser.tab.cpp"
+#line 4504 "parser.tab.cpp"
     break;
 
   case 277: /* atom: ELLIPSIS  */
-#line 1480 "parser.y"
+#line 1481 "parser.y"
              {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4511 "parser.tab.cpp"
+#line 4512 "parser.tab.cpp"
     break;
 
   case 278: /* atom: NONE  */
-#line 1482 "parser.y"
+#line 1483 "parser.y"
          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4519 "parser.tab.cpp"
+#line 4520 "parser.tab.cpp"
     break;
 
   case 279: /* atom: TRUE  */
-#line 1484 "parser.y"
+#line 1485 "parser.y"
          {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4527 "parser.tab.cpp"
+#line 4528 "parser.tab.cpp"
     break;
 
   case 280: /* atom: FALSE  */
-#line 1486 "parser.y"
+#line 1487 "parser.y"
           {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4535 "parser.tab.cpp"
+#line 4536 "parser.tab.cpp"
     break;
 
   case 281: /* cond_yield_or_testlist: yield_expr  */
-#line 1490 "parser.y"
+#line 1491 "parser.y"
                                   {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4543 "parser.tab.cpp"
+#line 4544 "parser.tab.cpp"
     break;
 
   case 282: /* cond_yield_or_testlist: testlist_comp  */
-#line 1492 "parser.y"
+#line 1493 "parser.y"
                  {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4551 "parser.tab.cpp"
+#line 4552 "parser.tab.cpp"
     break;
 
   case 283: /* cond_yield_or_testlist: %empty  */
-#line 1494 "parser.y"
+#line 1495 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4559 "parser.tab.cpp"
+#line 4560 "parser.tab.cpp"
     break;
 
   case 284: /* multi_str: STRING  */
-#line 1498 "parser.y"
+#line 1499 "parser.y"
                  {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4567 "parser.tab.cpp"
+#line 4568 "parser.tab.cpp"
     break;
 
   case 285: /* multi_str: STRING multi_str  */
-#line 1500 "parser.y"
+#line 1501 "parser.y"
                     {
     (yyval.ptr) = new node("nt", "MultiStr");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4578 "parser.tab.cpp"
+#line 4579 "parser.tab.cpp"
     break;
 
   case 286: /* testlist_comp: test_or_starexp comp_for  */
-#line 1507 "parser.y"
+#line 1508 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "TestListComp");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4589 "parser.tab.cpp"
+#line 4590 "parser.tab.cpp"
     break;
 
   case 287: /* testlist_comp: test_or_starexp close_commatest_or_starexp cond_comma  */
-#line 1512 "parser.y"
+#line 1513 "parser.y"
                                                          {
     (yyval.ptr) = new node("nt", "TestListComp");
     ast.add_node((yyval.ptr));
@@ -4597,11 +4598,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4601 "parser.tab.cpp"
+#line 4602 "parser.tab.cpp"
     break;
 
   case 288: /* trailer: '(' cond_arglist ')'  */
-#line 1520 "parser.y"
+#line 1521 "parser.y"
                               {
     (yyval.ptr) = new node("nt", "Trailer");
     ast.add_node((yyval.ptr));
@@ -4609,11 +4610,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4613 "parser.tab.cpp"
+#line 4614 "parser.tab.cpp"
     break;
 
   case 289: /* trailer: '[' subscriptlist ']'  */
-#line 1526 "parser.y"
+#line 1527 "parser.y"
                           {
     (yyval.ptr) = new node("nt", "Trailer");
     ast.add_node((yyval.ptr));
@@ -4621,11 +4622,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4625 "parser.tab.cpp"
+#line 4626 "parser.tab.cpp"
     break;
 
   case 290: /* trailer: '.' NAME  */
-#line 1532 "parser.y"
+#line 1533 "parser.y"
              {
     (yyval.ptr) = new node("nt", "Trailer");
     ast.add_node((yyval.ptr));
@@ -4633,11 +4634,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 
 }
-#line 4637 "parser.tab.cpp"
+#line 4638 "parser.tab.cpp"
     break;
 
   case 291: /* subscriptlist: subscript close_commasubscript cond_comma  */
-#line 1540 "parser.y"
+#line 1541 "parser.y"
                                                         {
     (yyval.ptr) = new node("nt", "SubscriptList");
     ast.add_node((yyval.ptr));
@@ -4645,11 +4646,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4649 "parser.tab.cpp"
+#line 4650 "parser.tab.cpp"
     break;
 
   case 292: /* close_commasubscript: close_commasubscript ',' subscript  */
-#line 1548 "parser.y"
+#line 1549 "parser.y"
                                                         {
     (yyval.ptr) = new node("nt", "CloseCommaSubscript");
     ast.add_node((yyval.ptr));
@@ -4657,27 +4658,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4661 "parser.tab.cpp"
+#line 4662 "parser.tab.cpp"
     break;
 
   case 293: /* close_commasubscript: %empty  */
-#line 1554 "parser.y"
+#line 1555 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4669 "parser.tab.cpp"
+#line 4670 "parser.tab.cpp"
     break;
 
   case 294: /* subscript: test  */
-#line 1558 "parser.y"
+#line 1559 "parser.y"
                 {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4677 "parser.tab.cpp"
+#line 4678 "parser.tab.cpp"
     break;
 
   case 295: /* subscript: cond_test ':' cond_test cond_sliceop  */
-#line 1560 "parser.y"
+#line 1561 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "Subscript");
     ast.add_node((yyval.ptr));
@@ -4686,63 +4687,63 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4690 "parser.tab.cpp"
+#line 4691 "parser.tab.cpp"
     break;
 
   case 296: /* cond_test: test  */
-#line 1569 "parser.y"
+#line 1570 "parser.y"
                 {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4698 "parser.tab.cpp"
+#line 4699 "parser.tab.cpp"
     break;
 
   case 297: /* cond_test: %empty  */
-#line 1571 "parser.y"
+#line 1572 "parser.y"
     {
     (yyval.ptr) = NULL;
 
 }
-#line 4707 "parser.tab.cpp"
+#line 4708 "parser.tab.cpp"
     break;
 
   case 298: /* cond_sliceop: sliceop  */
-#line 1576 "parser.y"
+#line 1577 "parser.y"
                       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4715 "parser.tab.cpp"
+#line 4716 "parser.tab.cpp"
     break;
 
   case 299: /* cond_sliceop: %empty  */
-#line 1578 "parser.y"
+#line 1579 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4723 "parser.tab.cpp"
+#line 4724 "parser.tab.cpp"
     break;
 
   case 300: /* sliceop: ':' test  */
-#line 1582 "parser.y"
+#line 1583 "parser.y"
                   {
     (yyval.ptr) = new node("nt", "SliceOp");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4734 "parser.tab.cpp"
+#line 4735 "parser.tab.cpp"
     break;
 
   case 301: /* sliceop: ':'  */
-#line 1587 "parser.y"
+#line 1588 "parser.y"
       {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4742 "parser.tab.cpp"
+#line 4743 "parser.tab.cpp"
     break;
 
   case 302: /* exprlist: expr_or_star_expr close_comma_expr_or_star_expr cond_comma  */
-#line 1591 "parser.y"
+#line 1592 "parser.y"
                                                                     {
     (yyval.ptr) = new node("nt", "ExprList");
     ast.add_node((yyval.ptr));
@@ -4750,27 +4751,27 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4754 "parser.tab.cpp"
+#line 4755 "parser.tab.cpp"
     break;
 
   case 303: /* expr_or_star_expr: expr  */
-#line 1599 "parser.y"
+#line 1600 "parser.y"
                         {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4762 "parser.tab.cpp"
+#line 4763 "parser.tab.cpp"
     break;
 
   case 304: /* expr_or_star_expr: star_expr  */
-#line 1601 "parser.y"
+#line 1602 "parser.y"
               {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4770 "parser.tab.cpp"
+#line 4771 "parser.tab.cpp"
     break;
 
   case 305: /* close_comma_expr_or_star_expr: close_comma_expr_or_star_expr ',' expr_or_star_expr  */
-#line 1605 "parser.y"
+#line 1606 "parser.y"
                                                                                    {
     (yyval.ptr) = new node("nt", "CloseCommaExprOrStarExpr");
     ast.add_node((yyval.ptr));
@@ -4778,19 +4779,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4782 "parser.tab.cpp"
+#line 4783 "parser.tab.cpp"
     break;
 
   case 306: /* close_comma_expr_or_star_expr: %empty  */
-#line 1611 "parser.y"
+#line 1612 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4790 "parser.tab.cpp"
+#line 4791 "parser.tab.cpp"
     break;
 
   case 307: /* testlist: test close_comma_test cond_comma  */
-#line 1615 "parser.y"
+#line 1616 "parser.y"
                                           {
     (yyval.ptr) = new node("nt", "TestList");
     ast.add_node((yyval.ptr));
@@ -4798,11 +4799,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4802 "parser.tab.cpp"
+#line 4803 "parser.tab.cpp"
     break;
 
   case 308: /* close_comma_test: close_comma_test ',' test  */
-#line 1623 "parser.y"
+#line 1624 "parser.y"
                                             {
     (yyval.ptr) = new node("nt", "CloseCommaTest");
     ast.add_node((yyval.ptr));
@@ -4810,38 +4811,38 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4814 "parser.tab.cpp"
+#line 4815 "parser.tab.cpp"
     break;
 
   case 309: /* close_comma_test: %empty  */
-#line 1629 "parser.y"
+#line 1630 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4822 "parser.tab.cpp"
+#line 4823 "parser.tab.cpp"
     break;
 
   case 310: /* dictorsetmaker: testcoltest_or_starrexpr compfor_or_close_commatestcoltestorstarexpr_condcomma  */
-#line 1635 "parser.y"
+#line 1636 "parser.y"
                                                                                                 {
     (yyval.ptr) = new node("nt", "DictOrSetMaker");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4833 "parser.tab.cpp"
+#line 4834 "parser.tab.cpp"
     break;
 
   case 311: /* dictorsetmaker: some_non_terminal  */
-#line 1640 "parser.y"
+#line 1641 "parser.y"
                      {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4841 "parser.tab.cpp"
+#line 4842 "parser.tab.cpp"
     break;
 
   case 312: /* testcoltest_or_starrexpr: test ':' test  */
-#line 1644 "parser.y"
+#line 1645 "parser.y"
                                        {
     (yyval.ptr) = new node("nt", "TestColTestOrStarRexpr");
     ast.add_node((yyval.ptr));
@@ -4849,19 +4850,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4853 "parser.tab.cpp"
+#line 4854 "parser.tab.cpp"
     break;
 
   case 313: /* testcoltest_or_starrexpr: POW star_expr  */
-#line 1650 "parser.y"
+#line 1651 "parser.y"
                  {
     (yyval.ptr) = (yyvsp[-1].ptr);
 }
-#line 4861 "parser.tab.cpp"
+#line 4862 "parser.tab.cpp"
     break;
 
   case 314: /* close_commatestcoltestorstarrexpr: close_commatestcoltestorstarrexpr ',' testcoltest_or_starrexpr  */
-#line 1655 "parser.y"
+#line 1656 "parser.y"
                                                                                                    {
     (yyval.ptr) = new node("nt", "CloseCommaTestColTestOrStarRexpr");
     ast.add_node((yyval.ptr));
@@ -4869,49 +4870,49 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4873 "parser.tab.cpp"
+#line 4874 "parser.tab.cpp"
     break;
 
   case 315: /* close_commatestcoltestorstarrexpr: %empty  */
-#line 1661 "parser.y"
+#line 1662 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4881 "parser.tab.cpp"
+#line 4882 "parser.tab.cpp"
     break;
 
   case 316: /* compfor_or_close_commatestcoltestorstarexpr_condcomma: comp_for  */
-#line 1665 "parser.y"
+#line 1666 "parser.y"
                                                                 {
     (yyval.ptr) = (yyvsp[0].ptr);
 }
-#line 4889 "parser.tab.cpp"
+#line 4890 "parser.tab.cpp"
     break;
 
   case 317: /* compfor_or_close_commatestcoltestorstarexpr_condcomma: close_commatestcoltestorstarrexpr cond_comma  */
-#line 1667 "parser.y"
+#line 1668 "parser.y"
                                                 {
     (yyval.ptr) = new node("nt", "CompForOrCloseCommaTestColTestOrStarRexprCondComma");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4900 "parser.tab.cpp"
+#line 4901 "parser.tab.cpp"
     break;
 
   case 318: /* some_non_terminal: test_or_starexp comp_for  */
-#line 1674 "parser.y"
+#line 1675 "parser.y"
                                            {
     (yyval.ptr) = new node("nt", "SomeNonTerminal");
     ast.add_node((yyval.ptr));
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4911 "parser.tab.cpp"
+#line 4912 "parser.tab.cpp"
     break;
 
   case 319: /* some_non_terminal: test_or_starexp close_commatest_or_starexp cond_comma  */
-#line 1679 "parser.y"
+#line 1680 "parser.y"
                                                          {
     (yyval.ptr) = new node("nt", "SomeNonTerminal");
     ast.add_node((yyval.ptr));
@@ -4919,11 +4920,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4923 "parser.tab.cpp"
+#line 4924 "parser.tab.cpp"
     break;
 
   case 320: /* classdef: CLASS NAME cond_parentheses_arglist ':' suite  */
-#line 1687 "parser.y"
+#line 1688 "parser.y"
                                                        {
     (yyval.ptr) = new node("nt", "ClassDef");
     ast.add_node((yyval.ptr));
@@ -4933,11 +4934,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4937 "parser.tab.cpp"
+#line 4938 "parser.tab.cpp"
     break;
 
   case 321: /* cond_parentheses_arglist: '(' cond_arglist ')'  */
-#line 1697 "parser.y"
+#line 1698 "parser.y"
                                               {
     (yyval.ptr) = new node("nt", "CondParenthesesArgList");
     ast.add_node((yyval.ptr));
@@ -4945,19 +4946,19 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4949 "parser.tab.cpp"
+#line 4950 "parser.tab.cpp"
     break;
 
   case 322: /* cond_parentheses_arglist: %empty  */
-#line 1703 "parser.y"
+#line 1704 "parser.y"
     {
     (yyval.ptr) = NULL;
 }
-#line 4957 "parser.tab.cpp"
+#line 4958 "parser.tab.cpp"
     break;
 
   case 323: /* arglist: argument close_comma_argument cond_comma  */
-#line 1707 "parser.y"
+#line 1708 "parser.y"
                                                  {
     (yyval.ptr) = new node("nt", "ArgList");
     ast.add_node((yyval.ptr));
@@ -4965,11 +4966,11 @@ yyreduce:
     ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
     ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
 }
-#line 4969 "parser.tab.cpp"
+#line 4970 "parser.tab.cpp"
     break;
 
   case 324: /* close_comma_argument: close_comma_argument ',' argument  */
-#line 1715 "parser.y"
+#line 1716 "parser.y"
                                                         {
         (yyval.ptr) = new node("nt", "CloseCommaArgument");
         ast.add_node((yyval.ptr));
@@ -4977,38 +4978,38 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 4981 "parser.tab.cpp"
+#line 4982 "parser.tab.cpp"
     break;
 
   case 325: /* close_comma_argument: %empty  */
-#line 1721 "parser.y"
+#line 1722 "parser.y"
         {
         (yyval.ptr) = nullptr;
     }
-#line 4989 "parser.tab.cpp"
+#line 4990 "parser.tab.cpp"
     break;
 
   case 326: /* argument: test comp_for  */
-#line 1734 "parser.y"
+#line 1735 "parser.y"
                         {
         (yyval.ptr) = new node("nt", "argument");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));
     }
-#line 5000 "parser.tab.cpp"
+#line 5001 "parser.tab.cpp"
     break;
 
   case 327: /* argument: test  */
-#line 1740 "parser.y"
+#line 1741 "parser.y"
          {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 5008 "parser.tab.cpp"
+#line 5009 "parser.tab.cpp"
     break;
 
   case 328: /* argument: test '=' test  */
-#line 1743 "parser.y"
+#line 1744 "parser.y"
                   {
         (yyval.ptr) = new node("nt", "argument");
         ast.add_node((yyval.ptr));
@@ -5016,49 +5017,49 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr)); 
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5020 "parser.tab.cpp"
+#line 5021 "parser.tab.cpp"
     break;
 
   case 329: /* argument: POW test  */
-#line 1750 "parser.y"
+#line 1751 "parser.y"
              {
         (yyval.ptr) = new node("nt", "argument");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5031 "parser.tab.cpp"
+#line 5032 "parser.tab.cpp"
     break;
 
   case 330: /* argument: '*' test  */
-#line 1756 "parser.y"
+#line 1757 "parser.y"
              {
         (yyval.ptr) = new node("nt", "argument");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5042 "parser.tab.cpp"
+#line 5043 "parser.tab.cpp"
     break;
 
   case 331: /* comp_iter: comp_for  */
-#line 1763 "parser.y"
+#line 1764 "parser.y"
                     {
         (yyval.ptr) = (yyvsp[0].ptr);    
     }
-#line 5050 "parser.tab.cpp"
+#line 5051 "parser.tab.cpp"
     break;
 
   case 332: /* comp_iter: comp_if  */
-#line 1765 "parser.y"
+#line 1766 "parser.y"
                 {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 5058 "parser.tab.cpp"
+#line 5059 "parser.tab.cpp"
     break;
 
   case 333: /* comp_for: cond_async FOR exprlist IN or_test comp_iter  */
-#line 1768 "parser.y"
+#line 1769 "parser.y"
                                                        {
         (yyval.ptr) = new node("nt", "comp_for");
         ast.add_node((yyval.ptr));
@@ -5069,38 +5070,38 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5073 "parser.tab.cpp"
+#line 5074 "parser.tab.cpp"
     break;
 
   case 334: /* cond_async: ASYNC  */
-#line 1778 "parser.y"
+#line 1779 "parser.y"
                   {  
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 5081 "parser.tab.cpp"
+#line 5082 "parser.tab.cpp"
     break;
 
   case 335: /* cond_async: %empty  */
-#line 1780 "parser.y"
+#line 1781 "parser.y"
         {
         (yyval.ptr) = nullptr;
     }
-#line 5089 "parser.tab.cpp"
+#line 5090 "parser.tab.cpp"
     break;
 
   case 336: /* comp_if: IF test_nocond  */
-#line 1785 "parser.y"
+#line 1786 "parser.y"
                         {
         (yyval.ptr) = new node("nt", "comp_if");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5100 "parser.tab.cpp"
+#line 5101 "parser.tab.cpp"
     break;
 
   case 337: /* comp_if: IF test_nocond comp_iter  */
-#line 1790 "parser.y"
+#line 1791 "parser.y"
                                  {
         (yyval.ptr) = new node("nt", "comp_if");
         ast.add_node((yyval.ptr));
@@ -5108,49 +5109,49 @@ yyreduce:
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5112 "parser.tab.cpp"
+#line 5113 "parser.tab.cpp"
     break;
 
   case 338: /* yield_expr: YIELD yield_arg  */
-#line 1803 "parser.y"
+#line 1804 "parser.y"
                             {
         (yyval.ptr) = new node("nt", "YieldExpression");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5123 "parser.tab.cpp"
+#line 5124 "parser.tab.cpp"
     break;
 
   case 339: /* yield_expr: YIELD  */
-#line 1809 "parser.y"
+#line 1810 "parser.y"
             {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 5131 "parser.tab.cpp"
+#line 5132 "parser.tab.cpp"
     break;
 
   case 340: /* yield_arg: FROM test  */
-#line 1813 "parser.y"
+#line 1814 "parser.y"
                      {
         (yyval.ptr) = new node("nt", "YieldArguments");
         ast.add_node((yyval.ptr));
         ast.add_edge((yyval.ptr), (yyvsp[-1].ptr));   
         ast.add_edge((yyval.ptr), (yyvsp[0].ptr));   
     }
-#line 5142 "parser.tab.cpp"
+#line 5143 "parser.tab.cpp"
     break;
 
   case 341: /* yield_arg: testlist  */
-#line 1819 "parser.y"
+#line 1820 "parser.y"
                {
         (yyval.ptr) = (yyvsp[0].ptr);
     }
-#line 5150 "parser.tab.cpp"
+#line 5151 "parser.tab.cpp"
     break;
 
 
-#line 5154 "parser.tab.cpp"
+#line 5155 "parser.tab.cpp"
 
       default: break;
     }
@@ -5343,7 +5344,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1823 "parser.y"
+#line 1824 "parser.y"
 
 
 

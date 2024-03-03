@@ -1,207 +1,1112 @@
 digraph AST{
 	1[label="file_input"]
-	2[label="IfStatement"]
-	3[color="purple" shape="rectangle"]
-	3[label="KEYWORD\n( if )"]
-	4[label="AndTest"]
-	5[label="Comparison"]
-	6[color="red" shape="rectangle"]
-	6[label="NUMBER\n( 1900 )"]
-	7[label="CloseCompOpExpr"]
-	8[label="CloseCompOpExpr"]
-	9[color="blue" shape="rectangle"]
-	9[label="DELIMITER\n( < )"]
-	10[color="green" shape="rectangle"]
-	10[label="IDENTIFIER\n( year )"]
-	11[color="blue" shape="rectangle"]
-	11[label="DELIMITER\n( < )"]
-	12[color="red" shape="rectangle"]
-	12[label="NUMBER\n( 2100 )"]
-	13[label="CloseAndNotTest"]
-	14[label="CloseAndNotTest"]
-	15[label="CloseAndNotTest"]
-	16[label="CloseAndNotTest"]
-	17[label="CloseAndNotTest"]
-	18[label="CloseAndNotTest"]
-	19[color="purple" shape="rectangle"]
-	19[label="KEYWORD\n( and )"]
-	20[label="Comparison"]
-	21[color="red" shape="rectangle"]
-	21[label="NUMBER\n( 1 )"]
-	22[label="CloseCompOpExpr"]
-	23[label="CloseCompOpExpr"]
-	24[color="VIOLET" shape="rectangle"]
-	24[label="OPERATOR\n( <= )"]
-	25[color="green" shape="rectangle"]
-	25[label="IDENTIFIER\n( month )"]
-	26[color="VIOLET" shape="rectangle"]
-	26[label="OPERATOR\n( <= )"]
-	27[color="red" shape="rectangle"]
-	27[label="NUMBER\n( 12 )"]
-	28[color="purple" shape="rectangle"]
-	28[label="KEYWORD\n( and )"]
-	29[label="Comparison"]
-	30[color="green" shape="rectangle"]
-	30[label="IDENTIFIER\n( x )"]
-	31[label="CloseCompOpExpr"]
-	32[color="VIOLET" shape="rectangle"]
-	32[label="OPERATOR\n( == )"]
-	33[color="yellow" shape="rectangle"]
-	33[label="\"huihuihui\""]
-	34[color="purple" shape="rectangle"]
-	34[label="KEYWORD\n( and )"]
-	35[label="Comparison"]
-	36[color="red" shape="rectangle"]
-	36[label="NUMBER\n( 1 )"]
-	37[label="CloseCompOpExpr"]
-	38[label="CloseCompOpExpr"]
-	39[color="VIOLET" shape="rectangle"]
-	39[label="OPERATOR\n( <= )"]
-	40[color="green" shape="rectangle"]
-	40[label="IDENTIFIER\n( day )"]
-	41[color="VIOLET" shape="rectangle"]
-	41[label="OPERATOR\n( <= )"]
+	2[label="nstatement"]
+	3[label="nstatement"]
+	4[label="nstatement"]
+	5[label="nstatement"]
+	6[label="function definition"]
+	7[color="purple" shape="rectangle"]
+	7[label="KEYWORD\n( def )"]
+	8[color="green" shape="rectangle"]
+	8[label="IDENTIFIER\n( build_lps )"]
+	9[label="parameters"]
+	10[color="blue" shape="rectangle"]
+	10[label="DELIMITER\n( ( )"]
+	11[color="green" shape="rectangle"]
+	11[label="IDENTIFIER\n( pattern )"]
+	12[color="blue" shape="rectangle"]
+	12[label="DELIMITER\n( ) )"]
+	13[color="blue" shape="rectangle"]
+	13[label="DELIMITER\n( : )"]
+	14[label="Suite"]
+	15[label="NEWLINE\n( NEWLINE )"]
+	16[color="yellow" shape="rectangle"]
+	16[label="INDENT"]
+	17[label="PlusStmt"]
+	18[label="PlusStmt"]
+	19[label="PlusStmt"]
+	20[label="PlusStmt"]
+	21[label="PlusStmt"]
+	22[label="simple_stmt"]
+	23[label="expr_statement"]
+	24[color="green" shape="rectangle"]
+	24[label="IDENTIFIER\n( m )"]
+	25[label="close_yield_or_test_star"]
+	26[color="blue" shape="rectangle"]
+	26[label="DELIMITER\n( = )"]
+	27[label="AtomExpr"]
+	28[color="green" shape="rectangle"]
+	28[label="IDENTIFIER\n( len )"]
+	29[label="Trailer"]
+	30[color="blue" shape="rectangle"]
+	30[label="DELIMITER\n( ( )"]
+	31[color="green" shape="rectangle"]
+	31[label="IDENTIFIER\n( pattern )"]
+	32[color="blue" shape="rectangle"]
+	32[label="DELIMITER\n( ) )"]
+	33[label="NEWLINE\n( NEWLINE )"]
+	34[label="simple_stmt"]
+	35[label="expr_statement"]
+	36[color="green" shape="rectangle"]
+	36[label="IDENTIFIER\n( lps )"]
+	37[label="close_yield_or_test_star"]
+	38[color="blue" shape="rectangle"]
+	38[label="DELIMITER\n( = )"]
+	39[label="Term"]
+	40[label="Atom"]
+	41[color="blue" shape="rectangle"]
+	41[label="DELIMITER\n( [ )"]
 	42[color="red" shape="rectangle"]
-	42[label="NUMBER\n( 31 )"]
-	43[color="purple" shape="rectangle"]
-	43[label="KEYWORD\n( and )"]
-	44[label="Comparison"]
-	45[color="red" shape="rectangle"]
-	45[label="NUMBER\n( 0 )"]
-	46[label="CloseCompOpExpr"]
-	47[label="CloseCompOpExpr"]
-	48[color="VIOLET" shape="rectangle"]
-	48[label="OPERATOR\n( <= )"]
-	49[color="green" shape="rectangle"]
-	49[label="IDENTIFIER\n( hour )"]
-	50[color="blue" shape="rectangle"]
-	50[label="DELIMITER\n( < )"]
-	51[color="red" shape="rectangle"]
-	51[label="NUMBER\n( 24 )"]
-	52[color="purple" shape="rectangle"]
-	52[label="KEYWORD\n( and )"]
-	53[label="Comparison"]
-	54[color="red" shape="rectangle"]
-	54[label="NUMBER\n( 0 )"]
-	55[label="CloseCompOpExpr"]
-	56[label="CloseCompOpExpr"]
-	57[color="VIOLET" shape="rectangle"]
-	57[label="OPERATOR\n( <= )"]
-	58[color="green" shape="rectangle"]
-	58[label="IDENTIFIER\n( minute )"]
+	42[label="NUMBER\n( 0 )"]
+	43[color="blue" shape="rectangle"]
+	43[label="DELIMITER\n( ] )"]
+	44[label="CloseMulDivOpsFactor"]
+	45[color="blue" shape="rectangle"]
+	45[label="DELIMITER\n( * )"]
+	46[color="green" shape="rectangle"]
+	46[label="IDENTIFIER\n( m )"]
+	47[label="NEWLINE\n( NEWLINE )"]
+	48[label="simple_stmt"]
+	49[label="expr_statement"]
+	50[color="green" shape="rectangle"]
+	50[label="IDENTIFIER\n( length )"]
+	51[label="close_yield_or_test_star"]
+	52[color="blue" shape="rectangle"]
+	52[label="DELIMITER\n( = )"]
+	53[color="red" shape="rectangle"]
+	53[label="NUMBER\n( 0 )"]
+	54[label="NEWLINE\n( NEWLINE )"]
+	55[label="simple_stmt"]
+	56[label="expr_statement"]
+	57[color="green" shape="rectangle"]
+	57[label="IDENTIFIER\n( i )"]
+	58[label="close_yield_or_test_star"]
 	59[color="blue" shape="rectangle"]
-	59[label="DELIMITER\n( < )"]
+	59[label="DELIMITER\n( = )"]
 	60[color="red" shape="rectangle"]
-	60[label="NUMBER\n( 60 )"]
-	61[color="purple" shape="rectangle"]
-	61[label="KEYWORD\n( and )"]
-	62[label="Comparison"]
-	63[color="red" shape="rectangle"]
-	63[label="NUMBER\n( 0 )"]
-	64[label="CloseCompOpExpr"]
-	65[label="CloseCompOpExpr"]
-	66[color="VIOLET" shape="rectangle"]
-	66[label="OPERATOR\n( <= )"]
-	67[color="green" shape="rectangle"]
-	67[label="IDENTIFIER\n( second )"]
-	68[color="blue" shape="rectangle"]
-	68[label="DELIMITER\n( < )"]
-	69[color="red" shape="rectangle"]
-	69[label="NUMBER\n( 60 )"]
-	70[color="blue" shape="rectangle"]
-	70[label="DELIMITER\n( : )"]
-	71[label="Suite"]
-	72[label="NEWLINE\n( NEWLINE )"]
-	73[color="yellow" shape="rectangle"]
-	73[label="INDENT"]
-	74[label="simple_stmt"]
-	75[label="ReturnStatement"]
-	76[color="purple" shape="rectangle"]
-	76[label="KEYWORD\n( return )"]
-	77[color="red" shape="rectangle"]
-	77[label="NUMBER\n( 1 )"]
-	78[label="NEWLINE\n( NEWLINE )"]
-	79[color="yellow" shape="rectangle"]
-	79[label="DEDENT"]
-	80[color="yellow" shape="rectangle"]
-	80[label="ENDMARKER"]
+	60[label="NUMBER\n( 1 )"]
+	61[label="NEWLINE\n( NEWLINE )"]
+	62[label="WhileStatement"]
+	63[color="purple" shape="rectangle"]
+	63[label="KEYWORD\n( while )"]
+	64[label="Comparison"]
+	65[color="green" shape="rectangle"]
+	65[label="IDENTIFIER\n( i )"]
+	66[label="CloseCompOpExpr"]
+	67[color="blue" shape="rectangle"]
+	67[label="DELIMITER\n( < )"]
+	68[color="green" shape="rectangle"]
+	68[label="IDENTIFIER\n( m )"]
+	69[color="blue" shape="rectangle"]
+	69[label="DELIMITER\n( : )"]
+	70[label="Suite"]
+	71[label="NEWLINE\n( NEWLINE )"]
+	72[color="yellow" shape="rectangle"]
+	72[label="INDENT"]
+	73[label="IfStatement"]
+	74[color="purple" shape="rectangle"]
+	74[label="KEYWORD\n( if )"]
+	75[label="Comparison"]
+	76[label="AtomExpr"]
+	77[color="green" shape="rectangle"]
+	77[label="IDENTIFIER\n( pattern )"]
+	78[label="Trailer"]
+	79[color="blue" shape="rectangle"]
+	79[label="DELIMITER\n( [ )"]
+	80[color="green" shape="rectangle"]
+	80[label="IDENTIFIER\n( i )"]
+	81[color="blue" shape="rectangle"]
+	81[label="DELIMITER\n( ] )"]
+	82[label="CloseCompOpExpr"]
+	83[color="VIOLET" shape="rectangle"]
+	83[label="OPERATOR\n( == )"]
+	84[label="AtomExpr"]
+	85[color="green" shape="rectangle"]
+	85[label="IDENTIFIER\n( pattern )"]
+	86[label="Trailer"]
+	87[color="blue" shape="rectangle"]
+	87[label="DELIMITER\n( [ )"]
+	88[color="green" shape="rectangle"]
+	88[label="IDENTIFIER\n( length )"]
+	89[color="blue" shape="rectangle"]
+	89[label="DELIMITER\n( ] )"]
+	90[color="blue" shape="rectangle"]
+	90[label="DELIMITER\n( : )"]
+	91[label="Suite"]
+	92[label="NEWLINE\n( NEWLINE )"]
+	93[color="yellow" shape="rectangle"]
+	93[label="INDENT"]
+	94[label="PlusStmt"]
+	95[label="PlusStmt"]
+	96[label="simple_stmt"]
+	97[label="expr_statement"]
+	98[color="green" shape="rectangle"]
+	98[label="IDENTIFIER\n( length )"]
+	99[color="VIOLET" shape="rectangle"]
+	99[label="OPERATOR\n( += )"]
+	100[label="NEWLINE\n( NEWLINE )"]
+	101[label="simple_stmt"]
+	102[label="expr_statement"]
+	103[label="AtomExpr"]
+	104[color="green" shape="rectangle"]
+	104[label="IDENTIFIER\n( lps )"]
+	105[label="Trailer"]
+	106[color="blue" shape="rectangle"]
+	106[label="DELIMITER\n( [ )"]
+	107[color="green" shape="rectangle"]
+	107[label="IDENTIFIER\n( i )"]
+	108[color="blue" shape="rectangle"]
+	108[label="DELIMITER\n( ] )"]
+	109[label="close_yield_or_test_star"]
+	110[color="blue" shape="rectangle"]
+	110[label="DELIMITER\n( = )"]
+	111[color="green" shape="rectangle"]
+	111[label="IDENTIFIER\n( length )"]
+	112[label="NEWLINE\n( NEWLINE )"]
+	113[label="simple_stmt"]
+	114[label="expr_statement"]
+	115[color="green" shape="rectangle"]
+	115[label="IDENTIFIER\n( i )"]
+	116[color="VIOLET" shape="rectangle"]
+	116[label="OPERATOR\n( += )"]
+	117[label="NEWLINE\n( NEWLINE )"]
+	118[color="yellow" shape="rectangle"]
+	118[label="DEDENT"]
+	119[label="ElseColonSuite"]
+	120[color="purple" shape="rectangle"]
+	120[label="KEYWORD\n( else )"]
+	121[color="blue" shape="rectangle"]
+	121[label="DELIMITER\n( : )"]
+	122[label="Suite"]
+	123[label="NEWLINE\n( NEWLINE )"]
+	124[color="yellow" shape="rectangle"]
+	124[label="INDENT"]
+	125[label="IfStatement"]
+	126[color="purple" shape="rectangle"]
+	126[label="KEYWORD\n( if )"]
+	127[label="Comparison"]
+	128[color="green" shape="rectangle"]
+	128[label="IDENTIFIER\n( length )"]
+	129[label="CloseCompOpExpr"]
+	130[color="VIOLET" shape="rectangle"]
+	130[label="OPERATOR\n( != )"]
+	131[color="red" shape="rectangle"]
+	131[label="NUMBER\n( 0 )"]
+	132[color="blue" shape="rectangle"]
+	132[label="DELIMITER\n( : )"]
+	133[label="Suite"]
+	134[label="NEWLINE\n( NEWLINE )"]
+	135[color="yellow" shape="rectangle"]
+	135[label="INDENT"]
+	136[label="simple_stmt"]
+	137[label="expr_statement"]
+	138[color="green" shape="rectangle"]
+	138[label="IDENTIFIER\n( length )"]
+	139[label="close_yield_or_test_star"]
+	140[color="blue" shape="rectangle"]
+	140[label="DELIMITER\n( = )"]
+	141[label="AtomExpr"]
+	142[color="green" shape="rectangle"]
+	142[label="IDENTIFIER\n( lps )"]
+	143[label="Trailer"]
+	144[color="blue" shape="rectangle"]
+	144[label="DELIMITER\n( [ )"]
+	145[label="ArithExpr"]
+	146[color="green" shape="rectangle"]
+	146[label="IDENTIFIER\n( length )"]
+	147[label="ClosePlusMinusTerm"]
+	148[color="blue" shape="rectangle"]
+	148[label="DELIMITER\n( - )"]
+	149[color="red" shape="rectangle"]
+	149[label="NUMBER\n( 1 )"]
+	150[color="blue" shape="rectangle"]
+	150[label="DELIMITER\n( ] )"]
+	151[label="NEWLINE\n( NEWLINE )"]
+	152[color="yellow" shape="rectangle"]
+	152[label="DEDENT"]
+	153[label="ElseColonSuite"]
+	154[color="purple" shape="rectangle"]
+	154[label="KEYWORD\n( else )"]
+	155[color="blue" shape="rectangle"]
+	155[label="DELIMITER\n( : )"]
+	156[label="Suite"]
+	157[label="NEWLINE\n( NEWLINE )"]
+	158[color="yellow" shape="rectangle"]
+	158[label="INDENT"]
+	159[label="PlusStmt"]
+	160[label="simple_stmt"]
+	161[label="expr_statement"]
+	162[label="AtomExpr"]
+	163[color="green" shape="rectangle"]
+	163[label="IDENTIFIER\n( lps )"]
+	164[label="Trailer"]
+	165[color="blue" shape="rectangle"]
+	165[label="DELIMITER\n( [ )"]
+	166[color="green" shape="rectangle"]
+	166[label="IDENTIFIER\n( i )"]
+	167[color="blue" shape="rectangle"]
+	167[label="DELIMITER\n( ] )"]
+	168[label="close_yield_or_test_star"]
+	169[color="blue" shape="rectangle"]
+	169[label="DELIMITER\n( = )"]
+	170[color="red" shape="rectangle"]
+	170[label="NUMBER\n( 0 )"]
+	171[label="NEWLINE\n( NEWLINE )"]
+	172[label="simple_stmt"]
+	173[label="expr_statement"]
+	174[color="green" shape="rectangle"]
+	174[label="IDENTIFIER\n( i )"]
+	175[color="VIOLET" shape="rectangle"]
+	175[label="OPERATOR\n( += )"]
+	176[label="NEWLINE\n( NEWLINE )"]
+	177[color="yellow" shape="rectangle"]
+	177[label="DEDENT"]
+	178[color="yellow" shape="rectangle"]
+	178[label="DEDENT"]
+	179[color="yellow" shape="rectangle"]
+	179[label="DEDENT"]
+	180[label="simple_stmt"]
+	181[label="ReturnStatement"]
+	182[color="purple" shape="rectangle"]
+	182[label="KEYWORD\n( return )"]
+	183[color="green" shape="rectangle"]
+	183[label="IDENTIFIER\n( lps )"]
+	184[label="NEWLINE\n( NEWLINE )"]
+	185[color="yellow" shape="rectangle"]
+	185[label="DEDENT"]
+	186[label="function definition"]
+	187[color="purple" shape="rectangle"]
+	187[label="KEYWORD\n( def )"]
+	188[color="green" shape="rectangle"]
+	188[label="IDENTIFIER\n( kmp_search )"]
+	189[label="parameters"]
+	190[color="blue" shape="rectangle"]
+	190[label="DELIMITER\n( ( )"]
+	191[label="typedargslist"]
+	192[color="green" shape="rectangle"]
+	192[label="IDENTIFIER\n( text )"]
+	193[label="close_comma_tfpdef_condeqtest"]
+	194[color="blue" shape="rectangle"]
+	194[label="DELIMITER\n( , )"]
+	195[color="green" shape="rectangle"]
+	195[label="IDENTIFIER\n( pattern )"]
+	196[color="blue" shape="rectangle"]
+	196[label="DELIMITER\n( ) )"]
+	197[color="blue" shape="rectangle"]
+	197[label="DELIMITER\n( : )"]
+	198[label="Suite"]
+	199[label="NEWLINE\n( NEWLINE )"]
+	200[color="yellow" shape="rectangle"]
+	200[label="INDENT"]
+	201[label="PlusStmt"]
+	202[label="PlusStmt"]
+	203[label="PlusStmt"]
+	204[label="PlusStmt"]
+	205[label="simple_stmt"]
+	206[label="expr_statement"]
+	207[color="green" shape="rectangle"]
+	207[label="IDENTIFIER\n( n )"]
+	208[label="close_yield_or_test_star"]
+	209[color="blue" shape="rectangle"]
+	209[label="DELIMITER\n( = )"]
+	210[label="AtomExpr"]
+	211[color="green" shape="rectangle"]
+	211[label="IDENTIFIER\n( len )"]
+	212[label="Trailer"]
+	213[color="blue" shape="rectangle"]
+	213[label="DELIMITER\n( ( )"]
+	214[color="green" shape="rectangle"]
+	214[label="IDENTIFIER\n( text )"]
+	215[color="blue" shape="rectangle"]
+	215[label="DELIMITER\n( ) )"]
+	216[label="NEWLINE\n( NEWLINE )"]
+	217[label="simple_stmt"]
+	218[label="expr_statement"]
+	219[color="green" shape="rectangle"]
+	219[label="IDENTIFIER\n( m )"]
+	220[label="close_yield_or_test_star"]
+	221[color="blue" shape="rectangle"]
+	221[label="DELIMITER\n( = )"]
+	222[label="AtomExpr"]
+	223[color="green" shape="rectangle"]
+	223[label="IDENTIFIER\n( len )"]
+	224[label="Trailer"]
+	225[color="blue" shape="rectangle"]
+	225[label="DELIMITER\n( ( )"]
+	226[color="green" shape="rectangle"]
+	226[label="IDENTIFIER\n( pattern )"]
+	227[color="blue" shape="rectangle"]
+	227[label="DELIMITER\n( ) )"]
+	228[label="NEWLINE\n( NEWLINE )"]
+	229[label="simple_stmt"]
+	230[label="expr_statement"]
+	231[color="green" shape="rectangle"]
+	231[label="IDENTIFIER\n( lps )"]
+	232[label="close_yield_or_test_star"]
+	233[color="blue" shape="rectangle"]
+	233[label="DELIMITER\n( = )"]
+	234[label="AtomExpr"]
+	235[color="green" shape="rectangle"]
+	235[label="IDENTIFIER\n( build_lps )"]
+	236[label="Trailer"]
+	237[color="blue" shape="rectangle"]
+	237[label="DELIMITER\n( ( )"]
+	238[color="green" shape="rectangle"]
+	238[label="IDENTIFIER\n( pattern )"]
+	239[color="blue" shape="rectangle"]
+	239[label="DELIMITER\n( ) )"]
+	240[label="NEWLINE\n( NEWLINE )"]
+	241[label="simple_stmt"]
+	242[label="expr_statement"]
+	243[label="testlist star expression"]
+	244[color="green" shape="rectangle"]
+	244[label="IDENTIFIER\n( i )"]
+	245[label="close_commatest_or_starexp"]
+	246[color="blue" shape="rectangle"]
+	246[label="DELIMITER\n( , )"]
+	247[color="green" shape="rectangle"]
+	247[label="IDENTIFIER\n( j )"]
+	248[label="close_yield_or_test_star"]
+	249[color="blue" shape="rectangle"]
+	249[label="DELIMITER\n( = )"]
+	250[label="testlist star expression"]
+	251[color="red" shape="rectangle"]
+	251[label="NUMBER\n( 0 )"]
+	252[label="close_commatest_or_starexp"]
+	253[color="blue" shape="rectangle"]
+	253[label="DELIMITER\n( , )"]
+	254[color="red" shape="rectangle"]
+	254[label="NUMBER\n( 0 )"]
+	255[label="NEWLINE\n( NEWLINE )"]
+	256[label="WhileStatement"]
+	257[color="purple" shape="rectangle"]
+	257[label="KEYWORD\n( while )"]
+	258[label="Comparison"]
+	259[color="green" shape="rectangle"]
+	259[label="IDENTIFIER\n( i )"]
+	260[label="CloseCompOpExpr"]
+	261[color="blue" shape="rectangle"]
+	261[label="DELIMITER\n( < )"]
+	262[color="green" shape="rectangle"]
+	262[label="IDENTIFIER\n( n )"]
+	263[color="blue" shape="rectangle"]
+	263[label="DELIMITER\n( : )"]
+	264[label="Suite"]
+	265[label="NEWLINE\n( NEWLINE )"]
+	266[color="yellow" shape="rectangle"]
+	266[label="INDENT"]
+	267[label="PlusStmt"]
+	268[label="IfStatement"]
+	269[color="purple" shape="rectangle"]
+	269[label="KEYWORD\n( if )"]
+	270[label="Comparison"]
+	271[label="AtomExpr"]
+	272[color="green" shape="rectangle"]
+	272[label="IDENTIFIER\n( pattern )"]
+	273[label="Trailer"]
+	274[color="blue" shape="rectangle"]
+	274[label="DELIMITER\n( [ )"]
+	275[color="green" shape="rectangle"]
+	275[label="IDENTIFIER\n( j )"]
+	276[color="blue" shape="rectangle"]
+	276[label="DELIMITER\n( ] )"]
+	277[label="CloseCompOpExpr"]
+	278[color="VIOLET" shape="rectangle"]
+	278[label="OPERATOR\n( == )"]
+	279[label="AtomExpr"]
+	280[color="green" shape="rectangle"]
+	280[label="IDENTIFIER\n( text )"]
+	281[label="Trailer"]
+	282[color="blue" shape="rectangle"]
+	282[label="DELIMITER\n( [ )"]
+	283[color="green" shape="rectangle"]
+	283[label="IDENTIFIER\n( i )"]
+	284[color="blue" shape="rectangle"]
+	284[label="DELIMITER\n( ] )"]
+	285[color="blue" shape="rectangle"]
+	285[label="DELIMITER\n( : )"]
+	286[label="Suite"]
+	287[label="NEWLINE\n( NEWLINE )"]
+	288[color="yellow" shape="rectangle"]
+	288[label="INDENT"]
+	289[label="PlusStmt"]
+	290[label="simple_stmt"]
+	291[label="expr_statement"]
+	292[color="green" shape="rectangle"]
+	292[label="IDENTIFIER\n( i )"]
+	293[color="VIOLET" shape="rectangle"]
+	293[label="OPERATOR\n( += )"]
+	294[label="NEWLINE\n( NEWLINE )"]
+	295[label="simple_stmt"]
+	296[label="expr_statement"]
+	297[color="green" shape="rectangle"]
+	297[label="IDENTIFIER\n( j )"]
+	298[color="VIOLET" shape="rectangle"]
+	298[label="OPERATOR\n( += )"]
+	299[label="NEWLINE\n( NEWLINE )"]
+	300[color="yellow" shape="rectangle"]
+	300[label="DEDENT"]
+	301[label="IfStatement"]
+	302[color="purple" shape="rectangle"]
+	302[label="KEYWORD\n( if )"]
+	303[label="Comparison"]
+	304[color="green" shape="rectangle"]
+	304[label="IDENTIFIER\n( j )"]
+	305[label="CloseCompOpExpr"]
+	306[color="VIOLET" shape="rectangle"]
+	306[label="OPERATOR\n( == )"]
+	307[color="green" shape="rectangle"]
+	307[label="IDENTIFIER\n( m )"]
+	308[color="blue" shape="rectangle"]
+	308[label="DELIMITER\n( : )"]
+	309[label="Suite"]
+	310[label="NEWLINE\n( NEWLINE )"]
+	311[color="yellow" shape="rectangle"]
+	311[label="INDENT"]
+	312[label="PlusStmt"]
+	313[label="simple_stmt"]
+	314[label="AtomExpr"]
+	315[color="green" shape="rectangle"]
+	315[label="IDENTIFIER\n( print )"]
+	316[label="Trailer"]
+	317[color="blue" shape="rectangle"]
+	317[label="DELIMITER\n( ( )"]
+	318[label="ArgList"]
+	319[color="yellow" shape="rectangle"]
+	319[label="\"Pattern found at index:\""]
+	320[label="CloseCommaArgument"]
+	321[color="blue" shape="rectangle"]
+	321[label="DELIMITER\n( , )"]
+	322[label="ArithExpr"]
+	323[color="green" shape="rectangle"]
+	323[label="IDENTIFIER\n( i )"]
+	324[label="ClosePlusMinusTerm"]
+	325[color="blue" shape="rectangle"]
+	325[label="DELIMITER\n( - )"]
+	326[color="green" shape="rectangle"]
+	326[label="IDENTIFIER\n( j )"]
+	327[color="blue" shape="rectangle"]
+	327[label="DELIMITER\n( ) )"]
+	328[label="NEWLINE\n( NEWLINE )"]
+	329[label="simple_stmt"]
+	330[label="expr_statement"]
+	331[color="green" shape="rectangle"]
+	331[label="IDENTIFIER\n( j )"]
+	332[label="close_yield_or_test_star"]
+	333[color="blue" shape="rectangle"]
+	333[label="DELIMITER\n( = )"]
+	334[label="AtomExpr"]
+	335[color="green" shape="rectangle"]
+	335[label="IDENTIFIER\n( lps )"]
+	336[label="Trailer"]
+	337[color="blue" shape="rectangle"]
+	337[label="DELIMITER\n( [ )"]
+	338[label="ArithExpr"]
+	339[color="green" shape="rectangle"]
+	339[label="IDENTIFIER\n( j )"]
+	340[label="ClosePlusMinusTerm"]
+	341[color="blue" shape="rectangle"]
+	341[label="DELIMITER\n( - )"]
+	342[color="red" shape="rectangle"]
+	342[label="NUMBER\n( 1 )"]
+	343[color="blue" shape="rectangle"]
+	343[label="DELIMITER\n( ] )"]
+	344[label="NEWLINE\n( NEWLINE )"]
+	345[color="yellow" shape="rectangle"]
+	345[label="DEDENT"]
+	346[label="CloseElifTestSuite"]
+	347[color="purple" shape="rectangle"]
+	347[label="KEYWORD\n( elif )"]
+	348[label="AndTest"]
+	349[label="Comparison"]
+	350[color="green" shape="rectangle"]
+	350[label="IDENTIFIER\n( i )"]
+	351[label="CloseCompOpExpr"]
+	352[color="blue" shape="rectangle"]
+	352[label="DELIMITER\n( < )"]
+	353[color="green" shape="rectangle"]
+	353[label="IDENTIFIER\n( n )"]
+	354[label="CloseAndNotTest"]
+	355[color="purple" shape="rectangle"]
+	355[label="KEYWORD\n( and )"]
+	356[label="Comparison"]
+	357[label="AtomExpr"]
+	358[color="green" shape="rectangle"]
+	358[label="IDENTIFIER\n( pattern )"]
+	359[label="Trailer"]
+	360[color="blue" shape="rectangle"]
+	360[label="DELIMITER\n( [ )"]
+	361[color="green" shape="rectangle"]
+	361[label="IDENTIFIER\n( j )"]
+	362[color="blue" shape="rectangle"]
+	362[label="DELIMITER\n( ] )"]
+	363[label="CloseCompOpExpr"]
+	364[color="VIOLET" shape="rectangle"]
+	364[label="OPERATOR\n( != )"]
+	365[label="AtomExpr"]
+	366[color="green" shape="rectangle"]
+	366[label="IDENTIFIER\n( text )"]
+	367[label="Trailer"]
+	368[color="blue" shape="rectangle"]
+	368[label="DELIMITER\n( [ )"]
+	369[color="green" shape="rectangle"]
+	369[label="IDENTIFIER\n( i )"]
+	370[color="blue" shape="rectangle"]
+	370[label="DELIMITER\n( ] )"]
+	371[color="blue" shape="rectangle"]
+	371[label="DELIMITER\n( : )"]
+	372[label="Suite"]
+	373[label="NEWLINE\n( NEWLINE )"]
+	374[color="yellow" shape="rectangle"]
+	374[label="INDENT"]
+	375[label="IfStatement"]
+	376[color="purple" shape="rectangle"]
+	376[label="KEYWORD\n( if )"]
+	377[label="Comparison"]
+	378[color="green" shape="rectangle"]
+	378[label="IDENTIFIER\n( j )"]
+	379[label="CloseCompOpExpr"]
+	380[color="VIOLET" shape="rectangle"]
+	380[label="OPERATOR\n( != )"]
+	381[color="red" shape="rectangle"]
+	381[label="NUMBER\n( 0 )"]
+	382[color="blue" shape="rectangle"]
+	382[label="DELIMITER\n( : )"]
+	383[label="Suite"]
+	384[label="NEWLINE\n( NEWLINE )"]
+	385[color="yellow" shape="rectangle"]
+	385[label="INDENT"]
+	386[label="simple_stmt"]
+	387[label="expr_statement"]
+	388[color="green" shape="rectangle"]
+	388[label="IDENTIFIER\n( j )"]
+	389[label="close_yield_or_test_star"]
+	390[color="blue" shape="rectangle"]
+	390[label="DELIMITER\n( = )"]
+	391[label="AtomExpr"]
+	392[color="green" shape="rectangle"]
+	392[label="IDENTIFIER\n( lps )"]
+	393[label="Trailer"]
+	394[color="blue" shape="rectangle"]
+	394[label="DELIMITER\n( [ )"]
+	395[label="ArithExpr"]
+	396[color="green" shape="rectangle"]
+	396[label="IDENTIFIER\n( j )"]
+	397[label="ClosePlusMinusTerm"]
+	398[color="blue" shape="rectangle"]
+	398[label="DELIMITER\n( - )"]
+	399[color="red" shape="rectangle"]
+	399[label="NUMBER\n( 1 )"]
+	400[color="blue" shape="rectangle"]
+	400[label="DELIMITER\n( ] )"]
+	401[label="NEWLINE\n( NEWLINE )"]
+	402[color="yellow" shape="rectangle"]
+	402[label="DEDENT"]
+	403[label="ElseColonSuite"]
+	404[color="purple" shape="rectangle"]
+	404[label="KEYWORD\n( else )"]
+	405[color="blue" shape="rectangle"]
+	405[label="DELIMITER\n( : )"]
+	406[label="Suite"]
+	407[label="NEWLINE\n( NEWLINE )"]
+	408[color="yellow" shape="rectangle"]
+	408[label="INDENT"]
+	409[label="simple_stmt"]
+	410[label="expr_statement"]
+	411[color="green" shape="rectangle"]
+	411[label="IDENTIFIER\n( i )"]
+	412[color="VIOLET" shape="rectangle"]
+	412[label="OPERATOR\n( += )"]
+	413[label="NEWLINE\n( NEWLINE )"]
+	414[color="yellow" shape="rectangle"]
+	414[label="DEDENT"]
+	415[color="yellow" shape="rectangle"]
+	415[label="DEDENT"]
+	416[color="yellow" shape="rectangle"]
+	416[label="DEDENT"]
+	417[color="yellow" shape="rectangle"]
+	417[label="DEDENT"]
+	418[label="simple_stmt"]
+	419[label="expr_statement"]
+	420[color="green" shape="rectangle"]
+	420[label="IDENTIFIER\n( text )"]
+	421[label="close_yield_or_test_star"]
+	422[color="blue" shape="rectangle"]
+	422[label="DELIMITER\n( = )"]
+	423[color="yellow" shape="rectangle"]
+	423[label="\"ABABDABACDABABCABAB\""]
+	424[label="NEWLINE\n( NEWLINE )"]
+	425[label="simple_stmt"]
+	426[label="expr_statement"]
+	427[color="green" shape="rectangle"]
+	427[label="IDENTIFIER\n( pattern )"]
+	428[label="close_yield_or_test_star"]
+	429[color="blue" shape="rectangle"]
+	429[label="DELIMITER\n( = )"]
+	430[color="yellow" shape="rectangle"]
+	430[label="\"ABABCABAB\""]
+	431[label="NEWLINE\n( NEWLINE )"]
+	432[label="simple_stmt"]
+	433[label="AtomExpr"]
+	434[color="green" shape="rectangle"]
+	434[label="IDENTIFIER\n( kmp_search )"]
+	435[label="Trailer"]
+	436[color="blue" shape="rectangle"]
+	436[label="DELIMITER\n( ( )"]
+	437[label="ArgList"]
+	438[color="green" shape="rectangle"]
+	438[label="IDENTIFIER\n( text )"]
+	439[label="CloseCommaArgument"]
+	440[color="blue" shape="rectangle"]
+	440[label="DELIMITER\n( , )"]
+	441[color="green" shape="rectangle"]
+	441[label="IDENTIFIER\n( pattern )"]
+	442[color="blue" shape="rectangle"]
+	442[label="DELIMITER\n( ) )"]
+	443[label="NEWLINE\n( NEWLINE )"]
+	444[color="yellow" shape="rectangle"]
+	444[label="ENDMARKER"]
 	1 -> 2
 	2 -> 3
-	2 -> 4
+	3 -> 4
 	4 -> 5
 	5 -> 6
-	5 -> 7
-	7 -> 8
-	8 -> 9
-	8 -> 10
-	7 -> 11
-	7 -> 12
-	4 -> 13
-	13 -> 14
+	6 -> 7
+	6 -> 8
+	6 -> 9
+	9 -> 10
+	9 -> 11
+	9 -> 12
+	6 -> 13
+	6 -> 14
 	14 -> 15
-	15 -> 16
-	16 -> 17
+	14 -> 16
+	14 -> 17
 	17 -> 18
 	18 -> 19
-	18 -> 20
+	19 -> 20
 	20 -> 21
-	20 -> 22
+	21 -> 22
 	22 -> 23
 	23 -> 24
 	23 -> 25
-	22 -> 26
-	22 -> 27
-	17 -> 28
-	17 -> 29
+	25 -> 26
+	25 -> 27
+	27 -> 28
+	27 -> 29
 	29 -> 30
 	29 -> 31
-	31 -> 32
-	31 -> 33
-	16 -> 34
-	16 -> 35
+	29 -> 32
+	22 -> 33
+	21 -> 34
+	34 -> 35
 	35 -> 36
 	35 -> 37
 	37 -> 38
-	38 -> 39
-	38 -> 40
-	37 -> 41
-	37 -> 42
-	15 -> 43
-	15 -> 44
+	37 -> 39
+	39 -> 40
+	40 -> 41
+	40 -> 42
+	40 -> 43
+	39 -> 44
 	44 -> 45
 	44 -> 46
-	46 -> 47
-	47 -> 48
-	47 -> 49
-	46 -> 50
-	46 -> 51
-	14 -> 52
-	14 -> 53
-	53 -> 54
-	53 -> 55
+	34 -> 47
+	20 -> 48
+	48 -> 49
+	49 -> 50
+	49 -> 51
+	51 -> 52
+	51 -> 53
+	48 -> 54
+	19 -> 55
 	55 -> 56
 	56 -> 57
 	56 -> 58
-	55 -> 59
-	55 -> 60
-	13 -> 61
-	13 -> 62
+	58 -> 59
+	58 -> 60
+	55 -> 61
+	18 -> 62
 	62 -> 63
 	62 -> 64
 	64 -> 65
-	65 -> 66
-	65 -> 67
-	64 -> 68
-	64 -> 69
-	2 -> 70
-	2 -> 71
-	71 -> 72
-	71 -> 73
-	71 -> 74
-	74 -> 75
+	64 -> 66
+	66 -> 67
+	66 -> 68
+	62 -> 69
+	62 -> 70
+	70 -> 71
+	70 -> 72
+	70 -> 73
+	73 -> 74
+	73 -> 75
 	75 -> 76
-	75 -> 77
-	74 -> 78
-	71 -> 79
-	1 -> 80
+	76 -> 77
+	76 -> 78
+	78 -> 79
+	78 -> 80
+	78 -> 81
+	75 -> 82
+	82 -> 83
+	82 -> 84
+	84 -> 85
+	84 -> 86
+	86 -> 87
+	86 -> 88
+	86 -> 89
+	73 -> 90
+	73 -> 91
+	91 -> 92
+	91 -> 93
+	91 -> 94
+	94 -> 95
+	95 -> 96
+	96 -> 97
+	97 -> 98
+	97 -> 99
+	96 -> 100
+	95 -> 101
+	101 -> 102
+	102 -> 103
+	103 -> 104
+	103 -> 105
+	105 -> 106
+	105 -> 107
+	105 -> 108
+	102 -> 109
+	109 -> 110
+	109 -> 111
+	101 -> 112
+	94 -> 113
+	113 -> 114
+	114 -> 115
+	114 -> 116
+	113 -> 117
+	91 -> 118
+	73 -> 119
+	119 -> 120
+	119 -> 121
+	119 -> 122
+	122 -> 123
+	122 -> 124
+	122 -> 125
+	125 -> 126
+	125 -> 127
+	127 -> 128
+	127 -> 129
+	129 -> 130
+	129 -> 131
+	125 -> 132
+	125 -> 133
+	133 -> 134
+	133 -> 135
+	133 -> 136
+	136 -> 137
+	137 -> 138
+	137 -> 139
+	139 -> 140
+	139 -> 141
+	141 -> 142
+	141 -> 143
+	143 -> 144
+	143 -> 145
+	145 -> 146
+	145 -> 147
+	147 -> 148
+	147 -> 149
+	143 -> 150
+	136 -> 151
+	133 -> 152
+	125 -> 153
+	153 -> 154
+	153 -> 155
+	153 -> 156
+	156 -> 157
+	156 -> 158
+	156 -> 159
+	159 -> 160
+	160 -> 161
+	161 -> 162
+	162 -> 163
+	162 -> 164
+	164 -> 165
+	164 -> 166
+	164 -> 167
+	161 -> 168
+	168 -> 169
+	168 -> 170
+	160 -> 171
+	159 -> 172
+	172 -> 173
+	173 -> 174
+	173 -> 175
+	172 -> 176
+	156 -> 177
+	122 -> 178
+	70 -> 179
+	17 -> 180
+	180 -> 181
+	181 -> 182
+	181 -> 183
+	180 -> 184
+	14 -> 185
+	5 -> 186
+	186 -> 187
+	186 -> 188
+	186 -> 189
+	189 -> 190
+	189 -> 191
+	191 -> 192
+	191 -> 193
+	193 -> 194
+	193 -> 195
+	189 -> 196
+	186 -> 197
+	186 -> 198
+	198 -> 199
+	198 -> 200
+	198 -> 201
+	201 -> 202
+	202 -> 203
+	203 -> 204
+	204 -> 205
+	205 -> 206
+	206 -> 207
+	206 -> 208
+	208 -> 209
+	208 -> 210
+	210 -> 211
+	210 -> 212
+	212 -> 213
+	212 -> 214
+	212 -> 215
+	205 -> 216
+	204 -> 217
+	217 -> 218
+	218 -> 219
+	218 -> 220
+	220 -> 221
+	220 -> 222
+	222 -> 223
+	222 -> 224
+	224 -> 225
+	224 -> 226
+	224 -> 227
+	217 -> 228
+	203 -> 229
+	229 -> 230
+	230 -> 231
+	230 -> 232
+	232 -> 233
+	232 -> 234
+	234 -> 235
+	234 -> 236
+	236 -> 237
+	236 -> 238
+	236 -> 239
+	229 -> 240
+	202 -> 241
+	241 -> 242
+	242 -> 243
+	243 -> 244
+	243 -> 245
+	245 -> 246
+	245 -> 247
+	242 -> 248
+	248 -> 249
+	248 -> 250
+	250 -> 251
+	250 -> 252
+	252 -> 253
+	252 -> 254
+	241 -> 255
+	201 -> 256
+	256 -> 257
+	256 -> 258
+	258 -> 259
+	258 -> 260
+	260 -> 261
+	260 -> 262
+	256 -> 263
+	256 -> 264
+	264 -> 265
+	264 -> 266
+	264 -> 267
+	267 -> 268
+	268 -> 269
+	268 -> 270
+	270 -> 271
+	271 -> 272
+	271 -> 273
+	273 -> 274
+	273 -> 275
+	273 -> 276
+	270 -> 277
+	277 -> 278
+	277 -> 279
+	279 -> 280
+	279 -> 281
+	281 -> 282
+	281 -> 283
+	281 -> 284
+	268 -> 285
+	268 -> 286
+	286 -> 287
+	286 -> 288
+	286 -> 289
+	289 -> 290
+	290 -> 291
+	291 -> 292
+	291 -> 293
+	290 -> 294
+	289 -> 295
+	295 -> 296
+	296 -> 297
+	296 -> 298
+	295 -> 299
+	286 -> 300
+	267 -> 301
+	301 -> 302
+	301 -> 303
+	303 -> 304
+	303 -> 305
+	305 -> 306
+	305 -> 307
+	301 -> 308
+	301 -> 309
+	309 -> 310
+	309 -> 311
+	309 -> 312
+	312 -> 313
+	313 -> 314
+	314 -> 315
+	314 -> 316
+	316 -> 317
+	316 -> 318
+	318 -> 319
+	318 -> 320
+	320 -> 321
+	320 -> 322
+	322 -> 323
+	322 -> 324
+	324 -> 325
+	324 -> 326
+	316 -> 327
+	313 -> 328
+	312 -> 329
+	329 -> 330
+	330 -> 331
+	330 -> 332
+	332 -> 333
+	332 -> 334
+	334 -> 335
+	334 -> 336
+	336 -> 337
+	336 -> 338
+	338 -> 339
+	338 -> 340
+	340 -> 341
+	340 -> 342
+	336 -> 343
+	329 -> 344
+	309 -> 345
+	301 -> 346
+	346 -> 347
+	346 -> 348
+	348 -> 349
+	349 -> 350
+	349 -> 351
+	351 -> 352
+	351 -> 353
+	348 -> 354
+	354 -> 355
+	354 -> 356
+	356 -> 357
+	357 -> 358
+	357 -> 359
+	359 -> 360
+	359 -> 361
+	359 -> 362
+	356 -> 363
+	363 -> 364
+	363 -> 365
+	365 -> 366
+	365 -> 367
+	367 -> 368
+	367 -> 369
+	367 -> 370
+	346 -> 371
+	346 -> 372
+	372 -> 373
+	372 -> 374
+	372 -> 375
+	375 -> 376
+	375 -> 377
+	377 -> 378
+	377 -> 379
+	379 -> 380
+	379 -> 381
+	375 -> 382
+	375 -> 383
+	383 -> 384
+	383 -> 385
+	383 -> 386
+	386 -> 387
+	387 -> 388
+	387 -> 389
+	389 -> 390
+	389 -> 391
+	391 -> 392
+	391 -> 393
+	393 -> 394
+	393 -> 395
+	395 -> 396
+	395 -> 397
+	397 -> 398
+	397 -> 399
+	393 -> 400
+	386 -> 401
+	383 -> 402
+	375 -> 403
+	403 -> 404
+	403 -> 405
+	403 -> 406
+	406 -> 407
+	406 -> 408
+	406 -> 409
+	409 -> 410
+	410 -> 411
+	410 -> 412
+	409 -> 413
+	406 -> 414
+	372 -> 415
+	264 -> 416
+	198 -> 417
+	4 -> 418
+	418 -> 419
+	419 -> 420
+	419 -> 421
+	421 -> 422
+	421 -> 423
+	418 -> 424
+	3 -> 425
+	425 -> 426
+	426 -> 427
+	426 -> 428
+	428 -> 429
+	428 -> 430
+	425 -> 431
+	2 -> 432
+	432 -> 433
+	433 -> 434
+	433 -> 435
+	435 -> 436
+	435 -> 437
+	437 -> 438
+	437 -> 439
+	439 -> 440
+	439 -> 441
+	435 -> 442
+	432 -> 443
+	1 -> 444
 }

@@ -3,13 +3,13 @@
 # Issues
 
 - [x] line joining 
-- [ ] tabs
-- [ ] syntax error
-- [ ] escape sequence 
+- [~] tabs
+- [x] syntax error
+- [x] escape sequence 
 - [ ] naming of nodes in graph
-- [ ] remove comments
+- [x] remove comments
 - [ ] testing
 - [ ] docs
 - [x] grammar check
 - [ ] operator position issue
-- [ ] bison version issue ??
+- [x] bison version issue ??
