@@ -25,6 +25,10 @@
 %code requires{
     #ifndef PARSER
     #include "node.hpp"
+
+
+
+
     #endif
 }
 
@@ -33,7 +37,7 @@
     AST ast;
     #define PARSER
 }
-%define api.value.type {data}
+%define api.value.type {NODE}
 
 %token NEWLINE // done
 %token ENDMARKER

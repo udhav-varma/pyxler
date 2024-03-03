@@ -70,46 +70,46 @@ public:
 
     void dfs1(node* node, int &i){
         node->id = i++;
-        // if(node->type != "nt"){
-        //     string newstr = "";
-        //     for(auto x: node->name){
-        //         if((x=='\'') || (x=='\"') || (x=='\\')){
-        //             newstr.push_back('\\');
-        //             newstr.push_back(x);
-        //         }
-        //         // else if(x=='\n'){
-        //         //     newstr.append("\\n");
-        //         // }
-        //         // else if(x=='\r'){
-        //         //     newstr.append("\\r");
-        //         // }
-        //         // else if(x=='\t'){
-        //         //     newstr.append("\\t");
-        //         // }
-        //         // else if(x=='\b'){
-        //         //     newstr.append("\\b");
-        //         // }
-        //         // else if(x=='\v'){
-        //         //     newstr.append("\\v");
-        //         // }
-        //         // else if(x=='\f'){
-        //         //     newstr.append("\\f");
-        //         // }
-        //         // else if(x=='\0'){
-        //         //     newstr.append("\\0");
-        //         // }
-        //         else{
-        //             newstr.push_back(x);
-        //         }
-        //         node->name = newstr;
-        //         string s = intToString(node->id) + "[label=\"" + node->name + "\"]\n";
-        //         dotcode.append(s);
-        //     }
-        // }
-        // else{
+        if(node->type != "nt"){
+            string newstr = "";
+            for(auto x: node->name){
+                if((x=='\'') || (x=='\"') || (x=='\\')){
+                    newstr.push_back('\\');
+                    newstr.push_back(x);
+                }
+                else if(x=='\n'){
+                    newstr.append("\\n");
+                }
+                else if(x=='\r'){
+                    newstr.append("\\r");
+                }
+                else if(x=='\t'){
+                    newstr.append("\\t");
+                }
+                else if(x=='\b'){
+                    newstr.append("\\b");
+                }
+                else if(x=='\v'){
+                    newstr.append("\\v");
+                }
+                else if(x=='\f'){
+                    newstr.append("\\f");
+                }
+                else if(x=='\0'){
+                    newstr.append("\\0");
+                }
+                else{
+                    newstr.push_back(x);
+                }
+            }
+            node->name = newstr;
             string s = intToString(node->id) + "[label=\"" + node->name + "\"]\n";
             dotcode.append(s);
-        // }       
+        }
+        else{
+            string s = intToString(node->id) + "[label=\"" + node->name + "\"]\n";
+            dotcode.append(s);
+        }       
 
         for(auto u: node->children){
             dfs1(u->next, i);
@@ -141,7 +141,7 @@ public:
 };
 
 
-class data{
+class NODE{
 public:
     node * ptr;
     string val;
