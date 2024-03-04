@@ -18,7 +18,10 @@ public:
     int sz = 0;
     vector<node*> tree;
     string dotcode = "";
-    set<string> delims{"=", "+", "/", "*", "-", "**", "+=", "-=", "*=", "/=", "==", "|", "&", "^", "|=", "&=", "^="};
+    set<string> delims{
+                        "=", "+", "/", "*", "-", "**", "+=", "-=", "*=", "/=", "==", "|", "&", "^", "|=", "&=", "^=", "//", "%", "<",
+                        ">", "<=", ">=", "!=", "<<", ">>"
+                        };
     void add_node(node* node){
         tree.push_back(node);
         sz++;
@@ -48,18 +51,32 @@ public:
             fixfs(u->next);
         }
         cerr << "fixfs " << node->name << '\n';
+        auto pt = node->children.end();
+        int cnt = 0;
         for(auto it = node->children.begin(); it != node->children.end(); it++){
             auto u = *it;
             u = u->next;
             if(delims.count(u->name) and u->children.size() <= 1){
-                cerr << "inside if " << node->name << ' ' << u->name << '\n';
-                node->name = u->name;
-                node->type = u->type;
-                node->children.erase(it);
-                node->children.insert(node->children.end(), begin(u->children), end(u->children));    
-                delete(u);
-                break;
+                cnt++;
+                pt = it; 
+                // cerr << "inside if " << node->name << ' ' << u->name << '\n';
+                // node->name = u->name;
+                // node->type = u->type;
+                // node->children.erase(it);
+                // node->children.insert(node->children.end(), begin(u->children), end(u->children));    
+                // delete(u);
+                // break;
             }
+        }
+        if(cnt == 1){
+            auto u = *pt;
+            u = u->next;
+            cerr << "inside if " << node->name << ' ' << u->name << '\n';
+            node->name = u->name;
+            node->type = u->type;
+            node->children.erase(pt);
+            node->children.insert(node->children.end(), begin(u->children), end(u->children));    
+            delete(u);
         }
     }
     void idfs(node* node)
@@ -189,7 +206,7 @@ public:
         dotcode.append("digraph AST{\n");
         logout = ofstream("logs.txt");
         idfs(ptr);
-        fixfs(ptr);
+        // fixfs(ptr);
         dfs1(ptr, id);
         dfs2(ptr);
         dotcode.append("}\n");

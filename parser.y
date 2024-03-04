@@ -499,7 +499,7 @@ yield_or_test_star: yield_expr {
  | testlist_star_expr {
             $<ptr>$ = $<ptr>1;
  }
-close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star {
+close_yield_or_test_star: '=' yield_or_test_star close_yield_or_test_star {
                     $<ptr>$ = new node("nt", "close yield or test star");
                     ast.add_node($<ptr>$);
                     ast.add_edge($<ptr>$, $<ptr>1);
@@ -511,7 +511,8 @@ close_yield_or_test_star: close_yield_or_test_star '=' yield_or_test_star {
                         }
 annassign: ':' test cond_eqtest {
     $<ptr>$ = new node("nt", "Annotated Assignment");
-    ast.add_node($<ptr>$);
+    // ast.add_node($<ptr>$);
+    // $<ptr>$ = $<ptr>1;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
