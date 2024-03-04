@@ -18,7 +18,7 @@ public:
     int sz = 0;
     vector<node*> tree;
     string dotcode = "";
-
+    set<string> delims{"=", "+", "/", "*", "-", "**", "+=", "-=", "*=", "/=", "==", "|", "&", "^", "|=", "&=", "^="};
     void add_node(node* node){
         tree.push_back(node);
         sz++;
@@ -42,6 +42,26 @@ public:
         return s;
     };
 
+    void fixfs(node * node)
+    {
+        for(auto u: node->children){
+            fixfs(u->next);
+        }
+        cerr << "fixfs " << node->name << '\n';
+        for(auto it = node->children.begin(); it != node->children.end(); it++){
+            auto u = *it;
+            u = u->next;
+            if(delims.count(u->name) and u->children.size() <= 1){
+                cerr << "inside if " << node->name << ' ' << u->name << '\n';
+                node->name = u->name;
+                node->type = u->type;
+                node->children.erase(it);
+                node->children.insert(node->children.end(), begin(u->children), end(u->children));    
+                delete(u);
+                break;
+            }
+        }
+    }
     void idfs(node* node)
     {
         for(auto u: node->children){
@@ -169,6 +189,7 @@ public:
         dotcode.append("digraph AST{\n");
         logout = ofstream("logs.txt");
         idfs(ptr);
+        fixfs(ptr);
         dfs1(ptr, id);
         dfs2(ptr);
         dotcode.append("}\n");

@@ -276,3 +276,4 @@ mile
 *.yy*
 lexer.cpp
 *.tab*
+logs.txt

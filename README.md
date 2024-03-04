@@ -6,10 +6,10 @@
 - [~] tabs
 - [x] syntax error
 - [x] escape sequence 
-- [ ] naming of nodes in graph
+- [x] naming of nodes in graph
 - [x] remove comments
-- [ ] testing
+- [x] testing
 - [ ] docs
 - [x] grammar check
-- [ ] operator position issue
+- [x] operator position issue
 - [x] bison version issue ??

@@ -528,7 +528,9 @@ cond_eqtest: '=' test {
 anna_or_auga_or_closeyield: annassign {
     $<ptr>$ = $<ptr>1;
 } | augassign yield_or_test {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "Assignment");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
 } | close_yield_or_test_star {
     $<ptr>$ = $<ptr>1;
 }
@@ -1290,8 +1292,8 @@ left_right_shift: LEFTSHIFT{
 }
 
 close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
-    $<ptr>$ = new node("nt", "Close Leftright shift Arithmatic Expression");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "Close Leftright shift Arithmetic Expression");
+    // ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -1300,7 +1302,7 @@ close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
 }
 
 arith_expr: term close_plusminusterm{
-    $<ptr>$ = new node("nt", "Arithmatic Expression");
+    $<ptr>$ = new node("nt", "Arithmetic Expression");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
