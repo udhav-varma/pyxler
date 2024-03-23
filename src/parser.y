@@ -866,13 +866,7 @@ power: atom_expr POW factor{
     $<ptr>$ = $<ptr>1;
 }
 
-atom_expr: AWAIT atom close_trailer{
-    $<ptr>$ = new node("nt", "Atomic Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | atom close_trailer{
+atom_expr: atom close_trailer{
     $<ptr>$ = new node("nt", "Atomic Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -947,12 +941,7 @@ multi_str: STRING{
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
-testlist_comp: test comp_for{
-    $<ptr>$ = new node("nt", "Test List Comparision");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | test close_commatest cond_comma{
+testlist_comp: test close_commatest cond_comma{
     $<ptr>$ = new node("nt", "Test List Comparision");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -1000,13 +989,12 @@ close_commasubscript: close_commasubscript ',' subscript{
 
 subscript: test {
     $<ptr>$ = $<ptr>1;
-}| cond_test ':' cond_test cond_sliceop{
+}| cond_test ':' cond_test{
     $<ptr>$ = new node("nt", "Subscript");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
 }
 
 cond_test: test {
@@ -1016,20 +1004,6 @@ cond_test: test {
 
 }
 
-cond_sliceop: sliceop {
-    $<ptr>$ = $<ptr>1;
-} | {
-    $<ptr>$ = NULL;
-}  
-
-sliceop: ':' test {
-    $<ptr>$ = new node("nt", "Slice Operation");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}| ':'{
-    $<ptr>$ = $<ptr>1;
-}
 
 exprlist: expr close_comma_expr cond_comma{
     $<ptr>$ = new node("nt", "Expression List");
@@ -1051,13 +1025,18 @@ close_comma_expr: close_comma_expr ',' expr {
 }
 
 
-dictorsetmaker:  testcoltest compfor_or_close_commatestcoltestorstarexpr_condcomma {
+dictorsetmaker:  testcoltest close_commatestcoltest cond_comma {
     $<ptr>$ = new node("nt", "DictOrSetMaker");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-} | some_non_terminal{
-    $<ptr>$ = $<ptr>1;
+    ast.add_edge($<ptr>$, $<ptr>3);
+} | test close_commatest cond_comma{
+    $<ptr>$ = new node("nt", "DictOrSetMaker");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 
 testcoltest: test ':' test{
@@ -1069,7 +1048,7 @@ testcoltest: test ':' test{
 }
 
 
-close_commatestcoltestorstarrexpr: close_commatestcoltestorstarrexpr ',' testcoltest  {
+close_commatestcoltest: close_commatestcoltest ',' testcoltest  {
     $<ptr>$ = new node("nt", "Close Comma Test Column Test Or Star expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -1079,27 +1058,6 @@ close_commatestcoltestorstarrexpr: close_commatestcoltestorstarrexpr ',' testcol
     $<ptr>$ = NULL;
 }
 
-compfor_or_close_commatestcoltestorstarexpr_condcomma: comp_for {
-    $<ptr>$ = $<ptr>1;
-} | close_commatestcoltestorstarrexpr cond_comma{
-    $<ptr>$ = new node("nt", "CompForOrCloseCommaTestColTestOrStarRexprCondComma");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-some_non_terminal: test comp_for{
-    $<ptr>$ = new node("nt", "Some Non Terminal");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | test close_commatest cond_comma{
-    $<ptr>$ = new node("nt", "Some Non Terminal");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
 
 classdef: CLASS NAME cond_parentheses_arglist ':' suite{
     $<ptr>$ = new node("nt", "Class Definition");
@@ -1148,13 +1106,7 @@ close_comma_argument: close_comma_argument ',' argument {
 // Illegal combinations and orderings are blocked in ast.c:
 // multiple (test comp_for) arguments are blocked; keyword unpackings
 // that precede iterable unpackings are blocked; etc.
-argument: test comp_for {
-        $<ptr>$ = new node("nt", "argument");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);
-    } |
-    test {
+argument: test {
         $<ptr>$ = $<ptr>1;
     } |
     test '=' test {
@@ -1163,49 +1115,7 @@ argument: test comp_for {
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2); 
         ast.add_edge($<ptr>$, $<ptr>3);   
-    } |
-    POW test {
-        $<ptr>$ = new node("nt", "argument");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);   
-    } |
-    '*' test {
-        $<ptr>$ = new node("nt", "argument");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);   
     }
-
-comp_iter: comp_for {
-        $<ptr>$ = $<ptr>1;    
-    } | comp_if {
-        $<ptr>$ = $<ptr>1;
-    }
-comp_for: FOR exprlist IN or_test comp_iter {
-        $<ptr>$ = new node("nt", "comp for");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);   
-        ast.add_edge($<ptr>$, $<ptr>3);   
-        ast.add_edge($<ptr>$, $<ptr>4);   
-        ast.add_edge($<ptr>$, $<ptr>5);   
-    }
-
-
-comp_if: IF or_test {
-        $<ptr>$ = new node("nt", "comp if");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);   
-    } | IF or_test comp_iter {
-        $<ptr>$ = new node("nt", "comp if");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);   
-        ast.add_edge($<ptr>$, $<ptr>2);   
-        ast.add_edge($<ptr>$, $<ptr>3);   
-    }
-
 
 %%
 
