@@ -1799,6 +1799,7 @@ int main(int argc, char *argv[]){
         cerr << "No Input file specified.\nParsing Terminated\n";
         return -1;
     }
+    present_table = new symbol_table(SYMBOL_TABLE_TYPE::GLOBAL_TABLE, nullptr);
     yyin = fopen(argv[1], "r");
     if(yyin == NULL){
         cerr << "Failed to open input file.\n Terminated\n";

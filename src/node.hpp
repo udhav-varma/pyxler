@@ -290,7 +290,9 @@ public:
     symbol_table_entry * find_var_entry(string name)
     {
         if(var_defs.find(name) == var_defs.end()){
-            return NULL;
+            if(this->parent != NULL) return this->parent->find_var_entry(name);
+            else
+                return NULL;
         }
         else return var_defs[name];
     }
@@ -298,7 +300,9 @@ public:
     symbol_table* find_fun_entry(string name)
     {
         if(fun_defs.find(name) == fun_defs.end()){
-            return NULL;
+            if(this->parent != NULL) return this->parent->find_fun_entry(name);
+            else
+                return NULL;
         }
         else return fun_defs[name];
     }
@@ -306,7 +310,9 @@ public:
     symbol_table* find_class_entry(string name)
     {
         if(class_defs.find(name) == class_defs.end()){
-            return NULL;
+            if(this->parent != NULL) return this->parent->find_class_entry(name);
+            else
+                return NULL;
         }
         else return class_defs[name];
     }
