@@ -251,8 +251,6 @@ close_eqtestlist: close_eqtestlist '=' test {
                         }
 annassign: ':' test cond_eqtest {
     $<ptr>$ = new node("nt", "Annotated Assignment");
-    // ast.add_node($<ptr>$);
-    // $<ptr>$ = $<ptr>1;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -345,9 +343,6 @@ flow_stmt: break_stmt {
         | return_stmt {
             $<ptr>$ = $<ptr>1;
         }
-        | raise_stmt {
-            $<ptr>$ = $<ptr>1;
-        }
 
 break_stmt: BREAK {
     $<ptr>$ = new node("nt", "Break Statement");
@@ -372,23 +367,6 @@ cond_testlist: test{
       $<ptr>$ = $<ptr>1;
 } | {
       $<ptr>$ = nullptr;
-}
-raise_stmt: RAISE cond_from_test{
-    $<ptr>$ = new node("nt", "Raise Statement");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-cond_from_test: test {
-    $<ptr>$ = $<ptr>1;
-}| test FROM test {
-    $<ptr>$ = new node("nt", "condition from test");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}| {    
-    $<ptr>$ = nullptr;
 }
 
 global_stmt: GLOBAL NAME close_comma_name{
@@ -529,72 +507,45 @@ plus_stmt: stmt{
 test: or_test{
     $<ptr>$ = $<ptr>1;
 }
-or_test: and_test close_or_and_test{
-    $<ptr>$ = new node("nt", "Or Test");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-close_or_and_test: close_or_and_test OR and_test{
+or_test: and_test {
+    $<ptr>$ = $<ptr>1;
+} | or_test OR and_test {
     $<ptr>$ = new node("nt", "Close Or And Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}  
+}
 
-and_test: not_test close_and_not_test{
+and_test: not_test{
+    $<ptr>$ = $<ptr>1;
+} | and_test AND not_test {
     $<ptr>$ = new node("nt", "And Test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-close_and_not_test: close_and_not_test AND not_test{
-    $<ptr>$ = new node("nt", "Close And Not Test");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
 }
 
-not_test: close_not comparison{
-    $<ptr>$ = new node("nt", "Not Test");
+not_test: NOT not_test {
+    $<ptr>$ = new node("nt", "Not test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+} | comparison {
+    $<ptr>$ = $<ptr>1;
 }
 
-close_not: close_not NOT{
-    $<ptr>$ = new node("nt", "Close Not");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | {
-    $<ptr>$ = NULL;
-}
-
-comparison: expr close_compopexpr{
+comparison: expr {
+    $<ptr>$ = $<ptr>1;
+} | comparison comp_op expr {
     $<ptr>$ = new node("nt", "Comparison");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-close_compopexpr: close_compopexpr comp_op expr{
-    $<ptr>$ = new node("nt", "Close Comparison Operator Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}
 
 // <> isn't actually a valid comparison operator in Python. It's here for the
 // sake of a __future__ import described in PEP 401 (which really works :-)
@@ -631,78 +582,53 @@ comp_op: '<'{
 }
 
 
-expr: xor_expr close_orxorexp{
+expr: xor_expr{
+    $<ptr>$ = $<ptr>1;
+} | expr '|' xor_expr {
     $<ptr>$ = new node("nt", "Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}
-close_orxorexp: close_orxorexp '|' xor_expr{
-    $<ptr>$ = new node("nt", "Close Or Xor Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
 }
 
-xor_expr: and_expr close_xor_and_expr{
+xor_expr: and_expr{
+    $<ptr>$ = $<ptr>1;
+} | xor_expr '^' and_expr {
     $<ptr>$ = new node("nt", "Xor Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
-close_xor_and_expr: close_xor_and_expr '^' and_expr{
-    $<ptr>$ = new node("nt", "Close Xor And Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-} 
-
-and_expr: shift_expr close_andshiftexpr{
+and_expr: shift_expr{
+    $<ptr>$ = $<ptr>1;
+} | and_expr '&' shift_expr{
     $<ptr>$ = new node("nt", "And Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-close_andshiftexpr: close_andshiftexpr '&' shift_expr{
-    $<ptr>$ = new node("nt", "Close And Shift Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}  | {
-$<ptr>$ = NULL;
-} 
 
-shift_expr: arith_expr close_lrs_arith_expr{
+shift_expr: arith_expr {
+    $<ptr>$ = $<ptr>1;
+} | shift_expr LEFTSHIFT arith_expr {
     $<ptr>$ = new node("nt", "Shift Expression");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-left_right_shift: LEFTSHIFT{
-    $<ptr>$ = $<ptr>1;
-} | RIGHTSHIFT{
-    $<ptr>$ = $<ptr>1;
-}
-
-close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
-    $<ptr>$ = new node("nt", "Close Leftright shift Arithmetic Expression");
-    // ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>3);
+} | shift_expr RIGHTSHIFT arith_expr {
+    $<ptr>$ = new node("nt", "Shift Expression");
+    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
+
 }
+
 
 arith_expr: term{
     $<ptr>$ = $<ptr>1;
@@ -719,14 +645,17 @@ arith_expr: term{
 }
 
 
-term: factor close_muldivopsfactor{
+term: factor{
+    $<ptr>$ = $<ptr>1;
+} | term muldivremops factor {
     $<ptr>$ = new node("nt", "Term");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-group_muldivremops: '*'{
+muldivremops: '*'{
     $<ptr>$ = $<ptr>1;
 } | '@'{
     $<ptr>$ = $<ptr>1;
@@ -738,31 +667,13 @@ group_muldivremops: '*'{
     $<ptr>$ = $<ptr>1;
 } 
 
-close_muldivopsfactor: close_muldivopsfactor group_muldivremops factor{
-    $<ptr>$ = new node("nt", "Close Mul Div Ops Factor");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}
-
-factor: close_plus_or_minus_or_not power{
+factor: plus_or_minus_or_not factor{
     $<ptr>$ = new node("nt", "Factor");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}
+} | power
 
-close_plus_or_minus_or_not: close_plus_or_minus_or_not plus_or_minus_or_not{
-    $<ptr>$ = new node("nt", "Close Plus Or Minus Or Not");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | {
-    $<ptr>$ = NULL;
-}
 
 /* plus_or_minus_or_not: '+' | '-' | '~' */
 plus_or_minus_or_not: '+'{
