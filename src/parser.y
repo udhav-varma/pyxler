@@ -906,6 +906,7 @@ classname: CLASS NAME{
 }
 
 classdef: classname cond_parentheses_arglist ':' suite{
+    present_table = present_table->parent;
     $<ptr>$ = new node("nt", "Class Definition");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
