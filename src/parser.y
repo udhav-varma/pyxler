@@ -12,12 +12,13 @@
     extern int yylex();
     extern int yylineno;
     extern int yydebug;
+    extern char * yytext;
     extern FILE * yyin;
     void yyerror(char * s){
-    fprintf(stderr, "Error! Line Number %d, message: %s\n", yylineno, s);
+    fprintf(stderr, "Error! Line Number %d, token: %s, message: %s\n", yylineno, yytext, s);
     }
     void yyerror(string s){
-    fprintf(stderr, "Error! Line Number %d, message: %s\n", yylineno, s.c_str());
+    fprintf(stderr, "Error! Line Number %d, token: %s, message: %s\n", yylineno, yytext, s.c_str());
     }
     extern stack<int> indents;
     symbol_table* present_table;
@@ -135,12 +136,28 @@ cond_arglist: arglist {
 | {
     $<ptr>$ = NULL;
 }
-funcdef: DEF NAME parameters ARROWOP test ':' suite {
-    auto p = present_table->find_fun_entry($<ptr>2);
-    if(!p){
-        symbol_table * newfuntable = new symbol_table(FUNCTION_TABLE, present_table, $<ptr>2);
-        present_table->add_entry_fun(newfuntable)
+defname: DEF NAME{
+    if(present_table->type == FUNCTION_TABLE){
+        yyerror("Nested function declaration not allowed\n");
+        return -1;
     }
+    auto p = present_table->find_fun_entry($<val>2);
+    if(!p){
+        symbol_table * newfuntable = new symbol_table(FUNCTION_TABLE, present_table, $<val>2);
+        present_table->add_entry_fun(newfuntable);
+        present_table = newfuntable;
+    }
+    else{
+        yyerror("Function of same name already exists in the scope");
+        return 0;
+    }
+    $<ptr>$ = new node("nt", "function start");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+}
+funcdef: defname parameters ARROWOP test ':' suite {
+    present_table = present_table->parent;
     $<ptr>$ = new node("nt", "function definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -149,7 +166,6 @@ funcdef: DEF NAME parameters ARROWOP test ':' suite {
     ast.add_edge($<ptr>$, $<ptr>4);
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
-    ast.add_edge($<ptr>$, $<ptr>7);
 }
 
 parameters: '(' cond_typedargslist ')' {
@@ -766,15 +782,6 @@ cond_testlistcomp:  testlist_comp{
     $<ptr>$ = NULL;
 } 
 
-multi_str: STRING{
-    $<ptr>$ = $<ptr>1;
-} | STRING multi_str{
-    $<ptr>$ = new node("nt", "Multiple String");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-
 testlist_comp: test close_commatest cond_comma{
     $<ptr>$ = new node("nt", "Test List Comparision");
     ast.add_node($<ptr>$);
@@ -871,7 +878,6 @@ testcoltest: test ':' test{
 
 close_commatestcoltest: close_commatestcoltest ',' testcoltest  {
     $<ptr>$ = new node("nt", "Close Comma Test Column Test Or Star expression");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -879,15 +885,32 @@ close_commatestcoltest: close_commatestcoltest ',' testcoltest  {
     $<ptr>$ = NULL;
 }
 
+classname: CLASS NAME{
+    if(present_table->type != GLOBAL_TABLE){
+        yyerror("Class declaration only allowed in global namespace\n");
+        return -1;
+    }
+    auto p = present_table->find_class_entry($<val>2);
+    if(p == NULL){
+        symbol_table * newclasstable = new symbol_table(CLASS_TABLE, present_table, $<val>2);
+        present_table->add_entry_class(newclasstable);
+        present_table = newclasstable;
+    }
+    else{
+        yyerror("Class already declared in scope\n");
+        return -1;
+    }
+    $<ptr>$ = new node("nt", "Class declaration");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+}
 
-classdef: CLASS NAME cond_parentheses_arglist ':' suite{
+classdef: classname cond_parentheses_arglist ':' suite{
     $<ptr>$ = new node("nt", "Class Definition");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
-    ast.add_edge($<ptr>$, $<ptr>5);
 }
 
 cond_parentheses_arglist: '(' cond_arglist ')'{
@@ -950,7 +973,7 @@ int main(int argc, char *argv[]){
         cerr << "No Input file specified.\nParsing Terminated\n";
         return -1;
     }
-    present_table = new symbol_table(SYMBOL_TABLE_TYPE::GLOBAL_TABLE, nullptr);
+    present_table = new symbol_table(SYMBOL_TABLE_TYPE::GLOBAL_TABLE, NULL);
     yyin = fopen(argv[1], "r");
     if(yyin == NULL){
         cerr << "Failed to open input file.\n Terminated\n";
