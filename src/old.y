@@ -5,35 +5,21 @@ single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
 funcdef: 'def' NAME parameters ['->' test] ':' suite
 
 parameters: '(' [typedargslist] ')'
-typedargslist: (tfpdef ['=' test] (',' tfpdef ['=' test])* [',' [
-        '*' [tfpdef] (',' tfpdef ['=' test])* [',' ['**' tfpdef [',']]]
-      | '**' tfpdef [',']]]
-  | '*' [tfpdef] (',' tfpdef ['=' test])* [',' ['**' tfpdef [',']]]
-  | '**' tfpdef [','])
-tfpdef: NAME [':' test]
-varargslist: (vfpdef ['=' test] (',' vfpdef ['=' test])* [',' [
-        '*' [vfpdef] (',' vfpdef ['=' test])* [',' ['**' vfpdef [',']]]
-      | '**' vfpdef [',']]]
-  | '*' [vfpdef] (',' vfpdef ['=' test])* [',' ['**' vfpdef [',']]]
-  | '**' vfpdef [',']
-)
-vfpdef: NAME
+typedargslist: tfpdef ['=' test] (',' tfpdef ['=' test])* [',']
+tfpdef: NAME ':' test
 
 stmt: simple_stmt | compound_stmt
 simple_stmt: small_stmt (';' small_stmt)* [';'] NEWLINE
-small_stmt: (expr_stmt | del_stmt | pass_stmt | flow_stmt |
-             import_stmt | global_stmt | nonlocal_stmt | assert_stmt)
+small_stmt: (expr_stmt pass_stmt | flow_stmt | global_stmt | assert_stmt)
 expr_stmt: testlist_star_expr (annassign | augassign testlist)
 annassign: ':' test ['=' test]
 augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' |
             '<<=' | '>>=' | '**=' | '//=')
-del_stmt: 'del' exprlist
 pass_stmt: 'pass'
-flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt
+flow_stmt: break_stmt | continue_stmt | return_stmt
 break_stmt: 'break'
 continue_stmt: 'continue'
 return_stmt: 'return' [testlist]
-raise_stmt: 'raise' [test ['from' test]]
 global_stmt: 'global' NAME (',' NAME)*
 assert_stmt: 'assert' test [',' test]
 
@@ -43,7 +29,7 @@ while_stmt: 'while' test ':' suite ['else' ':' suite]
 for_stmt: 'for' exprlist 'in' testlist ':' suite ['else' ':' suite]
 suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT
 
-test: or_test ['if' or_test 'else' test]
+test: or_test
 or_test: and_test ('or' and_test)*
 and_test: not_test ('and' not_test)*
 not_test: 'not' not_test | comparison
@@ -65,8 +51,7 @@ atom: ('(' testlist_comp ')' |
 testlist_comp: test (',' test)* [','] 
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME
 subscriptlist: subscript (',' subscript)* [',']
-subscript: test | [test] ':' [test] [sliceop]
-sliceop: ':' [test]
+subscript: test
 exprlist: expr (',' expr)* [',']
 testlist: test (',' test)* [',']
 dictorsetmaker: ( ((test ':' test )

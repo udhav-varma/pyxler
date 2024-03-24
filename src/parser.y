@@ -135,7 +135,7 @@ cond_arglist: arglist {
 | {
     $<ptr>$ = NULL;
 }
-funcdef: DEF NAME parameters cond_arrowtest ':' suite {
+funcdef: DEF NAME parameters ARROWOP test ':' suite {
     $<ptr>$ = new node("nt", "function definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -144,17 +144,9 @@ funcdef: DEF NAME parameters cond_arrowtest ':' suite {
     ast.add_edge($<ptr>$, $<ptr>4);
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
+    ast.add_edge($<ptr>$, $<ptr>7);
+}
 
-}
-cond_arrowtest: ARROWOP test{
-    $<ptr>$ = new node("nt", "condition arrowtest");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} 
-| {
-    $<ptr>$ = NULL;
-}
 parameters: '(' cond_typedargslist ')' {
     $<ptr>$ = new node("nt", "parameters");
     ast.add_node($<ptr>$);
@@ -168,7 +160,7 @@ cond_typedargslist: typedargslist {
     $<ptr>$ = NULL;
 }
 
-typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_condstarorstartstar{
+typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma{
     $<ptr>$ = new node("nt", "Typed Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -176,82 +168,20 @@ typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma_or_co
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 }
-  | '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma {
-    $<ptr>$ = new node("nt", "Typed Arguments List");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-  }
-  | POW tfpdef cond_comma {
-    $<ptr>$ = new node("nt", "Typed Arguments List");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-  }
-conds_comma_startfpdefcondcomma: ',' {
-        $<ptr>$ = $<ptr>1;
-    }
-    | ',' POW tfpdef cond_comma {
-        $<ptr>$ = new node("nt", "condition comma start condition comma");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2);
-        ast.add_edge($<ptr>$, $<ptr>3);
-        ast.add_edge($<ptr>$, $<ptr>4);
-    }
-    | {
-        $<ptr>$ = NULL;
-    }
-cond_star_or_startstar: '*' cond_tfpdef close_comma_tfpdef_condeqtest conds_comma_startfpdefcondcomma {
-            $<ptr>$ = new node("nt", "condition star or star star");
-            ast.add_node($<ptr>$);
-            ast.add_edge($<ptr>$, $<ptr>1);
-            ast.add_edge($<ptr>$, $<ptr>2);
-            ast.add_edge($<ptr>$, $<ptr>3);
-            ast.add_edge($<ptr>$, $<ptr>4);
-        }
-      | POW tfpdef cond_comma {
-        $<ptr>$ = new node("nt", "condition star or star star");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2);
-        ast.add_edge($<ptr>$, $<ptr>3);
-      }
-      | {
-        $<ptr>$ = NULL;
-      }
-cond_comma_or_condstarorstartstar: ',' cond_star_or_startstar {
-        $<ptr>$ = new node("nt", "condition comma or condition star or star star");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2);
-    } 
-    | {
-        $<ptr>$ = NULL;
-    }
+
 close_comma_tfpdef_condeqtest: close_comma_tfpdef_condeqtest ',' tfpdef cond_eqtest {
     $<ptr>$ = new node("nt", "close comma condition eqtest");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
+    ast.add_edge($<ptr>$, $<ptr>4);
 }
 | {
     $<ptr>$ = NULL;
 }
-cond_tfpdef: tfpdef {
-    $<ptr>$ = $<ptr>1;
-}
-| {
-    $<ptr>$ = NULL;
-}
-tfpdef: NAME {
-    $<ptr>$ = $<ptr>1;
-}
-| NAME ':' test {
+
+tfpdef: NAME ':' test {
     $<ptr>$ = new node("nt", "name colon test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -309,7 +239,7 @@ expr_stmt: test anna_or_auga_or_eqtestlist {
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
-close_eqtestlist: '=' test close_eqtestlist {
+close_eqtestlist: close_eqtestlist '=' test {
                     $<ptr>$ = new node("nt", "close yield or test star");
                     ast.add_node($<ptr>$);
                     ast.add_edge($<ptr>$, $<ptr>1);
@@ -596,15 +526,7 @@ plus_stmt: stmt{
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
-test: or_test IF or_test ELSE test{
-    $<ptr>$ = new node("nt", "Test");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-    ast.add_edge($<ptr>$, $<ptr>5);
-}  | or_test{
+test: or_test{
     $<ptr>$ = $<ptr>1;
 }
 or_test: and_test close_or_and_test{
@@ -782,25 +704,20 @@ close_lrs_arith_expr: close_lrs_arith_expr left_right_shift arith_expr{
     $<ptr>$ = NULL;
 }
 
-arith_expr: term close_plusminusterm{
+arith_expr: term{
+    $<ptr>$ = $<ptr>1;
+} | arith_expr '+' term {
     $<ptr>$ = new node("nt", "Arithmetic Expression");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
+} | arith_expr '-' term {
+    $<ptr>$ = new node("nt", "Arithmetic Expression");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-close_plusminusterm: close_plusminusterm '+' term{
-    $<ptr>$ = new node("nt", "Close Plus Minus Term");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | close_plusminusterm '-' term{
-    $<ptr>$ = new node("nt", "Close Plus Minus Term");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}  
 
 term: factor close_muldivopsfactor{
     $<ptr>$ = new node("nt", "Term");
@@ -989,19 +906,6 @@ close_commasubscript: close_commasubscript ',' subscript{
 
 subscript: test {
     $<ptr>$ = $<ptr>1;
-}| cond_test ':' cond_test{
-    $<ptr>$ = new node("nt", "Subscript");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-
-cond_test: test {
-    $<ptr>$ = $<ptr>1;
-} | {
-    $<ptr>$ = NULL;
-
 }
 
 
