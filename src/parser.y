@@ -136,6 +136,11 @@ cond_arglist: arglist {
     $<ptr>$ = NULL;
 }
 funcdef: DEF NAME parameters ARROWOP test ':' suite {
+    auto p = present_table->find_fun_entry($<ptr>2);
+    if(!p){
+        symbol_table * newfuntable = new symbol_table(FUNCTION_TABLE, present_table, $<ptr>2);
+        present_table->add_entry_fun(newfuntable)
+    }
     $<ptr>$ = new node("nt", "function definition");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -739,14 +744,15 @@ atom: '(' cond_testlistcomp ')' {
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | NAME {
+    auto p = present_table->find_var_entry($<val>1);
+    if(p == NULL){
+        symbol_table_entry * newentry = new symbol_table_entry($<val>1, ""s);
+        present_table->add_entry_var(newentry);
+    }
     $<ptr>$ = $<ptr>1;
 } | NUMBER {
     $<ptr>$ = $<ptr>1;
-} | multi_str {
-    $<ptr>$ = $<ptr>1;
-} | ELLIPSIS {
-    $<ptr>$ = $<ptr>1;
-} | NONE {
+}  | NONE {
     $<ptr>$ = $<ptr>1;
 } | TRUE {
     $<ptr>$ = $<ptr>1;
