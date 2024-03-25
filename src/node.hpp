@@ -10,6 +10,13 @@ public:
     vector<node*> children;   // indexes of children nodes
     string type, name;
     node(string Type, string Name) : type(Type), name(Name){}
+    struct{
+        bool is_assignable;
+        bool is_single;
+        bool is_expression;
+        int temp_id;
+        string info;
+    } tempparams;
 };
 
 class AST{
@@ -228,10 +235,11 @@ public:
     symbol_table* table = nullptr;
     string type;
 
-    symbol_table_entry(string name, string type)
+    symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
         this->name = name;
         this->type = type;
+        this->table = table;
     }
 };
 

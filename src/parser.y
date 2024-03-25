@@ -254,8 +254,35 @@ small_stmt: expr_stmt {
   | assert_stmt {
     $<ptr>$ = $<ptr>1;
   }
-expr_stmt: test anna_or_auga_or_eqtestlist {
-    $<ptr>$ = new node("nt", "expression statement");
+expr_stmt: test annassign {
+    if(!$<ptr>1->tempparams.is_assignable){
+        yyerror("lvalue not a valid declaration");
+        return -1;
+    }
+    else{
+        string name = $<ptr>1->tempparams.info;
+        string type = $<ptr>2->tempparams.info;
+        if(present_table->find_var_entry(name) != NULL){
+            yyerror("Variable already declared in scope");
+            return -1;
+        }
+        else{
+            symbol_table_entry  * newentry = new symbol_table_entry(name, type, present_table);
+            present_table->add_entry_var(newentry);
+            cerr << "Declared a variable of type " << type << ' ' << "with name " << name << '\n';
+        }
+    }
+    $<ptr>$ = new node("nt", "Declaration statement");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+} | test augassign {
+    $<ptr>$ = new node("nt", "Augassign statement");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+} | test close_eqtestlist {
+    $<ptr>$ = new node("nt", "assign statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -272,6 +299,7 @@ close_eqtestlist: close_eqtestlist '=' test {
                         }
 annassign: ':' test cond_eqtest {
     $<ptr>$ = new node("nt", "Annotated Assignment");
+    $<ptr>$->tempparams.info = $<ptr>2->tempparams.info;
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -285,15 +313,6 @@ cond_eqtest: '=' test {
       | {
         $<ptr>$ = NULL;
       }
-anna_or_auga_or_eqtestlist: annassign {
-    $<ptr>$ = $<ptr>1;
-} | augassign test {
-    $<ptr>$ = new node("nt", "Assignment");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | close_eqtestlist {
-    $<ptr>$ = $<ptr>1;
-}
               
 close_commatest: close_commatest ',' test {
     $<ptr>$ = new node("nt", "close commatest");
@@ -693,7 +712,9 @@ factor: plus_or_minus_or_not factor{
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-} | power
+} | power {
+    $<ptr>$ = $<ptr>1;
+}
 
 
 /* plus_or_minus_or_not: '+' | '-' | '~' */
@@ -717,6 +738,9 @@ power: atom_expr POW factor{
 
 atom_expr: atom close_trailer{
     $<ptr>$ = new node("nt", "Atomic Expression");
+    auto nodptr = $<ptr>$;
+    nodptr->tempparams.is_assignable = $<ptr>1->tempparams.is_assignable;
+    nodptr->tempparams.info = $<ptr>1->tempparams.info;
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -760,14 +784,17 @@ atom: '(' cond_testlistcomp ')' {
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | NAME {
-    auto p = present_table->find_var_entry($<val>1);
-    if(p == NULL){
-        symbol_table_entry * newentry = new symbol_table_entry($<val>1, ""s);
-        present_table->add_entry_var(newentry);
-    }
     $<ptr>$ = $<ptr>1;
+    auto nodptr = $<ptr>1;
+    nodptr->tempparams.is_assignable = true;
+    nodptr->tempparams.is_single = true;
+    nodptr->tempparams.info = $<val>1;
 } | NUMBER {
     $<ptr>$ = $<ptr>1;
+    auto nodptr = $<ptr>1;
+    nodptr->tempparams.is_assignable = false;
+    nodptr->tempparams.is_single = true;
+    nodptr->tempparams.info = $<val>1;
 }  | NONE {
     $<ptr>$ = $<ptr>1;
 } | TRUE {
