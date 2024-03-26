@@ -6,8 +6,84 @@ class temp_var{
 public:
     string type;
     int id;
+    bool is_literal = true;
     temp_var(string type);
 };
+
+struct name_type{
+    string name_val;
+};
+
+struct test_type{
+    temp_var * temp;
+};
+
+struct testlist_type{
+    vector<temp_var*> testlist_vars;
+};
+
+struct sqbrackettestlist_type{
+    vector<temp_var*> sqbrackettestlist_vars;
+};
+
+struct keyword_type{
+    string keyword;
+};
+
+struct delim_type{
+    string delim;
+};
+
+struct num_type{
+    string number;
+    bool is_uint;
+};
+
+struct op_type{
+    string op;
+};
+
+struct str_type{
+    string str;
+};
+
+struct arg_type{
+    string name;
+    temp_var* defval;
+    bool has_defval = false;  
+};
+
+struct arglist_type{
+    vector<arg_type*> args;
+};
+
+struct arr_access{
+    string name;
+    temp_var * accessind;
+};
+
+struct funccall{
+    string funcname;
+    vector<arg_type*> arglist;
+};
+
+struct atom_expr_list{
+    vector<temp_var *> tstlist;
+};
+
+struct atom_expr_name{
+    string name;
+};
+
+struct atom_expr_number{
+    string num;
+};
+
+struct atom_expr_keyword{
+    string keyword;
+};
+
+
 class node{
 public:
     int id = -1;
@@ -16,15 +92,10 @@ public:
     vector<node*> children;   // indexes of children nodes
     string type, name;
     node(string Type, string Name) : type(Type), name(Name){}
-    struct{
-        bool is_assignable = false;
-        bool is_single = false;
-        bool is_expression = false;
-        int temp_id = 0;
-        string info = "";
-    } tempparams;
-    temp_var * temp_variable = NULL;
-
+    void * info;
+    string data_type;
+    struct temp_var * temp = NULL;
+    vector<quad> code;
 };
 
 class AST{
@@ -93,6 +164,7 @@ public:
     int type;
     string name;
     symbol_table * parent = nullptr;
+    string returntype;
     map<string, symbol_table_entry*> var_defs;
     map<string, symbol_table*> fun_defs;
     map<string, symbol_table*> class_defs;

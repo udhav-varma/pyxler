@@ -22,7 +22,7 @@
     }
     set<string> native_types{"int", "str", "list", "set", "dict"};
     extern stack<int> indents;
-    symbol_table* present_table;
+    extern symbol_table* present_table;
     #define YYDEBUG 1
 %}
 
@@ -110,7 +110,7 @@
 %%
 
 file_input: nstatement ENDMARKER{
-    $<ptr>$ = new node("nt", "file input");
+    $<ptr>$ = new node("nt", "file_input");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -119,12 +119,12 @@ file_input: nstatement ENDMARKER{
 }
 
 nstatement: nstatement NEWLINE {
-    $<ptr>$ = new node("nt", "new statement");
+    $<ptr>$ = new node("nt", "nstatement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | nstatement stmt {
-    $<ptr>$ = new node("nt", "new statement");
+    $<ptr>$ = new node("nt", "nstatement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -137,29 +137,9 @@ cond_arglist: arglist {
 | {
     $<ptr>$ = NULL;
 }
-defname: DEF NAME{
-    if(present_table->type == FUNCTION_TABLE){
-        yyerror("Nested function declaration not allowed\n");
-        return -1;
-    }
-    auto p = present_table->find_fun_entry($<val>2);
-    if(!p){
-        symbol_table * newfuntable = new symbol_table(FUNCTION_TABLE, present_table, $<val>2);
-        present_table->add_entry_fun(newfuntable);
-        present_table = newfuntable;
-    }
-    else{
-        yyerror("Function of same name already exists in the scope");
-        return 0;
-    }
-    $<ptr>$ = new node("nt", "function start");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-funcdef: defname parameters ARROWOP test ':' suite {
+funcdef: DEF NAME parameters ARROWOP test ':' suite {
     present_table = present_table->parent;
-    $<ptr>$ = new node("nt", "function definition");
+    $<ptr>$ = new node("nt", "funcdef");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -167,6 +147,7 @@ funcdef: defname parameters ARROWOP test ':' suite {
     ast.add_edge($<ptr>$, $<ptr>4);
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
+    ast.add_edge($<ptr>$, $<ptr>7);
 }
 
 parameters: '(' cond_typedargslist ')' {
@@ -183,12 +164,12 @@ cond_typedargslist: typedargslist {
 }
 
 typedargslist: tfpdef cond_eqtest{
-    $<ptr>$ = new node("nt", "Typed Arguments List");
+    $<ptr>$ = new node("nt", "typedarglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | typedargslist tfpdef cond_eqtest{
-    $<ptr>$ = new node("nt", "Typed Arguments List");
+    $<ptr>$ = new node("nt", "typedarglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -196,13 +177,7 @@ typedargslist: tfpdef cond_eqtest{
 }
 
 tfpdef: NAME ':' test {
-    if(present_table->find_var_entry($<val>1) != NULL){
-        yyerror("Variable already present in function declaration - duplicate variable\n");
-        return -1;
-    }
-    symbol_table_entry * newentry = new symbol_table_entry($<val>1, $<ptr>3->tempparams.info);
-    present_table->add_entry_var(newentry);
-    $<ptr>$ = new node("nt", "name colon test");
+    $<ptr>$ = new node("nt", "tfpdef");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -215,23 +190,21 @@ stmt: simple_stmt {
 } | compound_stmt {
     $<ptr>$ = $<ptr>1;
 }
-simple_stmt: small_stmt close_small_stmt cond_semi_colon NEWLINE {
-        $<ptr>$ = new node("nt", "simple statement");
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2);
-        ast.add_edge($<ptr>$, $<ptr>3);
-        ast.add_edge($<ptr>$, $<ptr>4);
-    }
-close_small_stmt: close_small_stmt ';' small_stmt {
-        $<ptr>$ = new node("nt", "close small statement");
-        ast.add_node($<ptr>$);
+simple_stmt: small_stmts cond_semi_colon NEWLINE {
+        $<ptr>$ = new node("nt", "simple_stmt");
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
         ast.add_edge($<ptr>$, $<ptr>3);
     }
-        | {
-            $<ptr>$ = NULL;
-        }
+
+small_stmts: small_stmt {
+    $<ptr>$ = $<ptr>1;
+} | small_stmts ';' small_stmt {
+    $<ptr>$ = new node("nt", "small_stmts");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
+}
 cond_semi_colon: ';' {
         $<ptr>$ = $<ptr>1;
     }
@@ -250,88 +223,35 @@ small_stmt: expr_stmt {
 | global_stmt {
     $<ptr>$ = $<ptr>1;
 }
-expr_stmt: test annassign {// a :int = 5;
-    if(!$<ptr>1->tempparams.is_assignable){
-        yyerror("lvalue not a valid declaration");
-        return -1;
-    }
-    else{
-        string name = $<ptr>1->tempparams.info;
-        string type = $<ptr>2->tempparams.info;
-        if(native_types.find(type) == native_types.end()){
-            if(present_table->find_class_entry(type) == NULL){
-                yyerror("Invalid type: "s + type);
-                return -1;
-            }
-        }
-        if(present_table->find_var_entry(name) != NULL){
-            yyerror("Variable already declared in scope");
-            return -1;
-        }
-        else{
-            symbol_table_entry  * newentry = new symbol_table_entry(name, type, present_table);
-            present_table->add_entry_var(newentry);
-            cerr << "Declared a variable of type " << type << ' ' << "with name " << name << '\n';
-        }
-    }
-    $<ptr>$ = new node("nt", "Declaration statement");
+expr_stmt: test annassign {
+    $<ptr>$ = new node("nt", "expr_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | test augassign {
-    if(!$<ptr>1->tempparams.is_assignable){
-        yyerror("Lvalue not assignable\n");
-        return -1;
-    }
-    else{
-        string name = $<ptr>1->tempparams.info;
-        if(present_table->find_var_entry(name) == NULL){
-            yyerror("Variable not declared in scope\n");
-            return -1;
-        }
-        //TODO
-    }
-    $<ptr>$ = new node("nt", "Augassign statement");
+    $<ptr>$ = new node("nt", "expr_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-} | test close_eqtestlist {
-    if(!$<ptr>1->tempparams.is_assignable){
-        yyerror("Lvalue not assignable\n");
-        return -1;
-    }
-    else{
-        string name = $<ptr>1->tempparams.info;
-        if(present_table->find_var_entry(name) == NULL){
-            yyerror("Variable not declared in scope\n");
-            return -1;
-        }
-        //TODO
-    }
-    $<ptr>$ = new node("nt", "assign statement");
+} | test '=' test { 
+    $<ptr>$ = new node("nt", "expr_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
-close_eqtestlist: '=' test close_eqtestlist {
-                    $<ptr>$ = new node("nt", "close yield or test star");
-                    ast.add_node($<ptr>$);
-                    ast.add_edge($<ptr>$, $<ptr>1);
-                    ast.add_edge($<ptr>$, $<ptr>2);
-                    ast.add_edge($<ptr>$, $<ptr>3);
-            }
-                        | {
-                            $<ptr>$ = NULL;
-                        }
-annassign: ':' test cond_eqtest {
-    $<ptr>$ = new node("nt", "Annotated Assignment");
-    $<ptr>$->tempparams.info = $<ptr>2->tempparams.info;
+annassign: ':' test '=' test {
+    $<ptr>$ = new node("nt", "annasign");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
+    ast.add_edge($<ptr>$, $<ptr>4);
+} | ':' test { 
+    $<ptr>$ = new node("nt", "annasign");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
 }
 cond_eqtest: '=' test {
-        $<ptr>$ = new node("nt", "condition equal test");
+        $<ptr>$ = new node("nt", "cond_eqtest");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);
         ast.add_edge($<ptr>$, $<ptr>2);
@@ -381,9 +301,7 @@ augassign: ADDASSIGN{
                 $<ptr>$ = $<ptr>1;
             }
 pass_stmt: PASS{
-    $<ptr>$ = new node("nt", "Pass Statement");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
+    $<ptr>$ = $<ptr>1;
 }
 flow_stmt: break_stmt {
             $<ptr>$ = $<ptr>1;
@@ -396,45 +314,39 @@ flow_stmt: break_stmt {
         }
 
 break_stmt: BREAK {
-    $<ptr>$ = new node("nt", "Break Statement");
+    $<ptr>$ = new node("nt", "break_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
 
 continue_stmt: CONTINUE {
-    $<ptr>$ = new node("nt", "Continue Statement");
+    $<ptr>$ = new node("nt", "continue_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
 }
 
-return_stmt: RETURN cond_testlist{
-    $<ptr>$ = new node("nt", "Return Statement");
+return_stmt: RETURN test{
+    $<ptr>$ = new node("nt", "return_stmt");
     ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+} | RETURN  {
+    $<ptr>$ = $<ptr>1;
+}
+
+global_stmt: GLOBAL namelist{
+    $<ptr>$ = new node("nt", "global_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 
-cond_testlist: test{
-      $<ptr>$ = $<ptr>1;
-} | {
-      $<ptr>$ = nullptr;
-}
-
-global_stmt: GLOBAL NAME close_comma_name{
-    $<ptr>$ = new node("nt", "Global Statement");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-close_comma_name: close_comma_name ',' NAME{
-    $<ptr>$ = new node("nt", "Close Comma Name");
-    ast.add_node($<ptr>$);
+namelist: NAME {
+    $<ptr>$ = $<ptr>1;
+} | namelist ',' NAME {
+    $<ptr>$ = new node("nt", "namelist");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
 }
 
 
@@ -445,15 +357,14 @@ compound_stmt: if_stmt{
 } | for_stmt{
     $<ptr>$ = $<ptr>1;
 } | funcdef{
-    cerr << "here\n";
+    // cerr << "here\n";
     $<ptr>$ = $<ptr>1;
 } | classdef{
     $<ptr>$ = $<ptr>1;
 }
 
 if_stmt: IF test ':' suite close_eliftestsuite cond_else_colon_suite{
-    $<ptr>$ = new node("nt", "If Statement");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "if_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -463,8 +374,7 @@ if_stmt: IF test ':' suite close_eliftestsuite cond_else_colon_suite{
 }
 
 cond_else_colon_suite: ELSE ':' suite{
-    $<ptr>$ = new node("nt", "Else Colon Suite");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "cond_else_colon_suite");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -473,8 +383,7 @@ cond_else_colon_suite: ELSE ':' suite{
 }
 
 close_eliftestsuite: close_eliftestsuite ELIF test ':' suite{
-    $<ptr>$ = new node("nt", "Close Elif Test Suite");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "close_eliftestsuite");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -485,15 +394,13 @@ close_eliftestsuite: close_eliftestsuite ELIF test ':' suite{
 }  
 
 while_stmt: WHILE test ':' suite{
-    $<ptr>$ = new node("nt", "While Statement");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "while_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 } | WHILE test ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "While Statement");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "while_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -503,8 +410,7 @@ while_stmt: WHILE test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>7);
 }
 for_stmt: FOR exprlist IN test ':' suite{
-    $<ptr>$ = new node("nt", "For Statement");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "for_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -512,8 +418,7 @@ for_stmt: FOR exprlist IN test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
 } | FOR exprlist IN test ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "For Statement");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "for_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -528,8 +433,7 @@ for_stmt: FOR exprlist IN test ':' suite{
 suite: simple_stmt{
     $<ptr>$ = $<ptr>1;
 } | NEWLINE INDENT plus_stmt DEDENT{
-    $<ptr>$ = new node("nt", "Suite");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "suite");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -538,7 +442,7 @@ suite: simple_stmt{
 plus_stmt: stmt{
     $<ptr>$ = $<ptr>1;
 } | plus_stmt stmt{
-    $<ptr>$ = new node("nt", "Plus Statement");
+    $<ptr>$ = new node("nt", "plus_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -549,7 +453,7 @@ test: or_test{
 or_test: and_test {
     $<ptr>$ = $<ptr>1;
 } | or_test OR and_test {
-    $<ptr>$ = new node("nt", "Close Or And Test");
+    $<ptr>$ = new node("nt", "or_test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -559,7 +463,7 @@ or_test: and_test {
 and_test: not_test{
     $<ptr>$ = $<ptr>1;
 } | and_test AND not_test {
-    $<ptr>$ = new node("nt", "And Test");
+    $<ptr>$ = new node("nt", "and_test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -567,7 +471,7 @@ and_test: not_test{
 }
 
 not_test: NOT not_test {
-    $<ptr>$ = new node("nt", "Not test");
+    $<ptr>$ = new node("nt", "not_test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -578,7 +482,7 @@ not_test: NOT not_test {
 comparison: expr {
     $<ptr>$ = $<ptr>1;
 } | comparison comp_op expr {
-    $<ptr>$ = new node("nt", "Comparison");
+    $<ptr>$ = new node("nt", "comparison");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -607,14 +511,14 @@ comp_op: '<'{
 } | IN{
     $<ptr>$ = $<ptr>1;
 } | NOT IN{
-    $<ptr>$ = new node("nt", "Not in");
+    $<ptr>$ = new node("nt", "comp_op");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | IS{
     $<ptr>$ = $<ptr>1;
 } | IS NOT{
-    $<ptr>$ = new node("nt", "Is Not");
+    $<ptr>$ = new node("nt", "comp_op");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -624,7 +528,7 @@ comp_op: '<'{
 expr: xor_expr{
     $<ptr>$ = $<ptr>1;
 } | expr '|' xor_expr {
-    $<ptr>$ = new node("nt", "Expression");
+    $<ptr>$ = new node("nt", "expr");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -634,7 +538,7 @@ expr: xor_expr{
 xor_expr: and_expr{
     $<ptr>$ = $<ptr>1;
 } | xor_expr '^' and_expr {
-    $<ptr>$ = new node("nt", "Xor Expression");
+    $<ptr>$ = new node("nt", "xor_expr");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -643,7 +547,7 @@ xor_expr: and_expr{
 and_expr: shift_expr{
     $<ptr>$ = $<ptr>1;
 } | and_expr '&' shift_expr{
-    $<ptr>$ = new node("nt", "And Expression");
+    $<ptr>$ = new node("nt", "and_expr");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -654,13 +558,13 @@ and_expr: shift_expr{
 shift_expr: arith_expr {
     $<ptr>$ = $<ptr>1;
 } | shift_expr LEFTSHIFT arith_expr {
-    $<ptr>$ = new node("nt", "Shift Expression");
+    $<ptr>$ = new node("nt", "shift_expr");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | shift_expr RIGHTSHIFT arith_expr {
-    $<ptr>$ = new node("nt", "Shift Expression");
+    $<ptr>$ = new node("nt", "shift_expr");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -672,12 +576,12 @@ shift_expr: arith_expr {
 arith_expr: term{
     $<ptr>$ = $<ptr>1;
 } | arith_expr '+' term {
-    $<ptr>$ = new node("nt", "Arithmetic Expression");
+    $<ptr>$ = new node("nt", "arith_expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | arith_expr '-' term {
-    $<ptr>$ = new node("nt", "Arithmetic Expression");
+    $<ptr>$ = new node("nt", "arith_expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -687,7 +591,7 @@ arith_expr: term{
 term: factor{
     $<ptr>$ = $<ptr>1;
 } | term muldivremops factor {
-    $<ptr>$ = new node("nt", "Term");
+    $<ptr>$ = new node("nt", "term");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -707,7 +611,7 @@ muldivremops: '*'{
 } 
 
 factor: plus_or_minus_or_not factor{
-    $<ptr>$ = new node("nt", "Factor");
+    $<ptr>$ = new node("nt", "factor");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -726,132 +630,87 @@ plus_or_minus_or_not: '+'{
 }
 
 power: atom_expr POW factor{
-    $<ptr>$ = new node("nt", "Power");
-    ast.add_node($<ptr>$);
+    $<ptr>$ = new node("nt", "power");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | atom_expr{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "power");
+    ast.add_edge($<ptr>$, $<ptr>1);
 }
 
-atom_expr: atom close_trailer{
-    $<ptr>$ = new node("nt", "Atomic Expression");
-    auto nodptr = $<ptr>$;
-    nodptr->tempparams.is_assignable = $<ptr>1->tempparams.is_assignable;
-    nodptr->tempparams.info = $<ptr>1->tempparams.info;
-    ast.add_node($<ptr>$);
+atom_expr: atom {
+    $<ptr>$ = new node("nt", "atom_expr");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
+} | atom trailer {  // Function calls, object attr access only
+    $<ptr>$ = new node("nt", "atom_expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-close_trailer: close_trailer trailer{
-    $<ptr>$ = new node("nt", "Close Trailer");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | {
-    $<ptr>$ = NULL;
-}
-
-atom: '(' cond_testlistcomp ')' {
-    $<ptr>$ = new node("nt", "Atom");
-    ast.add_node($<ptr>$);
+} | atom trailer trailer {  // Method calls inside object
+    $<ptr>$ = new node("nt", "atom_expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-}|'[' testlist_comp ']' {
-    $<ptr>$ = new node("nt", "Atom");
+}
+
+atom: '[' testlist ']' {
+    $<ptr>$ = new node("nt", "atom");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }| '[' ']' {
-    $<ptr>$ = new node("nt", "Atom");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | '{' dictorsetmaker '}' {
-    $<ptr>$ = new node("nt", "Atom");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | '{' '}' {
-    $<ptr>$ = new node("nt", "Atom");
+    $<ptr>$ = new node("nt", "atom");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | NAME {
-    $<ptr>$ = $<ptr>1;
-    auto nodptr = $<ptr>1;
-    nodptr->tempparams.is_assignable = true;
-    nodptr->tempparams.is_single = true;
-    nodptr->tempparams.info = $<val>1;
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } | NUMBER {
-    $<ptr>$ = $<ptr>1;
-    auto nodptr = $<ptr>1;
-    nodptr->tempparams.is_assignable = false;
-    nodptr->tempparams.is_single = true;
-    nodptr->tempparams.info = $<val>1;
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 }  | NONE {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } | TRUE {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } | FALSE {
-    $<ptr>$ = $<ptr>1;
-}      
-
-cond_testlistcomp:  testlist_comp{
-    $<ptr>$ = $<ptr>1;
-} | {
-    $<ptr>$ = NULL;
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } 
 
-testlist_comp: test{
-    $<ptr>$ = $<ptr>1;
-} | testlist_comp ',' test{
-    $<ptr>$ = new node("nt", "Test List Comparision");
-    ast.add_node($<ptr>$);
+testlist: test{
+    $<ptr>$ = new node("nt", "testlist");
+    ast.add_edge($<ptr>$, $<ptr>1);
+} | testlist ',' test{
+    $<ptr>$ = new node("nt", "testlist");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
 trailer: '(' cond_arglist ')' {
-    $<ptr>$ = new node("nt", "Trailer");
+    $<ptr>$ = new node("nt", "trailer");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | '[' subscriptlist ']' {
-    $<ptr>$ = new node("nt", "Trailer");
+} | '[' test ']' {
+    $<ptr>$ = new node("nt", "trailer");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | '.' NAME {
-    $<ptr>$ = new node("nt", "Trailer");
+    $<ptr>$ = new node("nt", "trailer");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 
 }
-
-subscriptlist: subscript {
-    $<ptr>$ = $<ptr>1;
-} | subscriptlist ',' subscript {
-    $<ptr>$ = new node("nt", "subscriptlist");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-
-
-subscript: test {
-    $<ptr>$ = $<ptr>1;
-}
-
 
 exprlist: expr{
     $<ptr>$ = $<ptr>1;
@@ -863,61 +722,8 @@ exprlist: expr{
 }
 
 
-dictorsetmaker:  dictmaker {
-    $<ptr>$ = $<ptr>1;
-} | setmaker {
-    $<ptr>$ = $<ptr>1;
-}
-
-dictmaker: testcoltest {
-    $<ptr>$ = $<ptr>1;
-} | dictmaker ',' testcoltest {
-    $<ptr>$ = new node("nt", "dictmaker");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-setmaker: test {
-    $<ptr>$ = $<ptr>1;
-} | setmaker ',' test { 
-    $<ptr>$ = new node("nt", "setmaker");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-
-testcoltest: test ':' test{
-    $<ptr>$ = new node("nt", "Test Column Test Or Star expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-
-
-classname: CLASS NAME{
-    if(present_table->type != GLOBAL_TABLE){
-        yyerror("Class declaration only allowed in global namespace\n");
-        return -1;
-    }
-    auto p = present_table->find_class_entry($<val>2);
-    if(p == NULL){
-        symbol_table * newclasstable = new symbol_table(CLASS_TABLE, present_table, $<val>2);
-        present_table->add_entry_class(newclasstable);
-        present_table = newclasstable;
-    }
-    else{
-        yyerror("Class already declared in scope\n");
-        return -1;
-    }
-    $<ptr>$ = new node("nt", "Class declaration");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-}
-
-classdef: classname cond_parentheses_arglist ':' suite{
-    present_table = present_table->parent;
-    $<ptr>$ = new node("nt", "Class Definition");
+classdef: CLASS NAME cond_parentheses_arglist ':' suite{
+    $<ptr>$ = new node("nt", "classdef");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -925,7 +731,7 @@ classdef: classname cond_parentheses_arglist ':' suite{
 }
 
 cond_parentheses_arglist: '(' cond_arglist ')'{
-    $<ptr>$ = new node("nt", "Condition Parentheses Argument List");
+    $<ptr>$ = new node("nt", "cond_parentheses_arglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -935,7 +741,8 @@ cond_parentheses_arglist: '(' cond_arglist ')'{
 }
 
 arglist: argument {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "arglist");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } | arglist ',' argument { 
     $<ptr>$ = new node("nt", "arglist");
     ast.add_node($<ptr>$);
@@ -954,10 +761,11 @@ arglist: argument {
 // Illegal combinations and orderings are blocked in ast.c:
 // multiple (test comp_for) arguments are blocked; keyword unpackings
 // that precede iterable unpackings are blocked; etc.
-argument: test {
-        $<ptr>$ = $<ptr>1;
+argument: NAME {
+        $<ptr>$ = new node("nt", "argument");
+        ast.add_edge($<ptr>$, $<ptr>1);
     } |
-    test '=' test {
+    NAME '=' test {
         $<ptr>$ = new node("nt", "argument");
         ast.add_node($<ptr>$);
         ast.add_edge($<ptr>$, $<ptr>1);

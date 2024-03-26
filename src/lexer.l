@@ -125,7 +125,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         return DEDENT;
     }
     yylval.val = "ENDMARKER";
-    yylval.ptr = new node("", yylval.val);
+    yylval.ptr = new node("END", yylval.val);
     return ENDMARKER;
 }
 <*>\000 {
@@ -137,7 +137,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
         return DEDENT;
     }
     yylval.val = "ENDMARKER";
-    yylval.ptr = new node("", yylval.val);
+    yylval.ptr = new node("END", yylval.val);
     return ENDMARKER;   
 }
 <OUTLINE>. {
@@ -147,7 +147,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
             unput(yytext[0]);
             indents.push(pos);
             yylval.val = "INDENT";
-            yylval.ptr = new node("", yylval.val);
+            yylval.ptr = new node("INDENT", yylval.val);
             return INDENT;
         }
         else if(pos == indents.top()){
@@ -159,7 +159,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
             indents.pop();
             unput(yytext[0]);
             yylval.val = "DEDENT";
-            yylval.ptr = new node("", yylval.val);
+            yylval.ptr = new node("DEDENT", yylval.val);
             return DEDENT;
         }
     }
@@ -195,7 +195,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 }
 
 <INLINE,BRACKET>{NEWLINE} {
-    yylval.ptr = new node("", "NEWLINE");
+    yylval.ptr = new node("NEWLINE", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
@@ -350,71 +350,71 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     return DEF;}
 
 <INLINE,BRACKET>{COMMENT} {
-    yylval.ptr = new node("", "NEWLINE");
+    yylval.ptr = new node("NEWLINE", "NEWLINE");
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
     return NEWLINE;
 }
 <INLINE,BRACKET>{ADDASSIGN} {
-    yylval.ptr = new node("DELIMITER", "+=");
+    yylval.ptr = new node("OPERATOR", "+=");
     yylval.val = "+=";
     return ADDASSIGN;}
 <INLINE,BRACKET>{SUBASSIGN} {
-    yylval.ptr = new node("DELIMITER", "-=");
+    yylval.ptr = new node("OPERATOR", "-=");
     yylval.val = "-=";
     return SUBASSIGN;}
 <INLINE,BRACKET>{MULASSIGN} {
-    yylval.ptr = new node("DELIMITER", "*=");
+    yylval.ptr = new node("OPERATOR", "*=");
     yylval.val = "*=";
     return MULASSIGN;}
 <INLINE,BRACKET>{DIVASSIGN} {
-    yylval.ptr = new node("DELIMITER", "/=");
+    yylval.ptr = new node("OPERATOR", "/=");
     yylval.val = "/=";
     return DIVASSIGN;}
 <INLINE,BRACKET>{IDIVASSIGN} {
-    yylval.ptr = new node("DELIMITER", "//=");
+    yylval.ptr = new node("OPERATOR", "//=");
     yylval.val = "//=";
     return IDIVASSIGN;}
 <INLINE,BRACKET>{MODASSIGN} {
-    yylval.ptr = new node("DELIMITER", "%=");
+    yylval.ptr = new node("OPERATOR", "%=");
     yylval.val = "%=";
     return MODASSIGN;}
 <INLINE,BRACKET>{ATASSIGN} {
-    yylval.ptr = new node("DELIMITER", "@=");
+    yylval.ptr = new node("OPERATOR", "@=");
     yylval.val = "@=";
     return ATASSIGN;}
 <INLINE,BRACKET>{ANDASSIGN} {
-    yylval.ptr = new node("DELIMITER", "&=");
+    yylval.ptr = new node("OPERATOR", "&=");
     yylval.val = "&=";
     return ANDASSIGN;}
 <INLINE,BRACKET>{ORASSIGN} {
-    yylval.ptr = new node("DELIMITER", "|=");
+    yylval.ptr = new node("OPERATOR", "|=");
     yylval.val = "|=";
     return ORASSIGN;}
 <INLINE,BRACKET>{XORASSIGN} {
-    yylval.ptr = new node("DELIMITER", "^=");
+    yylval.ptr = new node("OPERATOR", "^=");
     yylval.val = "^=";
     return XORASSIGN;}
 <INLINE,BRACKET>{LSASSIGN} {
-    yylval.ptr = new node("DELIMITER", "<<=");
+    yylval.ptr = new node("OPERATOR", "<<=");
     yylval.val = "<<=";
     return LSASSIGN;}
 <INLINE,BRACKET>{RSASSIGN} {
-    yylval.ptr = new node("DELIMITER", ">>=");
+    yylval.ptr = new node("OPERATOR", ">>=");
     yylval.val = ">>=";
     return RSASSIGN;}
 <INLINE,BRACKET>{POWASSIGN} {
-    yylval.ptr = new node("DELIMITER", "**=");
+    yylval.ptr = new node("OPERATOR", "**=");
     yylval.val = "**=";
     return POWASSIGN;}
 <INLINE,BRACKET>{ARROWOP} {
-    yylval.ptr = new node("DELIMITER", "->");
+    yylval.ptr = new node("OPERATOR", "->");
     yylval.val = "->";
     return ARROWOP;}
 
 <INLINE,BRACKET>{stringliteral} { 
-    yylval.ptr = new node("", string(yytext, yytext + yyleng));
+    yylval.ptr = new node("STRING", string(yytext, yytext + yyleng));
     yylval.val = string(yytext, yytext + yyleng);
     return STRING;}
 <INLINE,BRACKET>{POW} {
