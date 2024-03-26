@@ -1,4 +1,4 @@
-mile:  	lexer.l parser.y node.hpp
+mile:  	lexer.l parser.y node.hpp node.cpp
 		bison -o parser.tab.cpp -d -t parser.y
 		flex -o lexer.cpp lexer.l
-		c++ -o $@ parser.tab.cpp lexer.cpp node.hpp -lfl -ll
+		c++ -o $@ parser.tab.cpp lexer.cpp node.hpp node.cpp -lfl -ll -Wno-write-strings

@@ -20,6 +20,7 @@
     void yyerror(string s){
     fprintf(stderr, "Error! Line Number %d, token: %s, message: %s\n", yylineno, yytext, s.c_str());
     }
+    set<string> native_types{"int", "str", "list", "set", "dict"};
     extern stack<int> indents;
     symbol_table* present_table;
     #define YYDEBUG 1
@@ -181,28 +182,26 @@ cond_typedargslist: typedargslist {
     $<ptr>$ = NULL;
 }
 
-typedargslist: tfpdef cond_eqtest close_comma_tfpdef_condeqtest cond_comma{
+typedargslist: tfpdef cond_eqtest{
+    $<ptr>$ = new node("nt", "Typed Arguments List");
+    ast.add_node($<ptr>$);
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+} | typedargslist tfpdef cond_eqtest{
     $<ptr>$ = new node("nt", "Typed Arguments List");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-}
-
-close_comma_tfpdef_condeqtest: close_comma_tfpdef_condeqtest ',' tfpdef cond_eqtest {
-    $<ptr>$ = new node("nt", "close comma condition eqtest");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-}
-| {
-    $<ptr>$ = NULL;
 }
 
 tfpdef: NAME ':' test {
+    if(present_table->find_var_entry($<val>1) != NULL){
+        yyerror("Variable already present in function declaration - duplicate variable\n");
+        return -1;
+    }
+    symbol_table_entry * newentry = new symbol_table_entry($<val>1, $<ptr>3->tempparams.info);
+    present_table->add_entry_var(newentry);
     $<ptr>$ = new node("nt", "name colon test");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -251,10 +250,7 @@ small_stmt: expr_stmt {
 | global_stmt {
     $<ptr>$ = $<ptr>1;
 }
-  | assert_stmt {
-    $<ptr>$ = $<ptr>1;
-  }
-expr_stmt: test annassign {
+expr_stmt: test annassign {// a :int = 5;
     if(!$<ptr>1->tempparams.is_assignable){
         yyerror("lvalue not a valid declaration");
         return -1;
@@ -262,6 +258,12 @@ expr_stmt: test annassign {
     else{
         string name = $<ptr>1->tempparams.info;
         string type = $<ptr>2->tempparams.info;
+        if(native_types.find(type) == native_types.end()){
+            if(present_table->find_class_entry(type) == NULL){
+                yyerror("Invalid type: "s + type);
+                return -1;
+            }
+        }
         if(present_table->find_var_entry(name) != NULL){
             yyerror("Variable already declared in scope");
             return -1;
@@ -277,17 +279,41 @@ expr_stmt: test annassign {
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | test augassign {
+    if(!$<ptr>1->tempparams.is_assignable){
+        yyerror("Lvalue not assignable\n");
+        return -1;
+    }
+    else{
+        string name = $<ptr>1->tempparams.info;
+        if(present_table->find_var_entry(name) == NULL){
+            yyerror("Variable not declared in scope\n");
+            return -1;
+        }
+        //TODO
+    }
     $<ptr>$ = new node("nt", "Augassign statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | test close_eqtestlist {
+    if(!$<ptr>1->tempparams.is_assignable){
+        yyerror("Lvalue not assignable\n");
+        return -1;
+    }
+    else{
+        string name = $<ptr>1->tempparams.info;
+        if(present_table->find_var_entry(name) == NULL){
+            yyerror("Variable not declared in scope\n");
+            return -1;
+        }
+        //TODO
+    }
     $<ptr>$ = new node("nt", "assign statement");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 }
-close_eqtestlist: close_eqtestlist '=' test {
+close_eqtestlist: '=' test close_eqtestlist {
                     $<ptr>$ = new node("nt", "close yield or test star");
                     ast.add_node($<ptr>$);
                     ast.add_edge($<ptr>$, $<ptr>1);
@@ -314,22 +340,7 @@ cond_eqtest: '=' test {
         $<ptr>$ = NULL;
       }
               
-close_commatest: close_commatest ',' test {
-    $<ptr>$ = new node("nt", "close commatest");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} 
-| {
-    $<ptr>$ = NULL;
-}
-cond_comma: ','{
-    $<ptr>$ = $<ptr>1;
-} 
-| {
-    $<ptr>$ = NULL;
-}
+
 augassign: ADDASSIGN{
             $<ptr>$ = $<ptr>1;
         }
@@ -426,19 +437,6 @@ close_comma_name: close_comma_name ',' NAME{
     $<ptr>$ = NULL;
 }
 
-assert_stmt: ASSERT test{
-    $<ptr>$ = new node("nt", "Assert Statement");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-} | ASSERT test ',' test{
-    $<ptr>$ = new node("nt", "Assert Statement");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-}
 
 compound_stmt: if_stmt{
     $<ptr>$ = $<ptr>1;
@@ -447,6 +445,7 @@ compound_stmt: if_stmt{
 } | for_stmt{
     $<ptr>$ = $<ptr>1;
 } | funcdef{
+    cerr << "here\n";
     $<ptr>$ = $<ptr>1;
 } | classdef{
     $<ptr>$ = $<ptr>1;
@@ -809,7 +808,9 @@ cond_testlistcomp:  testlist_comp{
     $<ptr>$ = NULL;
 } 
 
-testlist_comp: test close_commatest cond_comma{
+testlist_comp: test{
+    $<ptr>$ = $<ptr>1;
+} | testlist_comp ',' test{
     $<ptr>$ = new node("nt", "Test List Comparision");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -837,58 +838,49 @@ trailer: '(' cond_arglist ')' {
 
 }
 
-subscriptlist: subscript close_commasubscript cond_comma{
-    $<ptr>$ = new node("nt", "Subscript List");
-    ast.add_node($<ptr>$);
+subscriptlist: subscript {
+    $<ptr>$ = $<ptr>1;
+} | subscriptlist ',' subscript {
+    $<ptr>$ = new node("nt", "subscriptlist");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-close_commasubscript: close_commasubscript ',' subscript{
-    $<ptr>$ = new node("nt", "Close Comma Subscript");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}
 
 subscript: test {
     $<ptr>$ = $<ptr>1;
 }
 
 
-exprlist: expr close_comma_expr cond_comma{
-    $<ptr>$ = new node("nt", "Expression List");
-    ast.add_node($<ptr>$);
+exprlist: expr{
+    $<ptr>$ = $<ptr>1;
+} | exprlist ',' expr {
+    $<ptr>$ = new node("nt", "exprlist");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
 
-close_comma_expr: close_comma_expr ',' expr {
-    $<ptr>$ = new node("nt", "Close Comma Expression Or Star Expression");
-    ast.add_node($<ptr>$);
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
+dictorsetmaker:  dictmaker {
+    $<ptr>$ = $<ptr>1;
+} | setmaker {
+    $<ptr>$ = $<ptr>1;
 }
 
-
-dictorsetmaker:  testcoltest close_commatestcoltest cond_comma {
-    $<ptr>$ = new node("nt", "DictOrSetMaker");
-    ast.add_node($<ptr>$);
+dictmaker: testcoltest {
+    $<ptr>$ = $<ptr>1;
+} | dictmaker ',' testcoltest {
+    $<ptr>$ = new node("nt", "dictmaker");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
-} | test close_commatest cond_comma{
-    $<ptr>$ = new node("nt", "DictOrSetMaker");
-    ast.add_node($<ptr>$);
+}
+setmaker: test {
+    $<ptr>$ = $<ptr>1;
+} | setmaker ',' test { 
+    $<ptr>$ = new node("nt", "setmaker");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -902,15 +894,6 @@ testcoltest: test ':' test{
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-
-close_commatestcoltest: close_commatestcoltest ',' testcoltest  {
-    $<ptr>$ = new node("nt", "Close Comma Test Column Test Or Star expression");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-} | {
-    $<ptr>$ = NULL;
-}
 
 classname: CLASS NAME{
     if(present_table->type != GLOBAL_TABLE){
@@ -951,23 +934,16 @@ cond_parentheses_arglist: '(' cond_arglist ')'{
     $<ptr>$ = NULL;
 }
 
-arglist: argument close_comma_argument cond_comma{
-    $<ptr>$ = new node("nt", "Argument List");
+arglist: argument {
+    $<ptr>$ = $<ptr>1;
+} | arglist ',' argument { 
+    $<ptr>$ = new node("nt", "arglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
-close_comma_argument: close_comma_argument ',' argument {
-        $<ptr>$ = new node("nt", "Close Comma Argument");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2);
-        ast.add_edge($<ptr>$, $<ptr>3);
-    } | {
-        $<ptr>$ = nullptr;
-    }
 
 // The reason that keywords are test nodes instead of NAME is that using NAME
 // results in an ambiguity. ast.c makes sure it's a NAME.
