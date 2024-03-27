@@ -48,9 +48,7 @@ struct str_type{
 };
 
 struct arg_type{
-    string name;
-    temp_var* defval;
-    bool has_defval = false;  
+    temp_var * temp;
 };
 
 struct arglist_type{

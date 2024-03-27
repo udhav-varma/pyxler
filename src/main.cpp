@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <string>
 #include "node.hpp"
 
 symbol_table * present_table;
@@ -8,15 +9,17 @@ string tempprint(temp_var * temp)
     return "$"s + to_string(temp->id);
 }
 
+int for_id = 0, while_id = 0, if_id = 0;
+
 void make_3ac(node * root)
 {
     if(root->type == "nt"){
-        for(auto r: root->children){
-            if(!r){
-                make_3ac(r);
-                root->code.insert(root->code.end(), r->code.begin(), r->code.end());
-            }
-        }
+        // for(auto r: root->children){
+        //     if(!r){
+        //         make_3ac(r);
+        //         root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+        //     }
+        // }
         vector<quad> beg_code, end_code;
         if(root->name == "file_input"){
 
@@ -25,9 +28,7 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "funcdef"){
-            beg_code.push_back(quad("beginfunc", root->children[1]->name, "", ""));
-            // TODO - Paramters
-            end_code.push_back(quad("endfunc", root->children[1]->name, "", ""));
+
         }
         else if(root->name == "parameters"){
             //TODO this and funcdef
@@ -66,7 +67,15 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "if_stmt"){
-
+            root->code = root->children[3]->code;
+            if_id++;
+            beg_code.push_back(quad("beginif"s + to_string(if_id), "", "label", ""));
+            beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
+            beg_code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
+            end_code.push_back(quad("endif"s + to_string(if_id), "", "label", ""));
+            beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endif"s + to_string(if_id)));
+            if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
+            if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
         }
         else if(root->name == "cond_else_colon_suite"){
 
@@ -75,10 +84,50 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "while_stmt"){
-
+            if(root->children.size() == 4){
+                root->code = root->children[3]->code;
+                while_id++;
+                beg_code.push_back(quad("beginwhile"s + to_string(while_id), "", "label", ""));
+                beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
+                beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endwhile"s + to_string(while_id)));
+                end_code.push_back((quad("", "", "goto", "beginwhile"s + to_string(while_id))));
+                end_code.push_back(quad("endwhile"s + to_string(while_id), "", "label", ""));   
+            }
+            else{
+                //TODO
+            }
         }
         else if(root->name == "for_stmt"){
+            if(root->children.size() == 6){
+                if(root->children[3]->data_type == "funccall"){
+                    funccall * info = (funccall *)root->children[3]->info;
+                    if(info->funcname != "range"){
+                        cerr << "For loop: only range(n) type functions allowed\n";
+                        exit(0);
+                    }
+                    else if(info->arglist.size() != 1){
+                        cerr << "For loop: only range(n) type args allowed\n";
+                        exit(0);
+                    }
+                    temp_var * upbound = info->arglist[0]->temp;
+                    temp_var * itervar = new temp_var("uint");
+                    for_id++;
+                    beg_code.push_back(quad("beginfor"s + to_string(for_id), "", "label", ""));
+                    beg_code.push_back(quad(0, "", "", tempprint(itervar)));
+                    temp_var * comp_res = new temp_var("bool");
+                    beg_code.push_back(quad(tempprint(itervar), tempprint(upbound), "<", tempprint(comp_res)));
+                    beg_code.push_back(quad("if_false", tempprint(comp_res), "goto", "endfor"s + to_string(for_id)));
+                    end_code.push_back(quad("", "", "goto", "beginfor"s + to_string(for_id)));
+                    end_code.push_back(quad("endfor"s + to_string(for_id), "", "label", ""));
+                }   
+                else{
+                    cerr << "For loop: only for using range(n) call is supported";
+                    exit(0);
+                }
+            }
+            else{
 
+            }
         }
         else if(root->name == "suite"){
 
@@ -86,38 +135,149 @@ void make_3ac(node * root)
         else if(root->name == "plus_stmt"){
 
         }
+        else if(root->name == "test"){
+            root->data_type = root->children[0]->data_type;
+            root->info = root->children[0]->info;
+            root->temp = new temp_var(root->children[0]->temp->type);
+            root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));   
+        }
         else if(root->name == "or_test"){
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
 
         }
         else if(root->name == "and_test"){
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
 
         }
         else if(root->name == "not_test"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[1]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[1]->temp), "NOT", tempprint(root->temp)));
+            }
         }
         else if(root->name == "comparison"){
-
+            if(root->children.size() == 1){
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
         }
         else if(root->name == "expr"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
         }
         else if(root->name == "xor_expr"){
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
 
         }
         else if(root->name == "and_expr"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
         }
         else if(root->name == "shift_expr"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+            }
         }
         else if(root->name == "arith_expr"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+            }
         }
         else if(root->name == "term"){
-
+            if(root->children.size() == 1){
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[0]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            }
+            else{
+                root->temp = new temp_var(root->children[0]->temp->type);
+                //TODO: typechecking
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+            }
         }
         else if(root->name == "factor"){
-
+            if(root->children.size() == 2){
+                if(root->children[1]->temp == NULL || root->children[1]->temp->type != "uint"){
+                    cerr << "TypeError: Unary operation unsupported on this type\n";
+                    exit(0);
+                }
+                root->temp = new temp_var(root->children[1]->temp->type);
+                root->code.push_back(quad("", tempprint(root->children[1]->temp), root->children[0]->name, tempprint(root->temp)));
+            }
+            else{
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = new temp_var(root->children[1]->temp->type);
+                root->code.push_back(quad(tempprint(root->children[0]->temp), "", "", tempprint(root->temp)));
+            }
         }
         else if(root->name == "power"){
             if(root->children.size() == 1){
@@ -126,27 +286,44 @@ void make_3ac(node * root)
                 root->temp = root->children[0]->temp;
             }
             else if(root->children.size() == 3){
-                
+                if(root->children[2]->temp != NULL and root->children[2]->temp->type == "uint"){
+                    //TODO - implement power;
+                }
+                else{
+                    cerr << "TypeError: power operation not defined for these operands";
+                }
             }
         }
         else if(root->name == "atom_expr"){
             if(root->children.size() == 1){
                 if(root->children[0]->data_type == "name_type"){
+                    root->data_type = "atom_expr_name";
                     root->info = new atom_expr_name();
                     atom_expr_name * info = (atom_expr_name *) root->info;
                     info->name = ((name_type *)root->children[0]->info)->name_val;
+                    root->temp = new temp_var("name");
+                    root->code.push_back(quad(info->name, "", "", tempprint(root->temp)));
                 }
                 else if(root->children[0]->data_type == "num_type"){
+                    root->data_type = "atom_expr_number";
                     root->info = new atom_expr_number();
                     atom_expr_number * info = (atom_expr_number *) root->info;
                     info->num = ((num_type *) root->children[0]->info)->number;
+                    if(((num_type *) root->children[0]->info)->is_uint)
+                        root->temp = new temp_var("uint");
+                    else{
+                        root->temp = new temp_var("number");
+                    }
+                    root->code.push_back(quad(info->num, "", "", tempprint(root->temp)));
                 }
                 else if(root->children[0]->data_type == "keyword_type"){
+                    root->data_type = "atom_expr_keyword";
                     root->info = new atom_expr_keyword();
                     atom_expr_keyword * info = (atom_expr_keyword *) root->info;
                     info->keyword = ((keyword_type *) root->children[0]->info)->keyword;
                 }
                 else if(root->children[0]->data_type == "sqbrackettestlist_type"){
+                    root->data_type = "atom_expr_list";
                     root->info = new atom_expr_list();
                     atom_expr_list * info = (atom_expr_list *) root->info;
                     info->tstlist = ((sqbrackettestlist_type *)(root->children[0]))->sqbrackettestlist_vars;
@@ -267,15 +444,7 @@ void make_3ac(node * root)
             root->data_type = "arg_type";
             root->info = new arg_type();
             arg_type* info = (arg_type *) root->info;
-            if(root->children.size() == 3){
-                info->has_defval = true;
-                info->name = ((name_type*) root->children[0])->name_val;
-                info->defval = ((test_type*) root->children[2])->temp;
-            }
-            else{
-                info->has_defval = false;
-                info->name = ((name_type*) root->children[0])->name_val;
-            }
+            info->temp = root->children[0]->temp;
         }
         root->code.insert(root->code.begin(), beg_code.begin(), beg_code.end());
         root->code.insert(root->code.end(), end_code.begin(), end_code.end());

@@ -448,23 +448,27 @@ plus_stmt: stmt{
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 test: or_test{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "test");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 }
 or_test: and_test {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "or_test");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | or_test OR and_test {
     $<ptr>$ = new node("nt", "or_test");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
 and_test: not_test{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "and_test");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | and_test AND not_test {
     $<ptr>$ = new node("nt", "and_test");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -472,18 +476,20 @@ and_test: not_test{
 
 not_test: NOT not_test {
     $<ptr>$ = new node("nt", "not_test");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | comparison {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "not_test");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 }
 
 comparison: expr {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "comparison");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | comparison comp_op expr {
     $<ptr>$ = new node("nt", "comparison");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -526,17 +532,20 @@ comp_op: '<'{
 
 
 expr: xor_expr{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "expr");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | expr '|' xor_expr {
     $<ptr>$ = new node("nt", "expr");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 }
 
 xor_expr: and_expr{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "xor_expr");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | xor_expr '^' and_expr {
     $<ptr>$ = new node("nt", "xor_expr");
     ast.add_node($<ptr>$);
@@ -545,10 +554,11 @@ xor_expr: and_expr{
 }
 
 and_expr: shift_expr{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "and_expr");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | and_expr '&' shift_expr{
     $<ptr>$ = new node("nt", "and_expr");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -556,10 +566,11 @@ and_expr: shift_expr{
 
 
 shift_expr: arith_expr {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "shift_expr");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | shift_expr LEFTSHIFT arith_expr {
     $<ptr>$ = new node("nt", "shift_expr");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -589,7 +600,9 @@ arith_expr: term{
 
 
 term: factor{
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "term");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 } | term muldivremops factor {
     $<ptr>$ = new node("nt", "term");
     ast.add_node($<ptr>$);
@@ -616,7 +629,9 @@ factor: plus_or_minus_or_not factor{
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | power {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "factor");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 }
 
 
@@ -761,16 +776,9 @@ arglist: argument {
 // Illegal combinations and orderings are blocked in ast.c:
 // multiple (test comp_for) arguments are blocked; keyword unpackings
 // that precede iterable unpackings are blocked; etc.
-argument: NAME {
+argument: test {
         $<ptr>$ = new node("nt", "argument");
         ast.add_edge($<ptr>$, $<ptr>1);
-    } |
-    NAME '=' test {
-        $<ptr>$ = new node("nt", "argument");
-        ast.add_node($<ptr>$);
-        ast.add_edge($<ptr>$, $<ptr>1);
-        ast.add_edge($<ptr>$, $<ptr>2); 
-        ast.add_edge($<ptr>$, $<ptr>3);   
     }
 
 %%
