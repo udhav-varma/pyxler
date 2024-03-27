@@ -331,7 +331,9 @@ return_stmt: RETURN test{
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | RETURN  {
-    $<ptr>$ = $<ptr>1;
+    $<ptr>$ = new node("nt", "return_stmt");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    // $<ptr>$ = $<ptr>1;
 }
 
 global_stmt: GLOBAL namelist{
@@ -399,15 +401,6 @@ while_stmt: WHILE test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
-} | WHILE test ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "while_stmt");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-    ast.add_edge($<ptr>$, $<ptr>5);
-    ast.add_edge($<ptr>$, $<ptr>6);
-    ast.add_edge($<ptr>$, $<ptr>7);
 }
 for_stmt: FOR exprlist IN test ':' suite{
     $<ptr>$ = new node("nt", "for_stmt");
@@ -417,17 +410,6 @@ for_stmt: FOR exprlist IN test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>4);
     ast.add_edge($<ptr>$, $<ptr>5);
     ast.add_edge($<ptr>$, $<ptr>6);
-} | FOR exprlist IN test ':' suite ELSE ':' suite{
-    $<ptr>$ = new node("nt", "for_stmt");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-    ast.add_edge($<ptr>$, $<ptr>4);
-    ast.add_edge($<ptr>$, $<ptr>5);
-    ast.add_edge($<ptr>$, $<ptr>6);
-    ast.add_edge($<ptr>$, $<ptr>7);
-    ast.add_edge($<ptr>$, $<ptr>8);
-    ast.add_edge($<ptr>$, $<ptr>9);
 }
 
 suite: simple_stmt{

@@ -92,6 +92,17 @@ struct funcarglist{
     vector<funcarg*> args;
 };
 
+struct annasign{
+    string type;
+    temp_var * inval;
+};
+
+struct funcdef{
+    string name;
+    string returntype;
+    funcarglist * args;
+};
+
 class node{
 public:
     int id = -1;

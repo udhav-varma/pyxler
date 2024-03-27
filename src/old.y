@@ -25,8 +25,8 @@ assert_stmt: 'assert' test [',' test]
 
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | funcdef | classdef 
 if_stmt: 'if' test ':' suite ('elif' test ':' suite)* ['else' ':' suite]
-while_stmt: 'while' test ':' suite ['else' ':' suite]
-for_stmt: 'for' exprlist 'in' testlist ':' suite ['else' ':' suite]
+while_stmt: 'while' test ':' suite
+for_stmt: 'for' exprlist 'in' testlist ':' suite
 suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT
 
 test: or_test
