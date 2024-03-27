@@ -168,7 +168,7 @@ typedargslist: tfpdef cond_eqtest{
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-} | typedargslist tfpdef cond_eqtest{
+} | typedargslist ',' tfpdef cond_eqtest{
     $<ptr>$ = new node("nt", "typedarglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);

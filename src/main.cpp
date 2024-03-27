@@ -22,30 +22,111 @@ void make_3ac(node * root)
         // }
         vector<quad> beg_code, end_code;
         if(root->name == "file_input"){
-
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
         }   
         else if(root->name == "nstatement"){
-
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
         }
         else if(root->name == "funcdef"){
 
         }
         else if(root->name == "parameters"){
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
+            root->info = new funcarglist();
+            funcarglist * info = (funcarglist *) root->info;
+            if(root->children[1] != NULL){
+                info->args = ((funcarglist *) root->children[1]->info)->args;
+            }
             //TODO this and funcdef
         }
         else if(root->name == "typedarglist"){
-
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
+            root->info = new funcarglist();
+            funcarglist * info = (funcarglist *) root->info;
+            if(root->children.size() == 2){
+                info->args.push_back(((funcarg *) root->children[0]->info));
+                if(root->children[1] != NULL){
+                    info->args[0]->defval = root->children[1]->children[1]->temp;
+                }
+            }
+            else{
+                funcarg * narg = (funcarg*) root->children[2]->info;
+                if(root->children[3] != NULL){
+                    narg->defval = root->children[3]->children[1]->temp;
+                }
+                info->args.push_back(narg);
+            }
         }
         else if(root->name == "tfpdef"){
-
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
+            root->info = new funcarg();
+            funcarg * info = (funcarg *) root->info;
+            info->name = root->children[0]->name;
+            if(root->children[2]->data_type == "atom_expr_name"){
+                info->type = ((atom_expr_name *) root->children[2]->info)->name;
+            }
+            else{
+                cerr << "Invalid type for argument";
+                exit(0);
+            }
         }
-        else if(root->name == "simple_stmts"){
-            
+        else if(root->name == "simple_stmt"){
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
+        }
+        else if(root->name == "small_stmts"){
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
         }
         else if(root->name == "expr_stmt"){
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
             
         }
         else if(root->name == "annasign"){
+            for(auto r: root->children){
+                if(!r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
 
         }
         else if(root->name == "cond_eqtest"){

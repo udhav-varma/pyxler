@@ -81,6 +81,16 @@ struct atom_expr_keyword{
     string keyword;
 };
 
+struct funcarg{
+    string name;
+    string type;
+    bool hasdefval = false;
+    temp_var * defval = NULL;
+};
+
+struct funcarglist{
+    vector<funcarg*> args;
+};
 
 class node{
 public:
