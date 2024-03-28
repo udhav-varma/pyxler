@@ -13,25 +13,29 @@ int for_id = 0, while_id = 0, if_id = 0;
 
 void make_3ac(node * root)
 {
+    // cerr << "err " << root->name << '\n';
     if(root->type == "nt"){
         // for(auto r: root->children){
-        //     if(!r){
+        //     if(r){
         //         make_3ac(r);
         //         root->code.insert(root->code.end(), r->code.begin(), r->code.end());
         //     }
         // }
         vector<quad> beg_code, end_code;
         if(root->name == "file_input"){ // checked
+            // cerr << "enter\n";
             for(auto r: root->children){
-                if(!r){
+                // cerr << "r0 " << r << '\n';
+                if(r){
                     make_3ac(r);
+                    // cerr << "r\n";
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
         }   
         else if(root->name == "nstatement"){ // checked
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -60,7 +64,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "parameters"){ // checked
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -74,7 +78,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "typedarglist"){ // TODO: error handling
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -97,7 +101,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "tfpdef"){ // TODO: error handling
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -115,7 +119,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "simple_stmt"){ // checked
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -123,60 +127,70 @@ void make_3ac(node * root)
         }
         else if(root->name == "small_stmts"){ // checked
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-        }
+        } 
         else if(root->name == "expr_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
             if(root->children[1]->name == "annasign"){
+                // cerr << "here\n";
                 if(root->children[0]->data_type != "atom_expr_name"){
                     cerr << "Invalid declaration\n";
                     exit(0);
                 }
                 else{
                     //TODO: checking in current level
+                    root->info = root->children[1]->info;
+                    annasign * info = ((annasign *) root->info);
+                    info->name = ((atom_expr_name*) root->children[0]->info)->name;
                     symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
                     present_table->add_entry_var(newentry);
                     if(((annasign*) root->children[1]->info)->inval != NULL)
-                        root->code.push_back(quad(((atom_expr_name*) root->children[0]->info)->name, "", "", tempprint(((annasign*) root->children[1]->info)->inval)));
+                        root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
+                    else
+                        cerr << "invalnull\n";
                 }
             }
-            else if(root->children[1]->name == "augassign"){
-                //TODO
-            }
-            else{
+            else if(root->children[1]->name == "="){
+            
                 if(root->children[0]->data_type != "atom_expr_name"){
                     cerr << "Invalid declaration\n";
                     exit(0);
                 }
                 else{
+                    // cerr << root->children.size() << '\n';
                     string name = ((atom_expr_name *) root->children[0]->info)->name;
                     if(present_table->find_var_entry(name) == NULL){
                         cerr << "variable not declared for assignment\n";
                         exit(0);
                     }
                     else{
+                        if(root->children[2]->temp == NULL) cerr << "isnull\n";
                         root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
                     }
                 }
+            }
+            else{
+                //todo augassign
             }
             
         }
         else if(root->name == "annasign"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
+            // if(root->children[1]->info == NULL) cerr << "isnull\n";
             string type = ((atom_expr_name *) root->children[1]->info)->name;
             root->info = new annasign();
             annasign * info = (annasign *) root->info;
@@ -187,7 +201,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "cond_eqtest"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -202,7 +216,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "return_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -222,7 +236,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "if_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                 }
             }
@@ -244,7 +258,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "while_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                 }
             }
@@ -258,7 +272,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "for_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                 }
             }
@@ -291,7 +305,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "suite"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -299,7 +313,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "plus_stmt"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -307,19 +321,23 @@ void make_3ac(node * root)
         }
         else if(root->name == "test"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
+            // cerr << "rdt " << root->data_type << '\n';
             root->data_type = root->children[0]->data_type;
             root->info = root->children[0]->info;
-            root->temp = new temp_var(root->children[0]->temp->type);
-            root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));   
+            root->temp = root->children[0]->temp;
+            // if(root->children[0]->temp != NULL){
+            //     // root->temp = new temp_var(root->children[0]->temp->type);
+            //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+            // }
         }
         else if(root->name == "or_test"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -327,8 +345,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     // root->temp = new temp_var(root->children[0]->temp->type);
+                //     // root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -338,7 +359,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "and_test"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -346,8 +367,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -357,7 +381,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "not_test"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -365,8 +389,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[1]->temp->type);
@@ -375,14 +402,19 @@ void make_3ac(node * root)
         }
         else if(root->name == "comparison"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
             if(root->children.size() == 1){
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->data_type = root->children[0]->data_type;
+                root->info = root->children[0]->info;
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -391,7 +423,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -399,8 +431,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -409,7 +444,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "xor_expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -417,8 +452,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -428,7 +466,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "and_expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -436,8 +474,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -446,7 +487,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "shift_expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -454,8 +495,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -464,7 +508,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "arith_expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -472,8 +516,9 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // root->temp = new temp_var(root->children[0]->temp->type);
+                // root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -482,7 +527,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "term"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -490,8 +535,11 @@ void make_3ac(node * root)
             if(root->children.size() == 1){
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
+                // if(root->children[0]->temp != NULL){
+                //     root->temp = new temp_var(root->children[0]->temp->type);
+                //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
+                // }
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
@@ -501,7 +549,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "factor"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -511,19 +559,16 @@ void make_3ac(node * root)
                     cerr << "TypeError: Unary operation unsupported on this type\n";
                     exit(0);
                 }
-                root->temp = new temp_var(root->children[1]->temp->type);
-                root->code.push_back(quad("", tempprint(root->children[1]->temp), root->children[0]->name, tempprint(root->temp)));
             }
             else{
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
-                root->temp = new temp_var(root->children[1]->temp->type);
-                root->code.push_back(quad(tempprint(root->children[0]->temp), "", "", tempprint(root->temp)));
+                root->temp = root->children[0]->temp;
             }
         }
         else if(root->name == "power"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -544,7 +589,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "atom_expr"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -555,16 +600,21 @@ void make_3ac(node * root)
                     root->info = new atom_expr_name();
                     atom_expr_name * info = (atom_expr_name *) root->info;
                     info->name = ((name_type *)root->children[0]->info)->name_val;
-                    root->temp = new temp_var("name");
-                    root->code.push_back(quad(info->name, "", "", tempprint(root->temp)));
+                    if(present_table->find_var_entry(info->name)){
+                        root->temp = new temp_var("name");
+                        root->code.push_back(quad(info->name, "", "", tempprint(root->temp)));
+                    }
                 }
                 else if(root->children[0]->data_type == "num_type"){
+                    // cerr << "here\n";
                     root->data_type = "atom_expr_number";
                     root->info = new atom_expr_number();
                     atom_expr_number * info = (atom_expr_number *) root->info;
                     info->num = ((num_type *) root->children[0]->info)->number;
-                    if(((num_type *) root->children[0]->info)->is_uint)
+                    if(((num_type *) root->children[0]->info)->is_uint){
                         root->temp = new temp_var("uint");
+                        // cerr << "here\n";
+                    }
                     else{
                         root->temp = new temp_var("number");
                     }
@@ -630,7 +680,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "atom"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -647,13 +697,27 @@ void make_3ac(node * root)
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
             }
             else{
+                if(root->children[0]->name == "NAME"){
+                    if(present_table->find_var_entry(root->children[0]->name)){
+                        root->temp = new temp_var("name");
+                        root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                    }
+                }
+                else if(root->children[0]->name == "NUMBER"){
+                    root->temp = new temp_var("number");
+                    root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                }
+                else if(root->children[0]->name == "STRING"){
+                    root->temp = new temp_var("string");
+                    root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                }
                 root->info = root->children[0]->info;
                 root->data_type = root->children[0]->data_type;
             }
         }
         else if(root->name == "testlist"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -668,7 +732,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "trailer"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -693,7 +757,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "subscriptlist"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -702,7 +766,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "exprlist"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -714,7 +778,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "cond_parentheses_arglist"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -723,7 +787,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "arglist"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
@@ -738,7 +802,7 @@ void make_3ac(node * root)
         }
         else if(root->name == "argument"){
             for(auto r: root->children){
-                if(!r){
+                if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }

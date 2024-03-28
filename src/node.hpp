@@ -1,7 +1,6 @@
 #include<bits/stdc++.h>
 #include "quad.hpp"
 using namespace std;
-
 class temp_var{
 public:
     string type;
@@ -93,6 +92,7 @@ struct funcarglist{
 };
 
 struct annasign{
+    string name;
     string type;
     temp_var * inval;
 };
@@ -207,3 +207,5 @@ public:
     symbol_table* find_class_entry(string name);
 };
 
+
+void make_3ac(node * root);

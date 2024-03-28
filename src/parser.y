@@ -14,6 +14,7 @@
     extern int yydebug;
     extern char * yytext;
     extern FILE * yyin;
+    node * root;
     void yyerror(char * s){
     fprintf(stderr, "Error! Line Number %d, token: %s, message: %s\n", yylineno, yytext, s);
     }
@@ -114,6 +115,7 @@ file_input: nstatement ENDMARKER{
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    root = $<ptr>$;
     ast.graphviz($<ptr>$);
     return 0;
 }
@@ -228,16 +230,18 @@ expr_stmt: test annassign {
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
-} | test augassign {
+} | test augassign test {
     $<ptr>$ = new node("nt", "expr_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 } | test '=' test { 
     $<ptr>$ = new node("nt", "expr_stmt");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 }
 annassign: ':' test '=' test {
     $<ptr>$ = new node("nt", "annasign");
@@ -784,5 +788,10 @@ int main(int argc, char *argv[]){
     indents.push(0);
     if(!yyparse()) cerr << "Parsing successful\n";
     else return -1;
+    make_3ac(root);
+    cerr << root->code.size() << '\n';
+    for(auto x: root->code){
+        cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
+    }
     return 0;
 }
