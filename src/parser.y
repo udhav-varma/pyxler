@@ -140,7 +140,7 @@ cond_arglist: arglist {
     $<ptr>$ = NULL;
 }
 funcdef: DEF NAME parameters ARROWOP test ':' suite {
-    present_table = present_table->parent;
+    // present_table = present_table->parent;
     $<ptr>$ = new node("nt", "funcdef");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
@@ -170,12 +170,14 @@ typedargslist: tfpdef cond_eqtest{
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+    // cerr << "ptht " << $<ptr>$ << ' ' << $<ptr>$->children.size() << '\n';
 } | typedargslist ',' tfpdef cond_eqtest{
     $<ptr>$ = new node("nt", "typedarglist");
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
+    ast.add_edge($<ptr>$, $<ptr>4);
 }
 
 tfpdef: NAME ':' test {

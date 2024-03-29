@@ -42,8 +42,11 @@ void make_3ac(node * root)
             }
         }
         else if(root->name == "funcdef"){   // TODO
+        // cerr << root->children.size() << '\n';
             for(int i = 0; i < 6; i++){
-                if(!root->children[i]){
+                // cerr << root->children[i]->name << '\n';
+                if(root->children[i]){
+                    // cerr << "enter\n";
                     make_3ac(root->children[i]);
                     root->code.insert(root->code.end(), root->children[i]->code.begin(), root->children[i]->code.end());
                 }
@@ -52,11 +55,16 @@ void make_3ac(node * root)
             funcdef * info = (funcdef *) root->info;
             info->name = root->children[1]->name;
             info->args = ((funcarglist *) root->children[2]->info);
+            cerr << "rname " << root->children[4]->data_type << '\n';
             info->returntype = ((atom_expr_name *) root->children[4]->info)->name;
             beg_code.push_back(quad("beginfunc"s + info->name, "", "label", ""));
             //PUSHPARAMS
             symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
             present_table = fun_table;
+            for(auto x: info->args->args){
+                auto en = new symbol_table_entry(x->name, x->type, present_table);
+                present_table->add_entry_var(en);
+            }
             make_3ac(root->children[6]);
             root->code.insert(root->code.end(), root->children[6]->code.begin(), root->children[6]->code.end());
             present_table = present_table->parent;
@@ -83,11 +91,13 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
+            // cerr << root << " sz " << root->children.size() << '\n';
             root->info = new funcarglist();
             funcarglist * info = (funcarglist *) root->info;
-            if(root->children.size() == 2){
+            if(root->children[0]->name == "tfpdef"){
+                // cerr << "enter \n";
                 info->args.push_back(((funcarg *) root->children[0]->info));
-                if(root->children[1] != NULL){
+                if(root->children.size() > 1 and root->children[1] != NULL){
                     info->args[0]->defval = root->children[1]->children[1]->temp;
                 }
             }
@@ -610,6 +620,7 @@ void make_3ac(node * root)
                     root->info = new atom_expr_name();
                     atom_expr_name * info = (atom_expr_name *) root->info;
                     info->name = ((name_type *)root->children[0]->info)->name_val;
+                    // cerr << "here " << info->name << '\n';
                     root->temp = root->children[0]->temp;
                     // cerr << "addr2 " << root->temp << '\n';
                     if(present_table->find_var_entry(info->name)){
@@ -728,7 +739,8 @@ void make_3ac(node * root)
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
             }
             else{
-                if(root->children[0]->name == "NAME"){
+                if(root->children[0]->data_type == "name_type"){
+                    // cerr << "nm " << root->children[0]->name << '\n';
                     if(present_table->find_var_entry(root->children[0]->name)){
                         root->temp = new temp_var("name");
                         root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
@@ -744,6 +756,7 @@ void make_3ac(node * root)
                 }
                 root->info = root->children[0]->info;
                 root->data_type = root->children[0]->data_type;
+                // cerr << "rdt " << root->data_type << '\n';
             }
         }
         else if(root->name == "testlist"){
