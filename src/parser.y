@@ -666,6 +666,11 @@ atom: '[' testlist ']' {
     ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
+} | '(' test ')' {
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
+    ast.add_edge($<ptr>$, $<ptr>2);
+    ast.add_edge($<ptr>$, $<ptr>3);
 } | NAME {
     $<ptr>$ = new node("nt", "atom");
     ast.add_edge($<ptr>$, $<ptr>1);

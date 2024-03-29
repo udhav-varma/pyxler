@@ -244,8 +244,9 @@ void make_3ac(node * root)
             if_id++;
             beg_code.push_back(quad("beginif"s + to_string(if_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
-            beg_code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
+            root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
             end_code.push_back(quad("endif"s + to_string(if_id), "", "label", ""));
+            end_code.push_back(quad("endifblock"s + to_string(if_id), "", "label", ""));
             beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endif"s + to_string(if_id)));
             if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
             if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
@@ -542,6 +543,7 @@ void make_3ac(node * root)
                 // }
             }
             else{
+                // cerr << root->children[0]->temp << ' ' << root->children[2]->temp << '\n';
                 root->temp = new temp_var(root->children[0]->temp->type);
                 //TODO: typechecking
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
@@ -600,6 +602,8 @@ void make_3ac(node * root)
                     root->info = new atom_expr_name();
                     atom_expr_name * info = (atom_expr_name *) root->info;
                     info->name = ((name_type *)root->children[0]->info)->name_val;
+                    root->temp = root->children[0]->temp;
+                    // cerr << "addr2 " << root->temp << '\n';
                     if(present_table->find_var_entry(info->name)){
                         root->temp = new temp_var("name");
                         root->code.push_back(quad(info->name, "", "", tempprint(root->temp)));
@@ -631,6 +635,9 @@ void make_3ac(node * root)
                     root->info = new atom_expr_list();
                     atom_expr_list * info = (atom_expr_list *) root->info;
                     info->tstlist = ((sqbrackettestlist_type *)(root->children[0]))->sqbrackettestlist_vars;
+                }
+                else if(root->children[0]->data_type == "brack_test_type"){
+                    root->temp = root->children[0]->temp;
                 }
             }
             else if(root->children.size() == 2){
@@ -685,11 +692,16 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-            if(root->children.size() == 3){
+            if(root->children.size() == 3 && root->children[0]->name == "["){
                 root->data_type = "sqbrackettestlist_type";
                 root->info = new sqbrackettestlist_type();
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
                 info->sqbrackettestlist_vars = ((testlist_type *) root->children[1]->info)->testlist_vars;
+            }
+            else if(root->children.size() == 3 and root->children[0]->name == "("){
+                root->data_type = "brack_test_type";
+                root->temp = root->children[1]->temp;
+                // cerr << "addr " << root->temp << '\n';
             }
             else if(root->children.size() == 2){
                 root->data_type = "sqbrackettestlist_type";

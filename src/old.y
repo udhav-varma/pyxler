@@ -54,10 +54,6 @@ subscriptlist: subscript (',' subscript)* [',']
 subscript: test
 exprlist: expr (',' expr)* [',']
 testlist: test (',' test)* [',']
-dictorsetmaker: ( ((test ':' test )
-                   ( (',' (test ':' test))* [','])) |
-                  (test
-                   ((',' test)* [','])) )
 
 classdef: 'class' NAME ['(' [arglist] ')'] ':' suite
 
