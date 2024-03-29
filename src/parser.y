@@ -785,6 +785,8 @@ int main(int argc, char *argv[]){
         return -1;
     }
     present_table = new symbol_table(SYMBOL_TABLE_TYPE::GLOBAL_TABLE, NULL);
+    symbol_table * rangef = new symbol_table(FUNCTION_TABLE, present_table, "range");
+    present_table->add_entry_fun(rangef);
     yyin = fopen(argv[1], "r");
     if(yyin == NULL){
         cerr << "Failed to open input file.\n Terminated\n";

@@ -1,2 +1,3 @@
-if (3 + 5):
+x: int
+for x in range(10):
     a: int = 5

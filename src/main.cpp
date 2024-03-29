@@ -155,8 +155,8 @@ void make_3ac(node * root)
                     present_table->add_entry_var(newentry);
                     if(((annasign*) root->children[1]->info)->inval != NULL)
                         root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
-                    else
-                        cerr << "invalnull\n";
+                    // else
+                        // cerr << "invalnull\n";
                 }
             }
             else if(root->children[1]->name == "="){
@@ -173,7 +173,7 @@ void make_3ac(node * root)
                         exit(0);
                     }
                     else{
-                        if(root->children[2]->temp == NULL) cerr << "isnull\n";
+                        // if(root->children[2]->temp == NULL) cerr << "isnull\n";
                         root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
                     }
                 }
@@ -280,6 +280,7 @@ void make_3ac(node * root)
             root->code = root->children[5]->code;
             if(root->children[3]->data_type == "funccall"){
                 funccall * info = (funccall *)root->children[3]->info;
+                // cerr << "argls size " << info->arglist.size() << '\n';
                 if(info->funcname != "range"){
                     cerr << "For loop: only range(n) type functions allowed\n";
                     exit(0);
@@ -288,14 +289,20 @@ void make_3ac(node * root)
                     cerr << "For loop: only range(n) type args allowed\n";
                     exit(0);
                 }
+                // cerr << info->funcname << '\n';
                 temp_var * upbound = info->arglist[0]->temp;
                 temp_var * itervar = new temp_var("uint");
                 for_id++;
+                beg_code.insert(beg_code.end(), root->children[3]->code.begin(), root->children[3]->code.end());
                 beg_code.push_back(quad("beginfor"s + to_string(for_id), "", "label", ""));
-                beg_code.push_back(quad(0, "", "", tempprint(itervar)));
+                beg_code.push_back(quad("0", "", "", tempprint(itervar)));
                 temp_var * comp_res = new temp_var("bool");
+                // cerr << "upb\n";
+                // cerr << upbound << '\n';
+                tempprint(upbound);
                 beg_code.push_back(quad(tempprint(itervar), tempprint(upbound), "<", tempprint(comp_res)));
                 beg_code.push_back(quad("if_false", tempprint(comp_res), "goto", "endfor"s + to_string(for_id)));
+                end_code.push_back(quad(tempprint(itervar), "1", "+", tempprint(itervar)));
                 end_code.push_back(quad("", "", "goto", "beginfor"s + to_string(for_id)));
                 end_code.push_back(quad("endfor"s + to_string(for_id), "", "label", ""));
             }   
@@ -327,7 +334,6 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-            // cerr << "rdt " << root->data_type << '\n';
             root->data_type = root->children[0]->data_type;
             root->info = root->children[0]->info;
             root->temp = root->children[0]->temp;
@@ -335,6 +341,8 @@ void make_3ac(node * root)
             //     // root->temp = new temp_var(root->children[0]->temp->type);
             //     root->code.push_back(quad("", tempprint(root->children[0]->temp), "", tempprint(root->temp)));
             // }
+            // cerr << "rdt " << root->data_type << '\n';
+            // cerr << root->code.size() << '\n';
         }
         else if(root->name == "or_test"){
             for(auto r: root->children){
@@ -617,7 +625,8 @@ void make_3ac(node * root)
                     info->num = ((num_type *) root->children[0]->info)->number;
                     if(((num_type *) root->children[0]->info)->is_uint){
                         root->temp = new temp_var("uint");
-                        // cerr << "here\n";
+                        // cerr << "here uint " << info->num << '\n';
+                        // cerr << root->temp << '\n';
                     }
                     else{
                         root->temp = new temp_var("number");
@@ -643,13 +652,23 @@ void make_3ac(node * root)
             else if(root->children.size() == 2){
                 if(root->children[1]->data_type == "funccall"){
                     if(root->children[0]->data_type == "name_type"){
+    //                     cerr << "rsz " << root->code.size() << '\n';
+    //                     for(auto x: root->code){
+    //     cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
+    // }
                         root->data_type = "funccall";
                         root->info = root->children[1]->info;
                         funccall * info = (funccall *) root->info;
+                        // cerr << "fninfo " << info->funcname << ' ' << info->arglist[0]->temp << '\n';
+                        // if(root->children[1]->data_type != "arglist_type") cerr << "wrong type\n";
+                        // info->arglist = ((arglist_type *) root->children[1]->info)->args;
+                        // cerr << "funccall " << info->arglist.size() << '\n';
                         info->funcname = ((name_type *) root->children[0]->info)->name_val;
                         if(!present_table->find_fun_entry(info->funcname)){
-                            cerr << "Function " + info->funcname << " not defined\n";
-                            exit(0);
+                            if(info->funcname != "len" and info->funcname != "range" and info->funcname != "print"){
+                                cerr << "Function " + info->funcname << " not defined\n";
+                                exit(0);
+                            }
                         }
                         root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
                         root->code.push_back(quad(info->funcname, "", "callfunc", tempprint(root->temp)));
@@ -754,7 +773,10 @@ void make_3ac(node * root)
                 root->info = new funccall();
                 funccall * info = (funccall *) root->info;
                 if(root->children[1] != NULL){
+                    // cerr << root->children[1] << ' ' << root->children[1]->name << '\n';
                     info->arglist = ((arglist_type*) root->children[1]->info)->args;
+                    // cerr << "Adding " << ((arglist_type*) root->children[1]->info)->args.size() << '\n';
+                    // cerr << "Argtemp " << info->arglist[0]->temp << '\n';
                 }
             }
             else if(root->children[0]->name == "["){
@@ -804,13 +826,17 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
+            // cerr << "here\n";
             root->data_type = "arglist_type";
             root->info = new arglist_type();
-            arglist_type * info = new arglist_type();
+            arglist_type * info = (arglist_type *) root->info;
             if(root->children.size() == 3){
                 info->args = ((arglist_type *) root->children[0])->args;
             }
-            info->args.push_back((arg_type*)root->children.back());
+            info->args.push_back((arg_type*)root->children.back()->info);
+            // cerr << "arrgsz " << info->args.size() << '\n';
+            // cerr << "arrinfo " << ' ' << info <<  ' ' << info->args[0]->temp << '\n';
+            // cerr << root << '\n';
         }
         else if(root->name == "argument"){
             for(auto r: root->children){
@@ -823,6 +849,7 @@ void make_3ac(node * root)
             root->info = new arg_type();
             arg_type* info = (arg_type *) root->info;
             info->temp = root->children[0]->temp;
+            // cerr << "Argument info " << info << ' ' << (arg_type *)info->temp << '\n';
         }
         root->code.insert(root->code.begin(), beg_code.begin(), beg_code.end());
         root->code.insert(root->code.end(), end_code.begin(), end_code.end());
