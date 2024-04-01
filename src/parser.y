@@ -167,13 +167,11 @@ cond_typedargslist: typedargslist {
 
 typedargslist: tfpdef cond_eqtest{
     $<ptr>$ = new node("nt", "typedarglist");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     // cerr << "ptht " << $<ptr>$ << ' ' << $<ptr>$->children.size() << '\n';
 } | typedargslist ',' tfpdef cond_eqtest{
     $<ptr>$ = new node("nt", "typedarglist");
-    ast.add_node($<ptr>$);
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
@@ -244,6 +242,9 @@ expr_stmt: test annassign {
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
+} | test {
+    $<ptr>$ = new node("nt", "expr_stmt");
+    ast.add_edge($<ptr>$, $<ptr>1);
 }
 annassign: ':' test '=' test {
     $<ptr>$ = new node("nt", "annasign");
@@ -436,6 +437,7 @@ plus_stmt: stmt{
     ast.add_edge($<ptr>$, $<ptr>2);
 }
 test: or_test{
+    // cerr << "here test\n";
     $<ptr>$ = new node("nt", "test");
     ast.add_edge($<ptr>$, $<ptr>1);
     // $<ptr>$ = $<ptr>1;
@@ -520,6 +522,7 @@ comp_op: '<'{
 
 
 expr: xor_expr{
+    // cerr << "here expr\n";
     $<ptr>$ = new node("nt", "expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     // $<ptr>$ = $<ptr>1;
@@ -588,6 +591,7 @@ arith_expr: term{
 
 
 term: factor{
+    // cerr<<"here term \n";
     $<ptr>$ = new node("nt", "term");
     ast.add_edge($<ptr>$, $<ptr>1);
     // $<ptr>$ = $<ptr>1;
@@ -617,6 +621,7 @@ factor: plus_or_minus_or_not factor{
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
 } | power {
+    // cerr<<"here factor \n";
     $<ptr>$ = new node("nt", "factor");
     ast.add_edge($<ptr>$, $<ptr>1);
     // $<ptr>$ = $<ptr>1;
@@ -638,6 +643,7 @@ power: atom_expr POW factor{
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | atom_expr{
+    // cerr<<"here power \n";
     $<ptr>$ = new node("nt", "power");
     ast.add_edge($<ptr>$, $<ptr>1);
 }
@@ -647,6 +653,7 @@ atom_expr: atom {
     ast.add_edge($<ptr>$, $<ptr>1);
     // $<ptr>$ = $<ptr>1;
 } | atom trailer {  // Function calls, object attr access only
+    // cerr<<"here atom \n";
     $<ptr>$ = new node("nt", "atom_expr");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);

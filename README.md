@@ -1,4 +1,6 @@
 # pyxler
 
 # Issues
-- [] Removed cond_comma from end of list
+- funccall - runtime support 
+- range - special func
+- classimplement

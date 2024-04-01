@@ -1,5 +1,8 @@
-def foo(a: int) -> int:
-    return a + 1
-b: int = 5
-a: int = 7
-a = b + 8
+def foo(a: int, b: int) -> int:
+    a = a + 5
+    return a
+
+c: int = 4
+d: int = 5
+d = foo(c, d)
+

@@ -187,6 +187,7 @@ public:
     map<string, symbol_table_entry*> var_defs;
     map<string, symbol_table*> fun_defs;
     map<string, symbol_table*> class_defs;
+    vector<funcarg*> args;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {
         this->type = type;

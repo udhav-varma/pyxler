@@ -9,7 +9,10 @@ string tempprint(temp_var * temp)
     return "$"s + to_string(temp->id);
 }
 
-int for_id = 0, while_id = 0, if_id = 0;
+
+int for_id = 0, while_id = 0, if_id = 0, elif_id = 0;
+stack<pair<string, int>> loop_stack;
+stack<int> if_stack;
 
 void make_3ac(node * root)
 {
@@ -55,14 +58,18 @@ void make_3ac(node * root)
             funcdef * info = (funcdef *) root->info;
             info->name = root->children[1]->name;
             info->args = ((funcarglist *) root->children[2]->info);
-            cerr << "rname " << root->children[4]->data_type << '\n';
+            // cerr << "here " << info->args->args.size() << '\n';
+            // cerr << "rname " << root->children[4]->data_type << '\n';
             info->returntype = ((atom_expr_name *) root->children[4]->info)->name;
             beg_code.push_back(quad("beginfunc"s + info->name, "", "label", ""));
             //PUSHPARAMS
             symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
+            present_table->add_entry_fun(fun_table);
             present_table = fun_table;
+            fun_table->args = info->args->args;
             for(auto x: info->args->args){
                 auto en = new symbol_table_entry(x->name, x->type, present_table);
+                beg_code.push_back(quad("", "", "popparam", x->name));
                 present_table->add_entry_var(en);
             }
             make_3ac(root->children[6]);
@@ -79,12 +86,16 @@ void make_3ac(node * root)
             }
             root->info = new funcarglist();
             funcarglist * info = (funcarglist *) root->info;
-            if(root->children[1] != NULL){
+            if(root->children.size()  == 3){
+                // cerr << "name " << root->children[1]->name << '\n';
                 info->args = ((funcarglist *) root->children[1]->info)->args;
+                // cerr << root->children[1]->info << '\n';
             }
+            // cerr << "Param " << info->args.size() << '\n';
             //TODO this and funcdef
         }
         else if(root->name == "typedarglist"){ // TODO: error handling
+            // cerr << "Enter typedarglist\n";
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
@@ -102,14 +113,18 @@ void make_3ac(node * root)
                 }
             }
             else{
+                root->info = info = (funcarglist *) root->children[0]->info;
                 funcarg * narg = (funcarg*) root->children[2]->info;
-                if(root->children[3] != NULL){
+                if(root->children.size() > 3 and root->children[3] != NULL){
                     narg->defval = root->children[3]->children[1]->temp;
                 }
                 info->args.push_back(narg);
+                // cerr << "here inof " << info->args.size() << '\n';
+                // cerr << info << '\n';
             }
         }
         else if(root->name == "tfpdef"){ // TODO: error handling
+        // cerr << "Enter tfpdef\n";
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
@@ -150,48 +165,49 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-            if(root->children[1]->name == "annasign"){
-                // cerr << "here\n";
-                if(root->children[0]->data_type != "atom_expr_name"){
-                    cerr << "Invalid declaration\n";
-                    exit(0);
-                }
-                else{
-                    //TODO: checking in current level
-                    root->info = root->children[1]->info;
-                    annasign * info = ((annasign *) root->info);
-                    info->name = ((atom_expr_name*) root->children[0]->info)->name;
-                    symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
-                    present_table->add_entry_var(newentry);
-                    if(((annasign*) root->children[1]->info)->inval != NULL)
-                        root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
-                    // else
-                        // cerr << "invalnull\n";
-                }
-            }
-            else if(root->children[1]->name == "="){
-            
-                if(root->children[0]->data_type != "atom_expr_name"){
-                    cerr << "Invalid declaration\n";
-                    exit(0);
-                }
-                else{
-                    // cerr << root->children.size() << '\n';
-                    string name = ((atom_expr_name *) root->children[0]->info)->name;
-                    if(present_table->find_var_entry(name) == NULL){
-                        cerr << "variable not declared for assignment\n";
+            if(root->children.size() > 1){
+                if(root->children[1]->name == "annasign"){
+                    // cerr << "here\n";
+                    if(root->children[0]->data_type != "atom_expr_name"){
+                        cerr << "Invalid declaration\n";
                         exit(0);
                     }
                     else{
-                        // if(root->children[2]->temp == NULL) cerr << "isnull\n";
-                        root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
+                        //TODO: checking in current level
+                        root->info = root->children[1]->info;
+                        annasign * info = ((annasign *) root->info);
+                        info->name = ((atom_expr_name*) root->children[0]->info)->name;
+                        symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
+                        present_table->add_entry_var(newentry);
+                        if(((annasign*) root->children[1]->info)->inval != NULL)
+                            root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
+                        // else
+                            // cerr << "invalnull\n";
                     }
                 }
+                else if(root->children[1]->name == "="){
+                
+                    if(root->children[0]->data_type != "atom_expr_name"){
+                        cerr << "Invalid declaration\n";
+                        exit(0);
+                    }
+                    else{
+                        // cerr << root->children.size() << '\n';
+                        string name = ((atom_expr_name *) root->children[0]->info)->name;
+                        if(present_table->find_var_entry(name) == NULL){
+                            cerr << "variable not declared for assignment\n";
+                            exit(0);
+                        }
+                        else{
+                            // if(root->children[2]->temp == NULL) cerr << "isnull\n";
+                            root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
+                        }
+                    }
+                }
+                else{
+                    //todo augassign
+                }
             }
-            else{
-                //todo augassign
-            }
-            
         }
         else if(root->name == "annasign"){
             for(auto r: root->children){
@@ -216,13 +232,30 @@ void make_3ac(node * root)
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-
         }
         else if(root->name == "break_stmt"){
-
+            if(loop_stack.empty()){
+                cerr<<"Incorrect placement of break\n";
+                exit(0);
+            }
+            if(loop_stack.top().first == "for"){
+                root->code.push_back(quad("", "", "goto", "endfor"s + to_string(loop_stack.top().second)));
+            }
+            else if(loop_stack.top().first == "while"){
+                root->code.push_back(quad("", "", "goto", "endwhile"s + to_string(loop_stack.top().second)));
+            }
         }
         else if(root->name == "continue_stmt"){
-
+            if(loop_stack.empty()){
+                cerr<<"Incorrect placement of continue\n";
+                exit(0);
+            }
+            if(loop_stack.top().first == "for"){
+                root->code.push_back(quad("", "", "goto", "beginfor"s + to_string(loop_stack.top().second)));
+            }
+            else{
+                root->code.push_back(quad("", "", "goto", "beginwhile"s + to_string(loop_stack.top().second)));
+            }
         }
         else if(root->name == "return_stmt"){
             for(auto r: root->children){
@@ -245,43 +278,70 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "if_stmt"){
-            for(auto r: root->children){
-                if(r){
-                    make_3ac(r);
+            for(int i = 0; i < 4; i++){
+                if(root->children[i]){
+                    make_3ac(root->children[i]);
                 }
             }
             root->code = root->children[3]->code;
             if_id++;
+            if_stack.push(if_id);
             beg_code.push_back(quad("beginif"s + to_string(if_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
-            root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
-            end_code.push_back(quad("endif"s + to_string(if_id), "", "label", ""));
-            end_code.push_back(quad("endifblock"s + to_string(if_id), "", "label", ""));
             beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endif"s + to_string(if_id)));
-            if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
-            if(root->children[4] != NULL) end_code.insert(end_code.end(), root->children[4]->code.begin(), root->children[4]->code.end());
+            root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
+            root->code.push_back(quad("endif"s + to_string(if_id), "", "label", ""));
+            for(int i = 4; i < root->children.size(); i++){
+                if(root->children[i]){
+                    make_3ac(root->children[i]);
+                    root->code.insert(root->code.end(), root->children[i]->code.begin(), root->children[i]->code.end());
+                }
+            }
+            end_code.push_back(quad("endifblock"s + to_string(if_id), "", "label", ""));
+            if_stack.pop();
         }
         else if(root->name == "cond_else_colon_suite"){
-
+            for(auto r: root->children){
+                if(r){
+                    make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
+                }
+            }
         }
         else if(root->name == "close_eliftestsuite"){
-
+            for(auto r: root->children){
+                if(r)
+                    make_3ac(r);
+            }
+            if(root->children.size() == 5){
+                root->code.insert(root->code.end(), root->children[0]->code.begin(), root->children[0]->code.end());
+            }  
+            elif_id++;
+            root->code.insert(root->code.end(), root->children.end()[-3]->code.begin(), root->children.end()[-3]->code.end());
+            root->code.push_back(quad("if_false", tempprint(root->children.end()[-3]->temp), "goto", "endelif"+to_string(elif_id)));
+            root->code.insert(root->code.end(), root->children.back()->code.begin(), root->children.back()->code.end());
+            root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_stack.top())));
+            root->code.push_back(quad("endelif"s + to_string(elif_id), "", "label", ""));
         }
         else if(root->name == "while_stmt"){
+            while_id++;
+            loop_stack.push({"while", while_id});
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                 }
             }
             root->code = root->children[3]->code;
-            while_id++;
             beg_code.push_back(quad("beginwhile"s + to_string(while_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
             beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endwhile"s + to_string(while_id)));
             end_code.push_back((quad("", "", "goto", "beginwhile"s + to_string(while_id))));
             end_code.push_back(quad("endwhile"s + to_string(while_id), "", "label", ""));   
+            loop_stack.pop();
         }
         else if(root->name == "for_stmt"){
+            for_id++;
+            loop_stack.push({"for", for_id});
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
@@ -302,7 +362,6 @@ void make_3ac(node * root)
                 // cerr << info->funcname << '\n';
                 temp_var * upbound = info->arglist[0]->temp;
                 temp_var * itervar = new temp_var("uint");
-                for_id++;
                 beg_code.insert(beg_code.end(), root->children[3]->code.begin(), root->children[3]->code.end());
                 beg_code.push_back(quad("beginfor"s + to_string(for_id), "", "label", ""));
                 beg_code.push_back(quad("0", "", "", tempprint(itervar)));
@@ -320,6 +379,7 @@ void make_3ac(node * root)
                 cerr << "For loop: only for using range(n) call is supported";
                 exit(0);
             }
+            loop_stack.pop();
         }
         else if(root->name == "suite"){
             for(auto r: root->children){
@@ -604,6 +664,7 @@ void make_3ac(node * root)
                 }
                 else{
                     cerr << "TypeError: power operation not defined for these operands";
+                    exit(0);
                 }
             }
         }
@@ -682,10 +743,16 @@ void make_3ac(node * root)
                             }
                         }
                         root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
-                        root->code.push_back(quad(info->funcname, "", "callfunc", tempprint(root->temp)));
+                        auto func = present_table->find_fun_entry(info->funcname);
+                        for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                            root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                        }
+                        root->code.push_back(quad(info->funcname, to_string(info->arglist.size()), "callfunc", ""));
+                        root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                     }
                     else{
                         cerr << "Error: Invalid function call, not a proper name";
+                        exit(0);
                     }
                 }
                 else if(root->children[1]->data_type == "arr_access"){
@@ -705,6 +772,7 @@ void make_3ac(node * root)
                     }
                     else{
                         cerr << "Error: Invalid Array\n";
+                        exit(0);
                     }
                 }
                 else{
@@ -833,6 +901,7 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "arglist"){
+            // cerr << "enter arglist\n";
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
@@ -844,7 +913,7 @@ void make_3ac(node * root)
             root->info = new arglist_type();
             arglist_type * info = (arglist_type *) root->info;
             if(root->children.size() == 3){
-                info->args = ((arglist_type *) root->children[0])->args;
+                info->args = ((arglist_type *) root->children[0]->info)->args;
             }
             info->args.push_back((arg_type*)root->children.back()->info);
             // cerr << "arrgsz " << info->args.size() << '\n';
