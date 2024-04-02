@@ -202,7 +202,7 @@ public:
         this->name = name;
     }
 
-    void add_entry_var(symbol_table_entry* val);
+    void add_entry_var(symbol_table_entry* val, bool inc_offset = true);
 
     void add_entry_fun(symbol_table * val);
 

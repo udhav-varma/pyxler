@@ -1,8 +1,10 @@
-def foo(a: int, b: int) -> int:
-    a = a + 5
-    return a
+class A:
+    def __init__(self: A, k: int) -> int:
+        self.a: int = 2
+        self.b: int = k
+        self.c: int = 2
+    def foo(self: A)->int:
+        return self.c
+    
 
-c: int = 4
-d: int = 5
-d = foo(c, d)
-
+a: A = A(3)

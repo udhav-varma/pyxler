@@ -176,7 +176,7 @@ void AST::graphviz(node * ptr){
     // fout.close();
     // system("dot -T pdf -ograph graph.dot");
 }
-void symbol_table::add_entry_var(symbol_table_entry* val)
+void symbol_table::add_entry_var(symbol_table_entry* val, bool inc_offset)
 {
     if(val == NULL){
         throw logic_error("Symbol table entry is NULL\n");
@@ -184,8 +184,10 @@ void symbol_table::add_entry_var(symbol_table_entry* val)
     if(var_defs.find(val->name) != var_defs.end()){
         throw logic_error("Symbol table entry for variable already exists\n");
     }
-    val->offset = this->size;
-    this->size += 8;
+    if(inc_offset){
+        val->offset = this->size;
+        this->size += 8;
+    }
     val->table = this;
     var_defs[val->name] = val;
 }

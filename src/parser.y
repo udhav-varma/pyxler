@@ -140,6 +140,7 @@ cond_arglist: arglist {
     $<ptr>$ = NULL;
 }
 funcdef: DEF NAME parameters ARROWOP test ':' suite {
+    // cerr << "fundef\n";
     // present_table = present_table->parent;
     $<ptr>$ = new node("nt", "funcdef");
     ast.add_node($<ptr>$);
@@ -743,6 +744,7 @@ classdef: CLASS NAME cond_parentheses_arglist ':' suite{
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
+    ast.add_edge($<ptr>$, $<ptr>5);
 }
 
 cond_parentheses_arglist: '(' cond_arglist ')'{

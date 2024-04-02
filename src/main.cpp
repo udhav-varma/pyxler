@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <iostream>
 #include <string>
 #include "node.hpp"
 
@@ -45,7 +46,7 @@ void make_3ac(node * root)
             }
         }
         else if(root->name == "funcdef"){   // TODO
-        // cerr << root->children.size() << '\n';
+        // cerr << "funcdef " << root->children[1]->name << '\n';
             for(int i = 0; i < 6; i++){
                 // cerr << root->children[i]->name << '\n';
                 if(root->children[i]){
@@ -70,7 +71,7 @@ void make_3ac(node * root)
             for(auto x: info->args->args){
                 auto en = new symbol_table_entry(x->name, x->type, present_table);
                 beg_code.push_back(quad("", "", "popparam", x->name));
-                present_table->add_entry_var(en);
+                present_table->add_entry_var(en, false);
             }
             make_3ac(root->children[6]);
             root->code.insert(root->code.end(), root->children[6]->code.begin(), root->children[6]->code.end());
@@ -168,11 +169,7 @@ void make_3ac(node * root)
             if(root->children.size() > 1){
                 if(root->children[1]->name == "annasign"){
                     // cerr << "here\n";
-                    if(root->children[0]->data_type != "atom_expr_name"){
-                        cerr << "Invalid declaration\n";
-                        exit(0);
-                    }
-                    else{
+                    if(root->children[0]->data_type == "atom_expr_name"){
                         //TODO: checking in current level
                         root->info = root->children[1]->info;
                         annasign * info = ((annasign *) root->info);
@@ -183,6 +180,30 @@ void make_3ac(node * root)
                             root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
                         // else
                             // cerr << "invalnull\n";
+                    }
+                    else if(root->children[0]->data_type == "obj_access"){
+                        // cerr << "entered obj_access\n";
+                        root->info = root->children[1]->info;
+                        if(((obj_access *)root->children[0]->info)->obj != "self"){
+                            cerr << "Declarations only allowed with self object\n";
+                            exit(0);
+                        }
+                        if(present_table->type != FUNCTION_TABLE || present_table->name != "__init__"){
+                            cerr << "Declarations only allowed in __init__ function\n";
+                            exit(0);
+                        }
+                        if(present_table->parent == NULL or present_table->parent->type != CLASS_TABLE){
+                            cerr << "Declarations only allowed in __init__ function inside class\n";
+                            exit(0);
+                        }
+                        annasign * info = ((annasign *) root->info);
+                        info->name = ((obj_access *) root->children[0]->info)->attr_name;
+                        symbol_table_entry * newentry = new symbol_table_entry(((obj_access *) root->children[0]->info)->attr_name, ((annasign *) root->children[1]->info)->type, present_table);
+                        present_table->add_entry_var(newentry); 
+                        present_table->parent->add_entry_var(newentry);
+                        // cerr << "nm " << newentry->name << ' ' << newentry->offset << '\n';
+                        if(((annasign*) root->children[1]->info)->inval != NULL)
+                            root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", "*"s + "(" + ((obj_access *) root->children[0]->info)->obj + " + " + to_string(newentry->offset) + ")"));
                     }
                 }
                 else if(root->children[1]->name == "="){
@@ -738,17 +759,37 @@ void make_3ac(node * root)
                         info->funcname = ((name_type *) root->children[0]->info)->name_val;
                         if(!present_table->find_fun_entry(info->funcname)){
                             if(info->funcname != "len" and info->funcname != "range" and info->funcname != "print"){
-                                cerr << "Function " + info->funcname << " not defined\n";
-                                exit(0);
+                                if(!present_table->find_class_entry(info->funcname)){
+                                    cerr << "Function or class " + info->funcname << " not defined\n";
+                                    exit(0);
+                                }
+                                else{
+                                    cerr << "obj instantiation\n";
+                                    auto cls = present_table->find_class_entry(info->funcname);
+                                    root->temp = new temp_var("pointer");
+                                    int sz = cls->size;
+                                    root->code.push_back(quad("", "", "param", to_string(sz)));
+                                    root->code.push_back(quad("allocmem", "1", "callfunc", ""));
+                                    root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                                    for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                                        root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                                    }
+                                    root->code.push_back(quad("", "", "param", tempprint(root->temp)));
+                                    root->code.push_back(quad(cls->name + ".__init__", to_string(info->arglist.size() + 1), "callfunc", ""));
+                                }
                             }
                         }
-                        root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
-                        auto func = present_table->find_fun_entry(info->funcname);
-                        for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
-                            root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                        else{
+
+                            root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
+                            auto func = present_table->find_fun_entry(info->funcname);
+                            // func->args.size() == info->arglist.size(); TODO
+                            for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                                root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                            }
+                            root->code.push_back(quad(info->funcname, to_string(info->arglist.size()), "callfunc", ""));
+                            root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                         }
-                        root->code.push_back(quad(info->funcname, to_string(info->arglist.size()), "callfunc", ""));
-                        root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                     }
                     else{
                         cerr << "Error: Invalid function call, not a proper name";
@@ -776,7 +817,52 @@ void make_3ac(node * root)
                     }
                 }
                 else if(root->children[1]->data_type == "obj_access"){
-                    
+                    if(root->children[0]->data_type == "name_type"){
+                        root->data_type = root->children[1]->data_type;
+                        root->info = root->children[1]->info;
+                        obj_access * info = (obj_access *) root->info;
+                        info->obj = ((name_type *) root->children[0]->info)->name_val;
+                        if(present_table->find_var_entry(info->obj)){
+                            if(info->obj == "self"){
+                                root->temp = new temp_var(present_table->find_var_entry(info->obj)->type);
+                                symbol_table_entry * obj_entry = present_table->find_var_entry(info->obj);
+                                if(present_table->parent->find_var_entry(info->attr_name)){
+                                    // cerr << "entr " << obj_entry << ' ' << obj_entry->name << '\n';
+                                    // cerr << "ptable " << present_table->name << ' ' << present_table->parent->name << ' ' << present_table->parent->find_var_entry(info->attr_name) << '\n';
+                                    root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")", "", "", tempprint(root->temp)));
+                                }
+                            }
+                            else{
+                                auto obj = present_table->find_var_entry(info->obj);
+                                if(obj == NULL){
+                                    cerr << "Error, object " << info->obj << " not found\n";
+                                    exit(0);
+                                }
+                                auto cls = present_table->find_class_entry(obj->type);
+                                if(cls != NULL){
+                                    auto attr = cls->find_var_entry(info->attr_name);
+                                    if(attr == NULL){
+                                        cerr << "Error, attribute " << info->attr_name << " not found in class " << info->obj << '\n';
+                                        exit(0);
+                                    }
+                                    root->temp = new temp_var(attr->type);
+                                    int offset = attr->offset;
+                                    root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(offset) + ")", "", "", tempprint(root->temp)));
+                                }
+                                else{
+                                    
+                                }
+                            }
+                        }
+                        
+                    }
+                    else{
+                        cerr << "Error, invalid object access\n";
+                        exit(0);
+                    }
+                }
+                else{
+                    //???
                 }
             }
             else if(root->children.size() == 3){
@@ -903,9 +989,10 @@ void make_3ac(node * root)
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
+                    root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-
+            present_table = present_table->parent;
         }
         else if(root->name == "cond_parentheses_arglist"){
             for(auto r: root->children){
