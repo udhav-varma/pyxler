@@ -184,6 +184,8 @@ void symbol_table::add_entry_var(symbol_table_entry* val)
     if(var_defs.find(val->name) != var_defs.end()){
         throw logic_error("Symbol table entry for variable already exists\n");
     }
+    val->offset = this->size;
+    this->size += 8;
     val->table = this;
     var_defs[val->name] = val;
 }

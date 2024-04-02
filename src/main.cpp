@@ -775,8 +775,8 @@ void make_3ac(node * root)
                         exit(0);
                     }
                 }
-                else{
-                    //TODO - object attr access
+                else if(root->children[1]->data_type == "obj_access"){
+                    
                 }
             }
             else if(root->children.size() == 3){
@@ -867,7 +867,10 @@ void make_3ac(node * root)
                 info->accessind = ((test_type*) root->children[1]->info)->temp;
             }
             else if(root->children[0]->name == "."){ // Class Attr
-                //TODO
+                root->data_type = "obj_access";
+                root->info = new obj_access();
+                obj_access * info = (obj_access *) root->info;
+                info->attr_name = root->children[1]->name;
             }
         }
         else if(root->name == "subscriptlist"){
@@ -889,6 +892,19 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "classdef"){
+            string className = root->children[1]->name;
+            if(present_table->find_class_entry(className)){
+                cerr << "Class " << className << " already defined\n";
+                exit(0);
+            }
+            symbol_table * classTable = new symbol_table(CLASS_TABLE, present_table, className);
+            present_table->add_entry_class(classTable);
+            present_table = classTable;
+            for(auto r: root->children){
+                if(r){
+                    make_3ac(r);
+                }
+            }
 
         }
         else if(root->name == "cond_parentheses_arglist"){

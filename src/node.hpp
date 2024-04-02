@@ -103,6 +103,12 @@ struct funcdef{
     funcarglist * args;
 };
 
+struct obj_access{
+    temp_var * obj_base;
+    string attr_name;
+    string obj;
+};
+
 class node{
 public:
     int id = -1;
@@ -168,7 +174,7 @@ public:
     string name;
     symbol_table* table = nullptr;
     string type;
-
+    int offset = 0;
     symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
         this->name = name;
@@ -188,6 +194,7 @@ public:
     map<string, symbol_table*> fun_defs;
     map<string, symbol_table*> class_defs;
     vector<funcarg*> args;
+    int size = 0;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {
         this->type = type;
