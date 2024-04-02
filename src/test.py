@@ -8,3 +8,4 @@ class A:
     
 
 a: A = A(3)
+a.foo()

@@ -690,11 +690,13 @@ void make_3ac(node * root)
             }
         }
         else if(root->name == "atom_expr"){
+            // cerr << "enter atom expr " << root->children.size() << '\n';
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
+                    // cerr << "rent\n";
             }
             if(root->children.size() == 1){
                 if(root->children[0]->data_type == "name_type"){
@@ -745,10 +747,10 @@ void make_3ac(node * root)
             else if(root->children.size() == 2){
                 if(root->children[1]->data_type == "funccall"){
                     if(root->children[0]->data_type == "name_type"){
-    //                     cerr << "rsz " << root->code.size() << '\n';
-    //                     for(auto x: root->code){
-    //     cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
-    // }
+                        //                     cerr << "rsz " << root->code.size() << '\n';
+                        //                     for(auto x: root->code){
+                        //     cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
+                        // }
                         root->data_type = "funccall";
                         root->info = root->children[1]->info;
                         funccall * info = (funccall *) root->info;
@@ -764,7 +766,7 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 else{
-                                    cerr << "obj instantiation\n";
+                                    // cerr << "obj instantiation\n";
                                     auto cls = present_table->find_class_entry(info->funcname);
                                     root->temp = new temp_var("pointer");
                                     int sz = cls->size;
@@ -866,7 +868,38 @@ void make_3ac(node * root)
                 }
             }
             else if(root->children.size() == 3){
-                // TODO obj func call
+                // cerr << "entered 3\n";
+                if(root->children[0]->data_type != "name_type" or root->children[1]->data_type != "obj_access" || root->children[2]->data_type != "funccall"){
+                    cerr << "Error: Invalid object access\n";
+                    exit(0);
+                }
+                auto obj_entry = present_table->find_var_entry(((name_type *)root->children[0]->info)->name_val);
+                if(obj_entry == NULL){
+                    cerr << "Error: Object " << ((name_type *)root->children[0]->info)->name_val << " not found\n";
+                    exit(0);
+                }
+                auto cls = present_table->find_class_entry(obj_entry->type);
+                if(cls == NULL){
+                    cerr << "Error: Class " << obj_entry->type << " not found\n";
+                    exit(0);
+                }
+                auto fun = cls->find_fun_entry(((obj_access *) root->children[1]->info)->attr_name);
+                if(fun == NULL){
+                    cerr << "Error: Function " << ((obj_access *) root->children[1]->info)->attr_name << " not found in class " << obj_entry->type << '\n';
+                    exit(0);
+                }
+                // cerr << "here\n";
+                root->data_type = "funccall";
+                root->info = root->children[2]->info;
+                funccall * info = (funccall *) root->info;
+                info->funcname = cls->name + "." + fun->name;
+                for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                    root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                }
+                root->code.push_back(quad("", "", "param", obj_entry->name));
+                root->code.push_back(quad(info->funcname, to_string(info->arglist.size() + 1), "callfunc", ""));
+                root->temp = new temp_var(fun->returntype);
+                root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
             }
         }
         else if(root->name == "atom"){
@@ -939,7 +972,7 @@ void make_3ac(node * root)
                 root->data_type = "funccall";
                 root->info = new funccall();
                 funccall * info = (funccall *) root->info;
-                if(root->children[1] != NULL){
+                if(root->children.size() > 2){
                     // cerr << root->children[1] << ' ' << root->children[1]->name << '\n';
                     info->arglist = ((arglist_type*) root->children[1]->info)->args;
                     // cerr << "Adding " << ((arglist_type*) root->children[1]->info)->args.size() << '\n';
