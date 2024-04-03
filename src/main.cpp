@@ -19,6 +19,7 @@ string trim_string(string s)
             s = s.substr(3, s.length() - 6);
         }
     }
+    s = "\"" + s + "\"";
     return s;
 }
 

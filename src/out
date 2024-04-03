@@ -1,10 +1,10 @@
-.string1: SLR name:
-.string2: CLR name:
-.string3: LALR name:
-.string4: LALR
-.string5: CLR
-.string6: Shift-Reduce
-.string7: __main__
+.string1: "SLR name:"
+.string2: "CLR name:"
+.string3: "LALR name:"
+.string4: "LALR"
+.string5: "CLR"
+.string6: "Shift-Reduce"
+.string7: "__main__"
 
 beginfunc ShiftReduceParser.__init__:
     self         =   popparam 
@@ -24,7 +24,7 @@ beginfunc LR0Parser.__init__:
     $6           =   parentname_                    
     param $6
     param $5
-                 =   ShiftReduceParser.__init__ callfunc 2            
+    callfunc ShiftReduceParser.__init__ 2            
     $7           =   popreturn 
 
 endfunc__init__:
@@ -39,7 +39,7 @@ beginfunc CLRParser.__init__:
     $11          =   parentname_                    
     param $11
     param $10
-                 =   ShiftReduceParser.__init__ callfunc 2            
+    callfunc ShiftReduceParser.__init__ 2            
     $12          =   popreturn 
 
 endfunc__init__:
@@ -57,7 +57,7 @@ beginfunc LALRParser.__init__:
     param $17
     param $16
     param $15
-                 =   CLRParser.__init__ callfunc 3            
+    callfunc CLRParser.__init__ 3            
     $18          =   popreturn 
 
 endfunc__init__:
@@ -98,7 +98,7 @@ beginfunc main:
     callfunc LALRParser.__init__ 4            
     obj          =   $28                            
     param obj
-                 =   LALRParser.print_name callfunc 1            
+    callfunc LALRParser.print_name 1            
     $29          =   popreturn 
 
 endfuncmain:

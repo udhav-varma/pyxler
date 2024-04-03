@@ -795,24 +795,24 @@ void print_symbol_table(symbol_table *curr_table){
     ofstream fout(name);
 
     fout<<"VARIABLES:\n";
-    fout<<"Name,Line number,Offset\n";
+    fout<<"Name,Line number,Size,Offset\n";
     for(auto p: curr_table->var_defs){
         auto x = p.first;
         auto entry = p.second;
-        fout<<entry->name<<","<<entry->lineno<<","<<entry->offset<<"\n";
+        fout<<entry->name<<","<<entry->lineno<<","<<entry->size<<","<<entry->offset<<"\n";
     }
     fout<<"FUNCTIONS:\n";
     for(auto p: curr_table->fun_defs){
         auto x = p.first;
         auto table = p.second;
-        fout<<x<<","<<table->lineno<<"\n";
+        fout<<x<<","<<table->lineno<<","<<table->size<<"\n";
         print_symbol_table(table);
     }
     fout<<"CLASSES:\n";
     for(auto p: curr_table->class_defs){
         auto x = p.first;
         auto table = p.second;
-        fout<<x<<","<<table->lineno<<"\n";
+        fout<<x<<","<<table->lineno<<","<<table->size<<"\n";
         print_symbol_table(table);
     }
 }
@@ -860,7 +860,7 @@ int main(int argc, char *argv[]){
             cout<<setw(4)<<left<<x.op<<" ";
             cout<<"\n";
         }
-        else if(x.op=="callfunc "){
+        else if(x.op=="callfunc "|| x.op=="callfunc"){
             cout<<setw(4)<<left<<"";
             cout<<"callfunc ";
             cout<<setw(12)<<x.arg1<<" ";
