@@ -11,6 +11,7 @@ public:
 
 struct name_type{
     string name_val;
+    int lineno = 0;
 };
 
 struct test_type{
@@ -78,6 +79,7 @@ struct atom_expr_list{
 
 struct atom_expr_name{
     string name;
+    int lineno;
 };
 
 struct atom_expr_number{

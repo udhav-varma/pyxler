@@ -2,6 +2,9 @@ VARIABLES:
 Name,Offset
 __name__,0
 FUNCTIONS:
-binarySearch
 main
 CLASSES:
+CLRParser
+LALRParser
+LR0Parser
+ShiftReduceParser

@@ -1,5 +1,7 @@
 VARIABLES:
 Name,Offset
-obj,0
+name_,0
+self,0
+srname,0
 FUNCTIONS:
 CLASSES:

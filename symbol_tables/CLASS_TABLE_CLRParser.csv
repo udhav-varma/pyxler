@@ -1,5 +1,6 @@
 VARIABLES:
 Name,Offset
-obj,0
+clrname,8
 FUNCTIONS:
+__init__
 CLASSES:

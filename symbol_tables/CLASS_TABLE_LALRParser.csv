@@ -1,5 +1,7 @@
 VARIABLES:
 Name,Offset
-obj,0
+lalrname,16
 FUNCTIONS:
+__init__
+print_name
 CLASSES:

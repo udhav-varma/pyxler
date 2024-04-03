@@ -105,6 +105,7 @@ void make_3ac(node * root)
             fun_table->args = info->args->args;
             for(auto x: info->args->args){
                 auto en = new symbol_table_entry(x->name, x->type, present_table);
+                en->lineno = x->lineno;
                 beg_code.push_back(quad("", "", "popparam", x->name));
                 present_table->add_entry_var(en, false);
             }
@@ -239,6 +240,7 @@ void make_3ac(node * root)
                                 root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
                             }
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name *) root->children[0]->info)->name, "list["s + type + "]", present_table);
+                            newentry->lineno = root->children[1]->lineno;
                             newentry->size = elsize;
                             newentry->numel = num_elements;
                             present_table->add_entry_var(newentry);
@@ -248,6 +250,7 @@ void make_3ac(node * root)
                             annasign * info = ((annasign *) root->info);
                             info->name = ((atom_expr_name*) root->children[0]->info)->name;
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
+                            newentry->lineno = root->children[1]->lineno;
                             present_table->add_entry_var(newentry);
                             if(((annasign*) root->children[1]->info)->inval != NULL)
                                 root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
@@ -273,6 +276,7 @@ void make_3ac(node * root)
                         annasign * info = ((annasign *) root->info);
                         info->name = ((obj_access *) root->children[0]->info)->attr_name;
                         symbol_table_entry * newentry = new symbol_table_entry(((obj_access *) root->children[0]->info)->attr_name, ((annasign *) root->children[1]->info)->type, present_table);
+                        newentry->lineno = root->children[1]->lineno;
                         present_table->add_entry_var(newentry); 
                         present_table->parent->add_entry_var(newentry);
                         // cerr << "nm " << newentry->name << ' ' << newentry->offset << '\n';
@@ -445,6 +449,7 @@ void make_3ac(node * root)
             }
             else{
                 string type = ((atom_expr_name *) root->children[1]->info)->name;
+                root->lineno = root->children[0]->lineno;
                 root->info = new annasign();
                 annasign * info = (annasign *) root->info;
                 info->type = type;
@@ -924,6 +929,7 @@ void make_3ac(node * root)
                     root->info = new atom_expr_name();
                     atom_expr_name * info = (atom_expr_name *) root->info;
                     info->name = ((name_type *)root->children[0]->info)->name_val;
+                    info->lineno = ((name_type *)root->children[0]->info)->lineno;
                     // cerr << "here " << info->name << '\n';
                     root->temp = root->children[0]->temp;
                     // cerr << "addr2 " << root->temp << '\n';
@@ -1154,36 +1160,64 @@ void make_3ac(node * root)
                     exit(0);
                 }
                 auto obj_entry = present_table->find_var_entry(((name_type *)root->children[0]->info)->name_val);
+                // cerr << ((name_type *)root->children[0]->info)->name_val << ' ' << obj_entry << '\n';
                 if(obj_entry == NULL){
-                    cerr << "Error: Object " << ((name_type *)root->children[0]->info)->name_val << " not found\n";
-                    exit(0);
+                    auto cls_entry = present_table->find_class_entry(((name_type *) root->children[0]->info)->name_val);
+                    if(cls_entry != NULL){
+                        auto fun = cls_entry->find_fun_entry(((obj_access *) root->children[1]->info)->attr_name);
+                        if(fun == NULL){
+                            cerr << "Error: Function " << ((obj_access *) root->children[1]->info)->attr_name << " not found in class " << ((name_type *) root->children[0]->info)->name_val << '\n';
+                            exit(0);
+                        }
+                        root->data_type = "funccall";
+                        root->info = root->children[2]->info;
+                        funccall * info = (funccall *) root->info;
+                        info->funcname = fun->name;
+                        for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                            root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                        }
+                        // root->code.push_back(quad("", "", "param", obj_entry->name));
+                        string printName = info->funcname;
+                        if(fun->func_classname != ""){
+                            printName = fun->func_classname + "." + printName;
+                        }
+                        root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc", ""));
+                        root->temp = new temp_var(fun->returntype);
+                        root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                    }
+                    else{
+                        cerr << "Error: Object " << ((name_type *)root->children[0]->info)->name_val << " not found\n";
+                        exit(0);
+                    }
                 }
-                auto cls = present_table->find_class_entry(obj_entry->type);
-                if(cls == NULL){
-                    cerr << "Error: Class " << obj_entry->type << " not found\n";
-                    exit(0);
+                else{
+                    auto cls = present_table->find_class_entry(obj_entry->type);
+                    if(cls == NULL){
+                        cerr << "Error: Class " << obj_entry->type << " not found\n";
+                        exit(0);
+                    }
+                    auto fun = cls->find_fun_entry(((obj_access *) root->children[1]->info)->attr_name);
+                    if(fun == NULL){
+                        cerr << "Error: Function " << ((obj_access *) root->children[1]->info)->attr_name << " not found in class " << obj_entry->type << '\n';
+                        exit(0);
+                    }
+                    // cerr << "here\n";
+                    root->data_type = "funccall";
+                    root->info = root->children[2]->info;
+                    funccall * info = (funccall *) root->info;
+                    info->funcname = fun->name;
+                    for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
+                        root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                    }
+                    root->code.push_back(quad("", "", "param", obj_entry->name));
+                    string printName = info->funcname;
+                    if(fun->func_classname != ""){
+                        printName = fun->func_classname + "." + printName;
+                    }
+                    root->code.push_back(quad(printName, to_string(info->arglist.size() + 1), "callfunc", ""));
+                    root->temp = new temp_var(fun->returntype);
+                    root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                 }
-                auto fun = cls->find_fun_entry(((obj_access *) root->children[1]->info)->attr_name);
-                if(fun == NULL){
-                    cerr << "Error: Function " << ((obj_access *) root->children[1]->info)->attr_name << " not found in class " << obj_entry->type << '\n';
-                    exit(0);
-                }
-                // cerr << "here\n";
-                root->data_type = "funccall";
-                root->info = root->children[2]->info;
-                funccall * info = (funccall *) root->info;
-                info->funcname = fun->name;
-                for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
-                    root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
-                }
-                root->code.push_back(quad("", "", "param", obj_entry->name));
-                string printName = info->funcname;
-                if(fun->func_classname != ""){
-                    printName = fun->func_classname + "." + printName;
-                }
-                root->code.push_back(quad(printName, to_string(info->arglist.size() + 1), "callfunc", ""));
-                root->temp = new temp_var(fun->returntype);
-                root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
             }
         }
         else if(root->name == "atom"){
@@ -1348,6 +1382,7 @@ void make_3ac(node * root)
                     exit(0);
                 }
                 symbol_table * classTable = new symbol_table(CLASS_TABLE, present_table, className);
+                classTable->lineno = root->children[0]->lineno;
                 classTable->inher_var_defs = parentTable->var_defs;
                 classTable->size = parentTable->size;
                 classTable->inher_fun_defs = parentTable->fun_defs;
@@ -1439,6 +1474,7 @@ void make_3ac(node * root)
             root->info = new name_type();
             name_type * info = (name_type *) root->info;
             info->name_val = root->name;
+            info->lineno = root->lineno;
         }
         else if(root->type == "NUMBER"){
             cerr << "number " << root->name << '\n';
