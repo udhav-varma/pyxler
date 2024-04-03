@@ -645,7 +645,7 @@ power: atom_expr POW factor{
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | atom_expr{
-    // cerr<<"here power \n";
+    // <<"here power \n";
     $<ptr>$ = new node("nt", "power");
     ast.add_edge($<ptr>$, $<ptr>1);
 }
@@ -841,7 +841,7 @@ int main(int argc, char *argv[]){
     if(!yyparse()) cerr << "Parsing successful\n";
     else return -1;
     make_3ac(root);
-    cerr << root->code.size() << '\n';
+    /* cerr << root->code.size() << '\n'; */
     for(auto x: headers) cout << x << '\n';
 
     for(auto x: root->code){
