@@ -219,9 +219,12 @@ void symbol_table::add_entry_class(symbol_table* classtable)
 symbol_table_entry * symbol_table::find_var_entry(string name)
 {
     if(var_defs.find(name) == var_defs.end()){
-        if(this->parent != NULL) return this->parent->find_var_entry(name);
-        else
-            return NULL;
+        if(inher_var_defs.find(name) == inher_var_defs.end()){
+            if(this->parent != NULL) return this->parent->find_var_entry(name);
+            else
+                return NULL;
+        }
+        else return inher_var_defs[name];
     }
     else return var_defs[name];
 }
@@ -229,9 +232,12 @@ symbol_table_entry * symbol_table::find_var_entry(string name)
 symbol_table* symbol_table::find_fun_entry(string name)
 {
     if(fun_defs.find(name) == fun_defs.end()){
-        if(this->parent != NULL) return this->parent->find_fun_entry(name);
-        else
-            return NULL;
+        if(inher_fun_defs.find(name) == inher_fun_defs.end()){
+            if(this->parent != NULL) return this->parent->find_fun_entry(name);
+            else
+                return NULL;
+        }
+        else return inher_fun_defs[name];
     }
     else return fun_defs[name];
 }

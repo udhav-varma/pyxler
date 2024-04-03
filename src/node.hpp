@@ -202,7 +202,12 @@ public:
     map<string, symbol_table_entry*> var_defs;
     map<string, symbol_table*> fun_defs;
     map<string, symbol_table*> class_defs;
+    string inher_class = "";
+    map<string, symbol_table_entry*> inher_var_defs;
+    map<string, symbol_table*> inher_fun_defs;
+    map<string, symbol_table*> inher_class_defs;
     vector<funcarg*> args;
+    string func_classname = "";
     int size = 0;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {

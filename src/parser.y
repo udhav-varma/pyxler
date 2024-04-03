@@ -742,7 +742,7 @@ exprlist: expr{
 }
 
 
-classdef: CLASS NAME cond_parentheses_arglist ':' suite{
+classdef: CLASS NAME cond_parent_class ':' suite{
     $<ptr>$ = new node("nt", "classdef");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -751,15 +751,14 @@ classdef: CLASS NAME cond_parentheses_arglist ':' suite{
     ast.add_edge($<ptr>$, $<ptr>5);
 }
 
-cond_parentheses_arglist: '(' cond_arglist ')'{
-    $<ptr>$ = new node("nt", "cond_parentheses_arglist");
-    ast.add_node($<ptr>$);
+cond_parent_class: '(' NAME ')'{
+    $<ptr>$ = new node("nt", "cond_parent_class");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
     ast.add_edge($<ptr>$, $<ptr>3);
 } | {
     $<ptr>$ = NULL;
-}
+} 
 
 arglist: argument {
     $<ptr>$ = new node("nt", "arglist");

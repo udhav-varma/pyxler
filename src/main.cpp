@@ -88,9 +88,17 @@ void make_3ac(node * root)
             // cerr << "here " << info->args->args.size() << '\n';
             // cerr << "rname " << root->children[4]->data_type << '\n';
             info->returntype = ((atom_expr_name *) root->children[4]->info)->name;
-            beg_code.push_back(quad("beginfunc"s + info->name, "", "label", ""));
+            string printName = info->name;
+            if(present_table->type == CLASS_TABLE){
+                printName = present_table->name + "." + printName;
+            }
+            beg_code.push_back(quad("beginfunc "s + printName, "", "label", ""));
             //PUSHPARAMS
             symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
+            // cerr << "new fun table " << info->name << '\n';
+            if(present_table->type == CLASS_TABLE){
+                fun_table->func_classname = present_table->name;
+            }
             present_table->add_entry_fun(fun_table);
             present_table = fun_table;
             fun_table->args = info->args->args;
@@ -250,14 +258,14 @@ void make_3ac(node * root)
                             cerr << "Declarations only allowed with self object\n";
                             exit(0);
                         }
-                        if(present_table->type != FUNCTION_TABLE || present_table->name != "__init__"){
-                            cerr << "Declarations only allowed in __init__ function\n";
-                            exit(0);
-                        }
                         if(present_table->parent == NULL or present_table->parent->type != CLASS_TABLE){
-                            cerr << "Declarations only allowed in __init__ function inside class\n";
+                            cerr << present_table->parent->name << " : Declarations only allowed in __init__ function inside class\n";
                             exit(0);
                         }
+                        // if(present_table->type != FUNCTION_TABLE || present_table->name != present_table->parent->name + ".__init__"){
+                        //     cerr << "Declarations only allowed in __init__ function\n";
+                        //     exit(0);
+                        // }
                         annasign * info = ((annasign *) root->info);
                         info->name = ((obj_access *) root->children[0]->info)->attr_name;
                         symbol_table_entry * newentry = new symbol_table_entry(((obj_access *) root->children[0]->info)->attr_name, ((annasign *) root->children[1]->info)->type, present_table);
@@ -346,13 +354,13 @@ void make_3ac(node * root)
             }
         }
         else if(root->name == "annasign"){
-            cerr << "annasign " << root->children.size() << '\n';
+            // cerr << "annasign " << root->children.size() << '\n';
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
-                cerr << "Annasign child " << r->data_type << '\n';
+                // cerr << "Annasign child " << r->data_type << '\n';
             }
             // if(root->children[1]->info == NULL) cerr << "isnull\n";
             if(root->children[1]->data_type == "list_name_type"){
@@ -929,7 +937,11 @@ void make_3ac(node * root)
                             for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                 root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
                             }
-                            root->code.push_back(quad(info->funcname, to_string(info->arglist.size()), "callfunc", ""));
+                            string printName = info->funcname;
+                            if(func->func_classname != ""){
+                                printName = func->func_classname + "." + printName;
+                            }
+                            root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc", ""));
                             root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                         }
                     }
@@ -1042,12 +1054,16 @@ void make_3ac(node * root)
                 root->data_type = "funccall";
                 root->info = root->children[2]->info;
                 funccall * info = (funccall *) root->info;
-                info->funcname = cls->name + "." + fun->name;
+                info->funcname = fun->name;
                 for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                     root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
                 }
                 root->code.push_back(quad("", "", "param", obj_entry->name));
-                root->code.push_back(quad(info->funcname, to_string(info->arglist.size() + 1), "callfunc", ""));
+                string printName = info->funcname;
+                if(fun->func_classname != ""){
+                    printName = fun->func_classname + "." + printName;
+                }
+                root->code.push_back(quad(printName, to_string(info->arglist.size() + 1), "callfunc", ""));
                 root->temp = new temp_var(fun->returntype);
                 root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
             }
@@ -1168,14 +1184,38 @@ void make_3ac(node * root)
 
         }
         else if(root->name == "classdef"){
-            string className = root->children[1]->name;
-            if(present_table->find_class_entry(className)){
-                cerr << "Class " << className << " already defined\n";
+            if(present_table -> type != GLOBAL_TABLE){
+                cerr << "Class definition not allowed here\n";
                 exit(0);
             }
-            symbol_table * classTable = new symbol_table(CLASS_TABLE, present_table, className);
-            present_table->add_entry_class(classTable);
-            present_table = classTable;
+            string className = root->children[1]->name;
+            if(root->children.size() == 5){
+                string parentClass = root->children[2]->children[1]->name;
+                if(!present_table->find_class_entry(parentClass)){
+                    cerr << "Parent class " << parentClass << " not defined\n";
+                    exit(0);
+                }
+                symbol_table * parentTable = present_table->find_class_entry(parentClass);
+                if(present_table->find_class_entry(className)){
+                    cerr << "Class " << className << " already defined\n";
+                    exit(0);
+                }
+                symbol_table * classTable = new symbol_table(CLASS_TABLE, present_table, className);
+                classTable->inher_var_defs = parentTable->var_defs;
+                classTable->size = parentTable->size;
+                classTable->inher_fun_defs = parentTable->fun_defs;
+                present_table->add_entry_class(classTable);
+                present_table = classTable;
+            }
+            else{
+                if(present_table->find_class_entry(className)){
+                    cerr << "Class " << className << " already defined\n";
+                    exit(0);
+                }
+                symbol_table * classTable = new symbol_table(CLASS_TABLE, present_table, className);
+                present_table->add_entry_class(classTable);
+                present_table = classTable;
+            }
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
@@ -1184,14 +1224,13 @@ void make_3ac(node * root)
             }
             present_table = present_table->parent;
         }
-        else if(root->name == "cond_parentheses_arglist"){
+        else if(root->name == "cond_parent_class"){
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
             }
-
         }
         else if(root->name == "arglist"){
             // cerr << "enter arglist\n";
