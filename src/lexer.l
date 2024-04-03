@@ -173,6 +173,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     }
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
+    yylval.ptr->lineno = yylineno;
     return yytext[0];
 }
 
@@ -191,6 +192,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     }
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
+    yylval.ptr->lineno = yylineno;
     return yytext[0];
 }
 
@@ -199,6 +201,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
+    yylval.ptr->lineno = yylineno;
     return NEWLINE;
 }
 
@@ -211,142 +214,177 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 <INLINE,BRACKET>"async" { 
     yylval.ptr = new node("KEYWORD", "async");
     yylval.val = "async";
+    yylval.ptr->lineno = yylineno;
     return ASYNC;}
 <INLINE,BRACKET>"del" {
     yylval.ptr = new node("KEYWORD", "del");
     yylval.val = "del";
+    yylval.ptr->lineno = yylineno;
     return DEL;}
 <INLINE,BRACKET>"pass" {
     yylval.ptr = new node("KEYWORD", "pass");
     yylval.val = "pass";
+    yylval.ptr->lineno = yylineno;
     return PASS;}
 <INLINE,BRACKET>"break" {
     yylval.ptr = new node("KEYWORD", "break");
     yylval.val = "break";
+    yylval.ptr->lineno = yylineno;
     return BREAK;}
 <INLINE,BRACKET>"continue" {
     yylval.ptr = new node("KEYWORD", "continue");
     yylval.val = "continue";
+    yylval.ptr->lineno = yylineno;
     return CONTINUE;}
 <INLINE,BRACKET>"return" {
     yylval.ptr = new node("KEYWORD", "return");
     yylval.val = "return";
+    yylval.ptr->lineno = yylineno;
     return RETURN;}
 <INLINE,BRACKET>"raise" {
     yylval.ptr = new node("KEYWORD", "raise");
     yylval.val = "raise";
+    yylval.ptr->lineno = yylineno;
     return RAISE;}
 <INLINE,BRACKET>"from" {
     yylval.ptr = new node("KEYWORD", "from");
     yylval.val = "from";
+    yylval.ptr->lineno = yylineno;
     return FROM;}
 <INLINE,BRACKET>"import" {
     yylval.ptr = new node("KEYWORD", "import");
     yylval.val = "import";
+    yylval.ptr->lineno = yylineno;
     return IMPORT;}
 <INLINE,BRACKET>"as" {
     yylval.ptr = new node("KEYWORD", "as");
     yylval.val = "as";
+    yylval.ptr->lineno = yylineno;
     return AS;}
 <INLINE,BRACKET>"global" {
     yylval.ptr = new node("KEYWORD", "global");
     yylval.val = "global";
+    yylval.ptr->lineno = yylineno;
     return GLOBAL;}
 <INLINE,BRACKET>"nonlocal" {
     yylval.ptr = new node("KEYWORD", "nonlocal");
     yylval.val = "nonlocal";
+    yylval.ptr->lineno = yylineno;
     return NONLOCAL;}
 <INLINE,BRACKET>"assert" {
     yylval.ptr = new node("KEYWORD", "assert");
     yylval.val = "assert";
+    yylval.ptr->lineno = yylineno;
     return ASSERT;}
 <INLINE,BRACKET>"if" {
     yylval.ptr = new node("KEYWORD", "if");
     yylval.val = "if";
+    yylval.ptr->lineno = yylineno;
     return IF;}
 <INLINE,BRACKET>"elif" {
     yylval.ptr = new node("KEYWORD", "elif");
     yylval.val = "elif";
+    yylval.ptr->lineno = yylineno;
     return ELIF;}
 <INLINE,BRACKET>"else" {
     yylval.ptr = new node("KEYWORD", "else");
     yylval.val = "else";
+    yylval.ptr->lineno = yylineno;
     return ELSE;}
 <INLINE,BRACKET>"for" {
     yylval.ptr = new node("KEYWORD", "for");
     yylval.val = "for";
+    yylval.ptr->lineno = yylineno;
     return FOR;}
 <INLINE,BRACKET>"in" {
     yylval.ptr = new node("KEYWORD", "in");
     yylval.val = "in";
+    yylval.ptr->lineno = yylineno;
     return IN;}
 <INLINE,BRACKET>"while" {
     yylval.ptr = new node("KEYWORD", "while");
     yylval.val = "while";
+    yylval.ptr->lineno = yylineno;
     return WHILE;}
 <INLINE,BRACKET>"try" {
     yylval.ptr = new node("KEYWORD", "try");
     yylval.val = "try";
+    yylval.ptr->lineno = yylineno;
     return TRY;}
 <INLINE,BRACKET>"finally" {
     yylval.ptr = new node("KEYWORD", "finally");
     yylval.val = "finally";
+    yylval.ptr->lineno = yylineno;
     return FINALLY;}
 <INLINE,BRACKET>"with" {
     yylval.ptr = new node("KEYWORD", "with");
     yylval.val = "with";
+    yylval.ptr->lineno = yylineno;
     return WITH;}
 <INLINE,BRACKET>"except" {
     yylval.ptr = new node("KEYWORD", "except");
     yylval.val = "except";
+    yylval.ptr->lineno = yylineno;
     return EXCEPT;}
 <INLINE,BRACKET>"lambda" {
     yylval.ptr = new node("KEYWORD", "lambda");
     yylval.val = "lambda";
+    yylval.ptr->lineno = yylineno;
     return LAMBDA;}
 <INLINE,BRACKET>"not" {
     yylval.ptr = new node("KEYWORD", "not");
     yylval.val = "not";
+    yylval.ptr->lineno = yylineno;
     return NOT;}
 <INLINE,BRACKET>"or" {
     yylval.ptr = new node("KEYWORD", "or");
     yylval.val = "or";
+    yylval.ptr->lineno = yylineno;
     return OR;}
 <INLINE,BRACKET>"and" {
     yylval.ptr = new node("KEYWORD", "and");
     yylval.val = "and";
+    yylval.ptr->lineno = yylineno;
     return AND;}
 <INLINE,BRACKET>"await" {
     yylval.ptr = new node("KEYWORD", "await");
     yylval.val = "await";
+    yylval.ptr->lineno = yylineno;
     return AWAIT;}
 <INLINE,BRACKET>"is" {
     yylval.ptr = new node("KEYWORD", "is");
     yylval.val = "is";
+    yylval.ptr->lineno = yylineno;
     return IS;}
 <INLINE,BRACKET>"yield" {
     yylval.ptr = new node("KEYWORD", "yield");
     yylval.val = "yield";
+    yylval.ptr->lineno = yylineno;
     return YIELD;}
 <INLINE,BRACKET>"True" {
     yylval.ptr = new node("KEYWORD", "True");
     yylval.val = "True";
+    yylval.ptr->lineno = yylineno;
     return TRUE;}
 <INLINE,BRACKET>"False" {
     yylval.ptr = new node("KEYWORD", "False");
     yylval.val = "False";
+    yylval.ptr->lineno = yylineno;
     return FALSE;}
 <INLINE,BRACKET>"None" {
     yylval.ptr = new node("KEYWORD", "None");
     yylval.val = "None";
+    yylval.ptr->lineno = yylineno;
     return NONE;}
 <INLINE,BRACKET>"class" {
     yylval.ptr = new node("KEYWORD", "class");
     yylval.val = "class";
+    yylval.ptr->lineno = yylineno;
     return CLASS;}
 <INLINE,BRACKET>"def" {
     yylval.ptr = new node("KEYWORD", "def");
     yylval.val = "def";
+    yylval.ptr->lineno = yylineno;
     return DEF;}
 
 <INLINE,BRACKET>{COMMENT} {
@@ -354,113 +392,140 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
     yylval.val = "NEWLINE";
     inside_line = 0;
     space = 0;
+    yylval.ptr->lineno = yylineno;
     return NEWLINE;
 }
 <INLINE,BRACKET>{ADDASSIGN} {
     yylval.ptr = new node("OPERATOR", "+=");
     yylval.val = "+=";
+    yylval.ptr->lineno = yylineno;
     return ADDASSIGN;}
 <INLINE,BRACKET>{SUBASSIGN} {
     yylval.ptr = new node("OPERATOR", "-=");
     yylval.val = "-=";
+    yylval.ptr->lineno = yylineno;
     return SUBASSIGN;}
 <INLINE,BRACKET>{MULASSIGN} {
     yylval.ptr = new node("OPERATOR", "*=");
     yylval.val = "*=";
+    yylval.ptr->lineno = yylineno;
     return MULASSIGN;}
 <INLINE,BRACKET>{DIVASSIGN} {
     yylval.ptr = new node("OPERATOR", "/=");
     yylval.val = "/=";
+    yylval.ptr->lineno = yylineno;
     return DIVASSIGN;}
 <INLINE,BRACKET>{IDIVASSIGN} {
     yylval.ptr = new node("OPERATOR", "//=");
     yylval.val = "//=";
+    yylval.ptr->lineno = yylineno;
     return IDIVASSIGN;}
 <INLINE,BRACKET>{MODASSIGN} {
     yylval.ptr = new node("OPERATOR", "%=");
     yylval.val = "%=";
+    yylval.ptr->lineno = yylineno;
     return MODASSIGN;}
 <INLINE,BRACKET>{ATASSIGN} {
     yylval.ptr = new node("OPERATOR", "@=");
     yylval.val = "@=";
+    yylval.ptr->lineno = yylineno;
     return ATASSIGN;}
 <INLINE,BRACKET>{ANDASSIGN} {
     yylval.ptr = new node("OPERATOR", "&=");
     yylval.val = "&=";
+    yylval.ptr->lineno = yylineno;
     return ANDASSIGN;}
 <INLINE,BRACKET>{ORASSIGN} {
     yylval.ptr = new node("OPERATOR", "|=");
     yylval.val = "|=";
+    yylval.ptr->lineno = yylineno;
     return ORASSIGN;}
 <INLINE,BRACKET>{XORASSIGN} {
     yylval.ptr = new node("OPERATOR", "^=");
     yylval.val = "^=";
+    yylval.ptr->lineno = yylineno;
     return XORASSIGN;}
 <INLINE,BRACKET>{LSASSIGN} {
     yylval.ptr = new node("OPERATOR", "<<=");
     yylval.val = "<<=";
+    yylval.ptr->lineno = yylineno;
     return LSASSIGN;}
 <INLINE,BRACKET>{RSASSIGN} {
     yylval.ptr = new node("OPERATOR", ">>=");
     yylval.val = ">>=";
+    yylval.ptr->lineno = yylineno;
     return RSASSIGN;}
 <INLINE,BRACKET>{POWASSIGN} {
     yylval.ptr = new node("OPERATOR", "**=");
     yylval.val = "**=";
+    yylval.ptr->lineno = yylineno;
     return POWASSIGN;}
 <INLINE,BRACKET>{ARROWOP} {
     yylval.ptr = new node("OPERATOR", "->");
     yylval.val = "->";
+    yylval.ptr->lineno = yylineno;
     return ARROWOP;}
 
 <INLINE,BRACKET>{stringliteral} { 
     yylval.ptr = new node("STRING", string(yytext, yytext + yyleng));
     yylval.val = string(yytext, yytext + yyleng);
+    yylval.ptr->lineno = yylineno;
     return STRING;}
 <INLINE,BRACKET>{POW} {
     yylval.ptr = new node("OPERATOR", "**");
     yylval.val = "**";
+    yylval.ptr->lineno = yylineno;
     return POW;}
 <INLINE,BRACKET>{IDIV} {
     yylval.ptr = new node("OPERATOR", "//");
     yylval.val = "//";
+    yylval.ptr->lineno = yylineno;
     return IDIV;}
 <INLINE,BRACKET>{LEFTSHIFT} {
     yylval.ptr = new node("OPERATOR", "<<");
     yylval.val = "<<";
+    yylval.ptr->lineno = yylineno;
     return LEFTSHIFT;}
 <INLINE,BRACKET>{RIGHTSHIFT} {
     yylval.ptr = new node("OPERATOR", ">>");
     yylval.val = ">>";
+    yylval.ptr->lineno = yylineno;
     return RIGHTSHIFT;}
 <INLINE,BRACKET>{LEQ} {
     yylval.ptr = new node("OPERATOR", "<=");
     yylval.val = "<=";
+    yylval.ptr->lineno = yylineno;
     return LEQ;}
 <INLINE,BRACKET>{GEQ} {
     yylval.ptr = new node("OPERATOR", ">=");
     yylval.val = ">=";
+    yylval.ptr->lineno = yylineno;
     return GEQ;}
 <INLINE,BRACKET>{EQUAL} {
     yylval.ptr = new node("OPERATOR", "==");
     yylval.val = "==";
+    yylval.ptr->lineno = yylineno;
     return EQUAL;}
 <INLINE,BRACKET>{NEQ} {
     yylval.ptr = new node("OPERATOR", "!=");
     yylval.val = "!=";
+    yylval.ptr->lineno = yylineno;
     return NEQ;}
 <INLINE,BRACKET>({integer}|{floatnumber}|{imagnumber})  {
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("NUMBER", yylval.val);
+    yylval.ptr->lineno = yylineno;
     return NUMBER;}
 <INLINE,BRACKET>{NAME} {
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
     yylval.ptr->lineno = yylineno; 
+    yylval.ptr->lineno = yylineno;
     return NAME;}
 <INLINE,BRACKET>. {
     yylval.val = string(1, yytext[0]);
     yylval.ptr = new node("DELIMITER", yylval.val);
+    yylval.ptr->lineno = yylineno;
     return yytext[0];}
 
 %%

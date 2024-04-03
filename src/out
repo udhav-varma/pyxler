@@ -1,127 +1,116 @@
-.string1: Element is present at index:
-.string2: Element is not present
-.string3: __main__
+.string1: SLR name:
+.string2: CLR name:
+.string3: LALR name:
+.string4: LALR
+.string5: CLR
+.string6: Shift-Reduce
+.string7: __main__
 
 beginfunc ShiftReduceParser.__init__:
-    self        =   popparam
-    name_       =   popparam
-    $2          =   name_                       
-    *(self + 0) =   $2                          
+    self         =   popparam 
+    name_        =   popparam 
+    $2           =   name_                          
+    *(self + 0)  =   $2                             
 
 endfunc__init__:
 
 beginfunc LR0Parser.__init__:
-    self        =   popparam
-    myname_     =   popparam
-    parentname_ =   popparam
-    $4          =   myname_                     
-    *(self + 8) =   $4                          
-    $5          =   self                        
-    $6          =   parentname_                 
+    self         =   popparam 
+    myname_      =   popparam 
+    parentname_  =   popparam 
+    $4           =   myname_                        
+    *(self + 8)  =   $4                             
+    $5           =   self                           
+    $6           =   parentname_                    
     param $6
     param $5
-                =   ShiftReduceParser.__init__callfunc2           
-    $7          =   popreturn
+                 =   ShiftReduceParser.__init__ callfunc 2            
+    $7           =   popreturn 
 
 endfunc__init__:
 
 beginfunc CLRParser.__init__:
-    self        =   popparam
-    myname_     =   popparam
-    parentname_ =   popparam
-    $9          =   myname_                     
-    *(self + 8) =   $9                          
-    $10         =   self                        
-    $11         =   parentname_                 
+    self         =   popparam 
+    myname_      =   popparam 
+    parentname_  =   popparam 
+    $9           =   myname_                        
+    *(self + 8)  =   $9                             
+    $10          =   self                           
+    $11          =   parentname_                    
     param $11
     param $10
-                =   ShiftReduceParser.__init__callfunc2           
-    $12         =   popreturn
+                 =   ShiftReduceParser.__init__ callfunc 2            
+    $12          =   popreturn 
 
 endfunc__init__:
 
-beginfunc main:
-    $36         =   3                           
-    $37         =   4                           
-    $38         =   5                           
-    $39         =   6                           
-    $40         =   7                           
-    $41         =   8                           
-    $42         =   9                           
-    64          =               param            
-                =   allocmem 1  callfunc            
-    array       =               popparam            
-    *(array)    =                   7           
-    *(array + 8)=                   $36         
-    *(array + 16)=                   $37         
-    *(array + 24)=                   $38         
-    *(array + 32)=                   $39         
-    *(array + 40)=                   $40         
-    *(array + 48)=                   $41         
-    *(array + 56)=                   $42         
-    $43         =   array                       
-    $44         =   4                           
-    $45         =   0                           
-    $46         =   array                       
-    $47         =   *(array)                    
-    $48         =   1                           
-    $49         =   $47         -   $48         
-    $49         =               param            
-    $45         =               param            
-    $44         =               param            
-    $43         =               param            
-                =   binarySearchcallfunc4           
-    $50         =               popreturn            
-    result      =   $50                         
+beginfunc LALRParser.__init__:
+    self         =   popparam 
+    myname_      =   popparam 
+    clrname_     =   popparam 
+    srname_      =   popparam 
+    $14          =   myname_                        
+    *(self + 16) =   $14                            
+    $15          =   self                           
+    $16          =   clrname_                       
+    $17          =   srname_                        
+    param $17
+    param $16
+    param $15
+                 =   CLRParser.__init__ callfunc 3            
+    $18          =   popreturn 
 
-beginif2:
-    $51         =   result                      
-    $52         =   1                           
-    $53         =               -   $52         
-    $54         =   $51         !=  $53         
-    if_false    $54         goto endif2
-    $55         =   .string1                    
-    $55         =               param            
-                =   print       callfunc1           
-    $56         =   result                      
-    $56         =               param            
-                =   print       callfunc1           
-    goto endifblock2
+endfunc__init__:
 
-endif2:
-    $57         =   .string2                    
-    $57         =               param            
-                =   print       callfunc1           
+beginfunc LALRParser.print_name:
+    self         =   popparam 
+    $19          =   .string1                       
+    param $19
+    callfunc print        1            
+    param $20
+    callfunc print        1            
+    $21          =   .string2                       
+    param $21
+    callfunc print        1            
+    $22          =   *(self + 8)                    
+    param $22
+    callfunc print        1            
+    $23          =   .string3                       
+    param $23
+    callfunc print        1            
+    $24          =   *(self + 16)                   
+    param $24
+    callfunc print        1            
 
 endfuncprint_name:
 
 beginfunc main:
-    $25         =   .string4                    
-    $26         =   .string5                    
-    $27         =   .string6                    
+    $25          =   .string4                       
+    $26          =   .string5                       
+    $27          =   .string6                       
     param 24
-                =   allocmem    callfunc1           
-    $28         =   popreturn
+    callfunc allocmem     1            
+    $28          =   popreturn 
     param $27
     param $26
     param $25
     param $28
-                =   LALRParser.__init__callfunc4           
-    obj         =   $28                         
+    callfunc LALRParser.__init__ 4            
+    obj          =   $28                            
     param obj
-                =   LALRParser.print_namecallfunc1           
-    $29         =   popreturn
+                 =   LALRParser.print_name callfunc 1            
+    $29          =   popreturn 
 
 endfuncmain:
 
-beginif3:
-    $58         =   __name__                    
-    $59         =   .string3                    
-    $60         =   $58         ==  $59         
-    if_false    $60         goto endif3
-                =   main        callfunc0           
-    $61         =               popreturn            
-    goto endifblock3
+beginif1:
+    $30          =   __name__                       
+    $31          =   .string7                       
+    $32          =   $30          ==   $31          
+    if_false     $32          goto endif1
+    callfunc main         0            
+    $33          =   popreturn 
+    goto endifblock1
 
 endif1:
 

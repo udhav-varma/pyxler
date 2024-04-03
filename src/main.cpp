@@ -439,6 +439,7 @@ void make_3ac(node * root)
             if(root->children[1]->data_type == "list_name_type"){
                 root->data_type = root->children[1]->data_type;
                 root->info = root->children[1]->info;
+                root->lineno = root->children[0]->lineno;
                 if(root->children.size() == 4){
                     if(root->children[3]->data_type != "sqbrackettestlist_type"){
                         cerr << "Invalid list declaration\n";
