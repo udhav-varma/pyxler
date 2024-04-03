@@ -233,7 +233,7 @@ void make_3ac(node * root)
                             int num_elements = listinfo->vals->sqbrackettestlist_vars.size();
                             size = (elsize) * num_elements + 8;
                             root->code.push_back(quad("", "", "param", to_string(size)));
-                            root->code.push_back(quad("allocmem 1", "", "callfunc", ""));
+                            root->code.push_back(quad("allocmem 1", "", "callfunc ", ""));
                             root->code.push_back(quad("", "", "popparam", ((atom_expr_name *) root->children[0]->info)->name));                                                 
                             root->code.push_back(quad("", to_string(num_elements), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + ")"));
                             for(int i = 0; i < num_elements; i++){
@@ -1007,13 +1007,13 @@ void make_3ac(node * root)
                                     root->temp = new temp_var("pointer");
                                     int sz = cls->size;
                                     root->code.push_back(quad("", "", "param", to_string(sz)));
-                                    root->code.push_back(quad("allocmem", "1", "callfunc", ""));
+                                    root->code.push_back(quad("allocmem", "1", "callfunc ", ""));
                                     root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                                     for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                         root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
                                     }
                                     root->code.push_back(quad("", "", "param", tempprint(root->temp)));
-                                    root->code.push_back(quad(cls->name + ".__init__", to_string(info->arglist.size() + 1), "callfunc", ""));
+                                    root->code.push_back(quad(cls->name + ".__init__", to_string(info->arglist.size() + 1), "callfunc ", ""));
                                 }
                             }
                             else if(info->funcname == "len"){
@@ -1048,7 +1048,7 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 root->code.push_back(quad("", "", "param", tempprint(args[0]->temp)));
-                                root->code.push_back(quad("print", "1", "callfunc", ""));
+                                root->code.push_back(quad("print", "1", "callfunc ", ""));
                             }
                         }
                         else{
@@ -1063,7 +1063,7 @@ void make_3ac(node * root)
                             if(func->func_classname != ""){
                                 printName = func->func_classname + "." + printName;
                             }
-                            root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc", ""));
+                            root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc ", ""));
                             root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                         }
                     }
@@ -1496,7 +1496,7 @@ void make_3ac(node * root)
         }
         else if(root->type == "STRING"){
             root->data_type = "str_type";
-            // cerr << root->name 
+            // cerr << root->name <<"\n";
             root->info = new str_type();
             str_type * info = (str_type*)root->info;
             info->str = root->name;
