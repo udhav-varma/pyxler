@@ -21,7 +21,7 @@ def compute_avg() -> float:
   return sum / len(data)
 
 
-def main():
+def main() -> None:
   min_value: float = compute_min()
   print("Minimum value: ")
   print(min_value)

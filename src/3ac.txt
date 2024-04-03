@@ -1,19 +1,141 @@
-    $1           =   2                              
-    $2           =                -    $1           
-    $3           =   3                              
-    param 24
+.string1: "Element is present at index:"
+.string2: "Element is not present"
+.string3: "__main__"
+
+beginfunc binarySearch:
+    array        =   popparam 
+    x            =   popparam 
+    low          =   popparam 
+    high         =   popparam 
+
+beginwhile1:
+    $1           =   low                            
+    $2           =   high                           
+    $3           =   $1           <=   $2           
+    if_false     $3           goto endwhile1
+    $4           =   low                            
+    $5           =   high                           
+    $6           =   low                            
+    $7           =   $5           -    $6           
+    $8           =   2                              
+    $9           =   $7           //   $8           
+    $10          =   $4           +    $9           
+    mid          =   $10                            
+
+beginif1:
+    $11          =   mid                            
+    $12          =   mid                            
+    $15          =   8            *    $12          
+    $15          =   $15          +    8            
+    $14          =                     (array + $15) 
+    $13          =                     *$14         
+    $16          =   x                              
+    $17          =   $13          ==   $16          
+    if_false     $17          goto endif1
+    $18          =   mid                            
+                 =                return $18          
+    goto endifblock1
+
+endif1:
+    $19          =   mid                            
+    $20          =   mid                            
+    $23          =   8            *    $20          
+    $23          =   $23          +    8            
+    $22          =                     (array + $23) 
+    $21          =                     *$22         
+    $24          =   x                              
+    $25          =   $21          <    $24          
+    if_false     $25          goto endelif1
+    $26          =   low                            
+    $27          =   mid                            
+    $28          =   1                              
+    $29          =   $27          +    $28          
+    low          =   $29                            
+    goto endifblock1
+
+endelif1:
+    $30          =   high                           
+    $31          =   mid                            
+    $32          =   1                              
+    $33          =   $31          -    $32          
+    high         =   $33                            
+
+endifblock1:
+    goto beginwhile1
+
+endwhile1:
+    $34          =   1                              
+    $35          =                -    $34          
+                 =                return $35          
+
+endfuncbinarySearch:
+
+beginfunc main:
+    $36          =   3                              
+    $37          =   4                              
+    $38          =   5                              
+    $39          =   6                              
+    $40          =   7                              
+    $41          =   8                              
+    $42          =   9                              
+    param 64
     callfunc allocmem 1                
-    a            =   popparam 
-    *(a)         =                     2            
-    *(a + 8)     =                     $2           
-    *(a + 16)    =                     $3           
-    $4           =   5                              
-    x            =   $4                             
-    $5           =   x                              
-    $6           =   x                              
-    $9           =   8            *    $6           
-    $9           =   $9           +    8            
-    $8           =                     (a + $9)     
-    $7           =                     *$8          
-    $10          =   1                              
-    *(a + $9)    =   $10                            
+    array        =   popreturn 
+    *(array)     =                     7            
+    *(array + 8) =                     $36          
+    *(array + 16) =                     $37          
+    *(array + 24) =                     $38          
+    *(array + 32) =                     $39          
+    *(array + 40) =                     $40          
+    *(array + 48) =                     $41          
+    *(array + 56) =                     $42          
+    $43          =   array                          
+    $44          =   4                              
+    $45          =   0                              
+    $46          =   array                          
+    $47          =   *(array)                       
+    $48          =   1                              
+    $49          =   $47          -    $48          
+    param $49
+    param $45
+    param $44
+    param $43
+    callfunc binarySearch 4            
+    $50          =   popreturn 
+    result       =   $50                            
+
+beginif2:
+    $51          =   result                         
+    $52          =   1                              
+    $53          =                -    $52          
+    $54          =   $51          !=   $53          
+    if_false     $54          goto endif2
+    $55          =   .string1                       
+    param $55
+    callfunc print        1            
+    $56          =   result                         
+    param $56
+    callfunc print        1            
+    goto endifblock2
+
+endif2:
+    $57          =   .string2                       
+    param $57
+    callfunc print        1            
+
+endifblock2:
+
+endfuncmain:
+
+beginif3:
+    $58          =   __name__                       
+    $59          =   .string3                       
+    $60          =   $58          ==   $59          
+    if_false     $60          goto endif3
+    callfunc main         0            
+    $61          =   popreturn 
+    goto endifblock3
+
+endif3:
+
+endifblock3:
