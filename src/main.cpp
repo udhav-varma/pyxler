@@ -165,21 +165,49 @@ void make_3ac(node * root)
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
+                // cerr << "child\n";
             }
+            // cerr << "Enter expr_stmt\n";
             if(root->children.size() > 1){
                 if(root->children[1]->name == "annasign"){
                     // cerr << "here\n";
                     if(root->children[0]->data_type == "atom_expr_name"){
                         //TODO: checking in current level
-                        root->info = root->children[1]->info;
-                        annasign * info = ((annasign *) root->info);
-                        info->name = ((atom_expr_name*) root->children[0]->info)->name;
-                        symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
-                        present_table->add_entry_var(newentry);
-                        if(((annasign*) root->children[1]->info)->inval != NULL)
-                            root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
-                        // else
-                            // cerr << "invalnull\n";
+                        if(root->children[1]->data_type == "list_name_type"){
+                            list_name_type * listinfo = ((list_name_type *) root->children[1]->info);
+                            string type = listinfo->type;
+                            int size = 0;
+                            if(type == "str" || type == "int" || type == "float"){
+                                size = 8;
+                            }
+                            else{
+                                auto cls = present_table->find_class_entry(type);
+                                if(cls == NULL){
+                                    cerr << "Invalid type for list\n";
+                                    exit(0);
+                                }
+                                size = cls->size;
+                            }
+                            int num_elements = listinfo->vals->sqbrackettestlist_vars.size();
+                            size = size * num_elements;
+                            root->code.push_back(quad("", "", "param", to_string(size)));
+                            root->code.push_back(quad("allocmem 1", "", "callfunc", ""));
+                            root->code.push_back(quad("", "", "popparam", ((atom_expr_name *) root->children[0]->info)->name));                                                 
+                            for(int i = 0; i < num_elements; i++){
+                                root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(i * size / num_elements) + ")"));
+                            }
+                        }
+                        else{
+                            root->info = root->children[1]->info;
+                            annasign * info = ((annasign *) root->info);
+                            info->name = ((atom_expr_name*) root->children[0]->info)->name;
+                            symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
+                            present_table->add_entry_var(newentry);
+                            if(((annasign*) root->children[1]->info)->inval != NULL)
+                                root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
+                            // else
+                                // cerr << "invalnull\n";
+                        }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
                         // cerr << "entered obj_access\n";
@@ -231,19 +259,34 @@ void make_3ac(node * root)
             }
         }
         else if(root->name == "annasign"){
+            cerr << "annasign " << root->children.size() << '\n';
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
+                cerr << "Annasign child " << r->data_type << '\n';
             }
             // if(root->children[1]->info == NULL) cerr << "isnull\n";
-            string type = ((atom_expr_name *) root->children[1]->info)->name;
-            root->info = new annasign();
-            annasign * info = (annasign *) root->info;
-            info->type = type;
-            if(root->children.size() == 4){
-                info->inval = root->children[3]->temp;
+            if(root->children[1]->data_type == "list_name_type"){
+                root->data_type = root->children[1]->data_type;
+                root->info = root->children[1]->info;
+                if(root->children.size() == 4){
+                    if(root->children[3]->data_type != "sqbrackettestlist_type"){
+                        cerr << "Invalid list declaration\n";
+                        exit(0);
+                    }
+                    ((list_name_type *) root->info)->vals = ((sqbrackettestlist_type *) root->children[3]->info);
+                }
+            }
+            else{
+                string type = ((atom_expr_name *) root->children[1]->info)->name;
+                root->info = new annasign();
+                annasign * info = (annasign *) root->info;
+                info->type = type;
+                if(root->children.size() == 4){
+                    info->inval = root->children[3]->temp;
+                }
             }
         }
         else if(root->name == "cond_eqtest"){
@@ -735,10 +778,13 @@ void make_3ac(node * root)
                     info->keyword = ((keyword_type *) root->children[0]->info)->keyword;
                 }
                 else if(root->children[0]->data_type == "sqbrackettestlist_type"){
-                    root->data_type = "atom_expr_list";
-                    root->info = new atom_expr_list();
-                    atom_expr_list * info = (atom_expr_list *) root->info;
-                    info->tstlist = ((sqbrackettestlist_type *)(root->children[0]))->sqbrackettestlist_vars;
+                    cerr << "atom_expr list\n";
+                    root->data_type = root->children[0]->data_type;
+                    root->info = root->children[0]->info;
+                    // root->data_type = "atom_expr_list";
+                    // root->info = new atom_expr_list();
+                    // atom_expr_list * info = (atom_expr_list *) root->info;
+                    // info->tstlist = ((sqbrackettestlist_type *)(root->children[0]))->sqbrackettestlist_vars;
                 }
                 else if(root->children[0]->data_type == "brack_test_type"){
                     root->temp = root->children[0]->temp;
@@ -804,14 +850,22 @@ void make_3ac(node * root)
                         root->info = root->children[1]->info;
                         arr_access * info = (arr_access *) root->info;
                         info->name = ((name_type *) root->children[0]->info)->name_val;
-                        if(!present_table->find_var_entry(info->name)){
-                            cerr << "Array " << info->name << " not defined\n";
-                            exit(0);
+                        if(info->name == "list"){
+                            root->data_type = "list_name_type";
+                            root->info = new list_name_type();
+                            ((list_name_type *) root->info)->type = info->access_name;
+                            ((list_name_type *) root->info)->name = info->name;
                         }
-                        root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
-                        temp_var * derefpos = new temp_var("int");
-                        root->code.push_back(quad("", info->name + "+" + tempprint(info->accessind), "*", tempprint(derefpos)));
-                        root->code.push_back(quad("", tempprint(derefpos), "", tempprint(root->temp)));
+                        else{
+                            if(!present_table->find_var_entry(info->name)){
+                                cerr << "Array " << info->name << " not defined\n";
+                                exit(0);
+                            }
+                            root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
+                            temp_var * derefpos = new temp_var("int");
+                            root->code.push_back(quad("", info->name + "+" + tempprint(info->accessind), "*", tempprint(derefpos)));
+                            root->code.push_back(quad("", tempprint(derefpos), "", tempprint(root->temp)));
+                        }
                     }
                     else{
                         cerr << "Error: Invalid Array\n";
@@ -910,10 +964,12 @@ void make_3ac(node * root)
                 }
             }
             if(root->children.size() == 3 && root->children[0]->name == "["){
+                cerr << "testlist_type\n";
                 root->data_type = "sqbrackettestlist_type";
                 root->info = new sqbrackettestlist_type();
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
                 info->sqbrackettestlist_vars = ((testlist_type *) root->children[1]->info)->testlist_vars;
+                cerr << info->sqbrackettestlist_vars.size() << '\n';
             }
             else if(root->children.size() == 3 and root->children[0]->name == "("){
                 root->data_type = "brack_test_type";
@@ -959,7 +1015,8 @@ void make_3ac(node * root)
             if(root->children.size() == 3){
                 info->testlist_vars = ((testlist_type *) root->children[0]->info)->testlist_vars;
             }
-            info->testlist_vars.push_back(((test_type *) root->children.back()->info)->temp);
+            cerr << "test_type " << root->children.back()->data_type << ' ' << (root->children.back()->temp) << ' ' << tempprint(root->children.back()->temp) << '\n';
+            info->testlist_vars.push_back(root->children.back()->temp);
         }
         else if(root->name == "trailer"){
             for(auto r: root->children){
@@ -984,6 +1041,9 @@ void make_3ac(node * root)
                 root->info = new arr_access();
                 arr_access * info = (arr_access *) root->info;
                 info->accessind = ((test_type*) root->children[1]->info)->temp;
+                if(root->children[1]->data_type == "atom_expr_name"){
+                    info->access_name = ((atom_expr_name *) root->children[1]->info)->name;
+                }
             }
             else if(root->children[0]->name == "."){ // Class Attr
                 root->data_type = "obj_access";

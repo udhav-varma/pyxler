@@ -29,6 +29,12 @@ struct keyword_type{
     string keyword;
 };
 
+struct list_name_type{
+    string name;
+    string type;
+    sqbrackettestlist_type * vals;
+};
+
 struct delim_type{
     string delim;
 };
@@ -57,6 +63,7 @@ struct arglist_type{
 struct arr_access{
     string name;
     temp_var * accessind;
+    string access_name;
 };
 
 struct funccall{
