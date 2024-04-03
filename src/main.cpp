@@ -95,6 +95,7 @@ void make_3ac(node * root)
             beg_code.push_back(quad("beginfunc "s + printName, "", "label", ""));
             //PUSHPARAMS
             symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
+            fun_table->lineno = (root->children[1]->lineno);
             // cerr << "new fun table " << info->name << '\n';
             if(present_table->type == CLASS_TABLE){
                 fun_table->func_classname = present_table->name;
@@ -141,6 +142,7 @@ void make_3ac(node * root)
             root->info = new funcarglist();
             funcarglist * info = (funcarglist *) root->info;
             if(root->children[0]->name == "tfpdef"){
+                root->lineno = root->children[0]->lineno;
                 // cerr << "enter \n";
                 info->args.push_back(((funcarg *) root->children[0]->info));
                 if(root->children.size() > 1 and root->children[1] != NULL){
@@ -169,6 +171,7 @@ void make_3ac(node * root)
             root->info = new funcarg();
             funcarg * info = (funcarg *) root->info;
             info->name = root->children[0]->name;
+            info->lineno = root->children[0]->lineno;
             if(root->children[2]->data_type == "atom_expr_name"){
                 info->type = ((atom_expr_name *) root->children[2]->info)->name;
             }
@@ -868,10 +871,15 @@ void make_3ac(node * root)
                 }
             }
             if(root->children.size() == 2){
-                if(root->children[1]->temp == NULL || root->children[1]->temp->type != "uint"){
-                    cerr << "TypeError: Unary operation unsupported on this type\n";
-                    exit(0);
-                }
+                cerr << "here factor\n";
+                // if(root->children[1]->temp == NULL || root->children[1]->temp->type != "int" || root->children[1]->temp->type != "float"){
+                //     cerr << "TypeError: Unary operation unsupported on this type\n";
+                //     exit(0);
+                // }
+                // else{
+                    root->temp = new temp_var("int");
+                    root->code.push_back(quad("", tempprint(root->children[1]->temp), root->children[0]->name, tempprint(root->temp)));
+                // }
             }
             else{
                 root->data_type = root->children[0]->data_type;
@@ -892,7 +900,7 @@ void make_3ac(node * root)
                 root->temp = root->children[0]->temp;
             }
             else if(root->children.size() == 3){
-                if(root->children[2]->temp != NULL and root->children[2]->temp->type == "uint"){
+                if(root->children[2]->temp != NULL and root->children[2]->temp->type == "int"){
                     //TODO - implement power;
                 }
                 else{
@@ -930,9 +938,9 @@ void make_3ac(node * root)
                     root->info = new atom_expr_number();
                     atom_expr_number * info = (atom_expr_number *) root->info;
                     info->num = ((num_type *) root->children[0]->info)->number;
-                    if(((num_type *) root->children[0]->info)->is_uint){
-                        root->temp = new temp_var("uint");
-                        // cerr << "here uint " << info->num << '\n';
+                    if(((num_type *) root->children[0]->info)->is_int){
+                        root->temp = new temp_var("int");
+                        // cerr << "here int " << info->num << '\n';
                         // cerr << root->temp << '\n';
                     }
                     else{
@@ -1220,8 +1228,26 @@ void make_3ac(node * root)
                     root->temp = new temp_var("string");
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
                 }
-                root->info = root->children[0]->info;
-                root->data_type = root->children[0]->data_type;
+                else if(root->children[0]->name == "True"){
+                    root->temp = new temp_var("int");
+                    root->data_type = "num_type";
+                    root->info = new num_type();
+                    ((num_type *) root->info)->is_int = true;
+                    ((num_type *) root->info)->number = "1";
+                    // root->code.push_back(quad("1", "", "", tempprint(root->temp)));
+                }
+                else if(root->children[0]->name == "False"){
+                    root->temp = new temp_var("int");
+                    root->data_type = "num_type";
+                    root->info = new num_type();
+                    ((num_type *) root->info)->is_int = true;
+                    ((num_type *) root->info)->number = "0";
+                    // root->code.push_back(quad("0", "", "", tempprint(root->temp)));
+                }
+                if(root->children[0]->name != "True" and root->children[0]->name != "False"){
+                    root->info = root->children[0]->info;
+                    root->data_type = root->children[0]->data_type;
+                }
                 // cerr << "rdt " << root->data_type << '\n';
             }
         }
@@ -1407,11 +1433,15 @@ void make_3ac(node * root)
         }
         else if(root->type == "IDENTIFIER"){
             root->data_type = "name_type";
+            if(root->name == "bool"){
+                root->name = "int";
+            }
             root->info = new name_type();
             name_type * info = (name_type *) root->info;
             info->name_val = root->name;
         }
         else if(root->type == "NUMBER"){
+            cerr << "number " << root->name << '\n';
             root->data_type = "num_type";
             root->info = new num_type();
             num_type * info = (num_type *) root->info;
@@ -1420,7 +1450,7 @@ void make_3ac(node * root)
             for(auto c: root->name){
                 if(c < '0' || c > '9') f = false;
             }
-            if(f) info->is_uint = true;
+            if(f) info->is_int = true;
         }
         else if(root->type == "OPERATOR"){
             root->data_type = "op_type";
@@ -1430,6 +1460,7 @@ void make_3ac(node * root)
         }
         else if(root->type == "STRING"){
             root->data_type = "str_type";
+            // cerr << root->name 
             root->info = new str_type();
             str_type * info = (str_type*)root->info;
             info->str = root->name;

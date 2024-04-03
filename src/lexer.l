@@ -88,7 +88,7 @@ nonzerodigit [1-9]
 bindigit [0-1]
 octdigit [0-7]
 hexdigit ({digit}|[a-f]|[A-F])
-decinteger (({nonzerodigit}((("_"?){digit})*))|("0"+)((("_"?)"0")*))
+decinteger (({nonzerodigit}((("_"?){digit})*))|("0"+)((("_"?)"0")*)) 
 bininteger ([0][bB](([_]?){bindigit})+)
 octinteger ([0][oO](([_]?){octdigit})+)
 hexinteger ([0][xX](([_]?){hexdigit})+)
@@ -456,6 +456,7 @@ imagnumber ({floatnumber}|{digitpart})[jJ]
 <INLINE,BRACKET>{NAME} {
     yylval.val = string(yytext, yytext + yyleng);
     yylval.ptr = new node("IDENTIFIER", yylval.val);
+    yylval.ptr->lineno = yylineno; 
     return NAME;}
 <INLINE,BRACKET>. {
     yylval.val = string(1, yytext[0]);

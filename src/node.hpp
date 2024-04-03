@@ -41,7 +41,7 @@ struct delim_type{
 
 struct num_type{
     string number;
-    bool is_uint;
+    bool is_int;
 };
 
 struct op_type{
@@ -93,6 +93,7 @@ struct funcarg{
     string type;
     bool hasdefval = false;
     temp_var * defval = NULL;
+    int lineno = 0;
 };
 
 struct funcarglist{
@@ -129,6 +130,7 @@ public:
     string data_type;
     struct temp_var * temp = NULL;
     vector<quad> code;
+    int lineno = 0;
 };
 
 class AST{
@@ -185,6 +187,7 @@ public:
     int offset = 0;
     int size = 8;
     int numel = 1;
+    int lineno = 0;
     symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
         this->name = name;
@@ -210,6 +213,7 @@ public:
     vector<funcarg*> args;
     string func_classname = "";
     int size = 0;
+    int lineno = 0;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {
         this->type = type;

@@ -1,143 +1,138 @@
 
-beginfunc bubbleSort:
+beginfunc binarySearch:
     array       =               popparam            
-    $1          =   0                           
-    i           =   $1                          
-    $2          =   0                           
-    j           =   $2                          
+    x           =               popparam            
+    low         =               popparam            
+    high        =               popparam            
 
-beginfor1:
-    $3          =   array                       
-    $4          =   *(array)                    
-    $43         =   0                           
-    $44         =   $43         <   $4          
-    if_false    $44         goto endfor1
-    i           =   $43                         
-    $5          =   0                           
-    swapped     =   $5                          
-
-beginfor2:
-    $6          =   0                           
-    $7          =   array                       
-    $8          =   *(array)                    
-    $9          =   i                           
-    $10         =   $8          -   $9          
-    $11         =   1                           
-    $12         =   $10         -   $11         
-    $38         =   $6                          
-    $39         =   $38         <   $12         
-    if_false    $39         goto endfor2
-    j           =   $38                         
-    $13         =   j                           
-    $14         =   j                           
-    $17         =   8           *   $14         
-    $17         =   $17         +   8           
-    $16         =                   (array + $17)
-    $15         =                   *$16        
-    temp        =   $15                         
-    $18         =   j                           
-    $19         =   j                           
-    $22         =   8           *   $19         
-    $22         =   $22         +   8           
-    $21         =                   (array + $22)
-    $20         =                   *$21        
-    $23         =   j                           
-    $24         =   1                           
-    $25         =   $23         +   $24         
-    $28         =   8           *   $25         
-    $28         =   $28         +   8           
-    $27         =                   (array + $28)
-    $26         =                   *$27        
-    *$20        =   $26                         
-    $29         =   j                           
-    $30         =   1                           
-    $31         =   $29         +   $30         
-    $34         =   8           *   $31         
-    $34         =   $34         +   8           
-    $33         =                   (array + $34)
-    $32         =                   *$33        
-    $35         =   temp                        
-    *$32        =   $35                         
-    $36         =   swapped                     
-    $37         =   1                           
-    swapped     =   $37                         
-    $38         =   $38         +   1           
-    goto beginfor2
-
-endfor2:
+beginwhile1:
+    $1          =   low                         
+    $2          =   high                        
+    $3          =   $1          <=  $2          
+    if_false    $3          goto endwhile1
+    $4          =   low                         
+    $5          =   high                        
+    $6          =   low                         
+    $7          =   $5          -   $6          
+    $8          =   2                           
+    $9          =   $7          //  $8          
+    $10         =   $4          +   $9          
+    mid         =   $10                         
 
 beginif1:
-    $40         =   swapped                     
-    $41         =   0                           
-    $42         =   $40         ==  $41         
-    if_false    $42         goto endif1
-    goto endfor1
+    $11         =   mid                         
+    $12         =   mid                         
+    $15         =   8           *   $12         
+    $15         =   $15         +   8           
+    $14         =                   (array + $15)
+    $13         =                   *$14        
+    $16         =   x                           
+    $17         =   $13         ==  $16         
+    if_false    $17         goto endif1
+    $18         =   mid                         
+                =               return$18         
     goto endifblock1
 
 endif1:
+    $19         =   mid                         
+    $20         =   mid                         
+    $23         =   8           *   $20         
+    $23         =   $23         +   8           
+    $22         =                   (array + $23)
+    $21         =                   *$22        
+    $24         =   x                           
+    $25         =   $21         <   $24         
+    if_false    $25         goto endelif1
+    $26         =   low                         
+    $27         =   mid                         
+    $28         =   1                           
+    $29         =   $27         +   $28         
+    low         =   $29                         
+    goto endifblock1
+
+endelif1:
+    $30         =   high                        
+    $31         =   mid                         
+    $32         =   1                           
+    $33         =   $31         -   $32         
+    high        =   $33                         
 
 endifblock1:
-    $43         =   $43         +   1           
-    goto beginfor2
+    goto beginwhile1
 
-endfor1:
+endwhile1:
+    $34         =   1                           
+    $35         =               -   $34         
+                =               return$35         
 
-endfuncbubbleSort:
+endfuncbinarySearch:
 
 beginfunc main:
-    $45         =   1                           
-    $46         =   2                           
-    $47         =   3                           
-    $48         =   4                           
-    40          =               param            
+    $36         =   3                           
+    $37         =   4                           
+    $38         =   5                           
+    $39         =   6                           
+    $40         =   7                           
+    $41         =   8                           
+    $42         =   9                           
+    64          =               param            
                 =   allocmem 1  callfunc            
-    data        =               popparam            
-    *(data)     =                   4           
-    *(data + 8) =                   $45         
-    *(data + 16)=                   $46         
-    *(data + 24)=                   $47         
-    *(data + 32)=                   $48         
-    $49         =   data                        
+    array       =               popparam            
+    *(array)    =                   7           
+    *(array + 8)=                   $36         
+    *(array + 16)=                   $37         
+    *(array + 24)=                   $38         
+    *(array + 32)=                   $39         
+    *(array + 40)=                   $40         
+    *(array + 48)=                   $41         
+    *(array + 56)=                   $42         
+    $43         =   array                       
+    $44         =   4                           
+    $45         =   0                           
+    $46         =   array                       
+    $47         =   *(array)                    
+    $48         =   1                           
+    $49         =   $47         -   $48         
     $49         =               param            
-                =   bubbleSort  callfunc1           
+    $45         =               param            
+    $44         =               param            
+    $43         =               param            
+                =   binarySearchcallfunc4           
     $50         =               popreturn            
-    $51         =   .string1                    
-    $51         =               param            
-                =   print       callfunc1           
-    $52         =   0                           
-    i           =   $52                         
-
-beginfor3:
-    $53         =   data                        
-    $54         =   *(data)                     
-    $60         =   0                           
-    $61         =   $60         <   $54         
-    if_false    $61         goto endfor3
-    i           =   $60                         
-    $55         =   i                           
-    $56         =   i                           
-    $59         =   8           *   $56         
-    $59         =   $59         +   8           
-    $58         =                   (data + $59)
-    $57         =                   *$58        
-    $57         =               param            
-                =   print       callfunc1           
-    $60         =   $60         +   1           
-    goto beginfor3
-
-endfor3:
-
-endfuncmain:
+    result      =   $50                         
 
 beginif2:
-    $62         =   __name__                    
-    $63         =   .string2                    
-    $64         =   $62         ==  $63         
-    if_false    $64         goto endif2
-                =   main        callfunc0           
-    $65         =               popreturn            
+    $51         =   result                      
+    $52         =   1                           
+    $53         =               -   $52         
+    $54         =   $51         !=  $53         
+    if_false    $54         goto endif2
+    $55         =   .string1                    
+    $55         =               param            
+                =   print       callfunc1           
+    $56         =   result                      
+    $56         =               param            
+                =   print       callfunc1           
     goto endifblock2
 
 endif2:
+    $57         =   .string2                    
+    $57         =               param            
+                =   print       callfunc1           
 
 endifblock2:
+
+endfuncmain:
+
+beginif3:
+    $58         =   __name__                    
+    $59         =   .string3                    
+    $60         =   $58         ==  $59         
+    if_false    $60         goto endif3
+                =   main        callfunc0           
+    $61         =               popreturn            
+    goto endifblock3
+
+endif3:
+
+endifblock3:

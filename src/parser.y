@@ -780,6 +780,44 @@ argument: test {
 %%
 
 
+void print_symbol_table(symbol_table *curr_table){
+
+    string name = "";
+    if(curr_table->type==GLOBAL_TABLE){
+        name = "../symbol_tables/GLOBAL_TABLE.csv";
+    }
+    else if(curr_table->type==FUNCTION_TABLE){
+        name = "../symbol_tables/FUNCTION_TABLE_" + curr_table->name + ".csv";
+    }
+    else{
+        name = "../symbol_tables/CLASS_TABLE_" + curr_table->name + ".csv";
+    }
+    ofstream fout(name);
+
+    fout<<"VARIABLES:\n";
+    fout<<"Name,Offset\n";
+    for(auto p: curr_table->var_defs){
+        auto x = p.first;
+        auto entry = p.second;
+        fout<<entry->name<<","<<entry->offset<<"\n";
+    }
+    fout<<"FUNCTIONS:\n";
+    for(auto p: curr_table->fun_defs){
+        auto x = p.first;
+        auto table = p.second;
+        fout<<x<<"\n";
+        print_symbol_table(table);
+    }
+    fout<<"CLASSES:\n";
+    for(auto p: curr_table->class_defs){
+        auto x = p.first;
+        auto table = p.second;
+        fout<<x<<"\n";
+        print_symbol_table(table);
+    }
+}
+
+
 int main(int argc, char *argv[]){
     /* yydebug = 1  */
     if(argc > 1){
@@ -811,6 +849,24 @@ int main(int argc, char *argv[]){
         if(x.op=="label"){
             cout<<"\n"<<x.arg1<<":\n";
         }
+else if(x.op=="param"){
+            cout<<setw(4)<<left<<"";
+            cout<<"param "<<x.result<<"\n";
+        }
+        else if(x.op=="popparam" || x.op=="popreturn"){
+            cout<<setw(4)<<left<<"";
+            cout<<setw(12)<<left<<x.result;
+            cout<<setw(4)<<left<<"=";
+            cout<<setw(4)<<left<<x.op;
+            cout<<"\n";
+        }
+        else if(x.op=="callfunc "){
+            cout<<setw(4)<<left<<"";
+            cout<<"callfunc ";
+            cout<<setw(12)<<x.arg1;
+            cout<<setw(12)<<x.arg2;
+            cout<<"\n";
+        }
         else if(x.op=="goto" && x.arg1==""){
             cout<<setw(4)<<left<<"";
             cout<<"goto "<<x.result<<"\n";
@@ -831,6 +887,8 @@ int main(int argc, char *argv[]){
             cout<<"\n";
         }
     }
+
+    print_symbol_table(present_table);
 
     return 0;
 }

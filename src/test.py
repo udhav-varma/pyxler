@@ -1,25 +1,24 @@
-def bubbleSort(array: list[int]) -> None:
-  i: int = 0
-  j: int = 0
-  for i in range(len(array)):
-    swapped: int = 0
-    for j in range(0, len(array) - i - 1):
-      temp:int = array[j]
-      array[j] = array[j + 1]
-      array[j + 1] = temp
-      swapped = 1
-    if swapped == 0:
-      break
+def binarySearch(array: list[int], x: int, low: int, high: int) -> int:
+  while low <= high:
+    mid: int = low + (high - low) // 2
+    if array[mid] == x:
+      return mid
+    elif array[mid] < x:
+      low = mid + 1
+    else:
+      high = mid - 1
+  return -1
 
 
 def main() -> None:
-  data: list[int] = [1, 2, 3, 4]
-  bubbleSort(data)
+  array: list[int] = [3, 4, 5, 6, 7, 8, 9]
+  result: int = binarySearch(array, 4, 0, len(array) - 1)
 
-  print('Sorted Array in Ascending Order:')
-  i: int = 0
-  for i in range(len(data)):
-    print(data[i])
+  if result != -1:
+    print("Element is present at index:")
+    print(result)
+  else:
+    print("Element is not present")
 
 
 if __name__ == "__main__":
