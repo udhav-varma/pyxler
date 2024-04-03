@@ -1,7 +1,0 @@
-VARIABLES:
-Name,Offset
-lalrname,16
-FUNCTIONS:
-__init__
-print_name
-CLASSES:

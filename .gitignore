@@ -277,3 +277,4 @@ mile
 lexer.cpp
 *.tab*
 logs.txt
+symbol_tables/*
