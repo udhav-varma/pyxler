@@ -696,6 +696,9 @@ atom: '[' testlist ']' {
 } | FALSE {
     $<ptr>$ = new node("nt", "atom");
     ast.add_edge($<ptr>$, $<ptr>1);
+} | STRING {
+    $<ptr>$ = new node("nt", "atom");
+    ast.add_edge($<ptr>$, $<ptr>1);
 } 
 
 testlist: test{

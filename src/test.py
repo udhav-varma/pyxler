@@ -1,2 +1,8 @@
-a: list[int] = [1, 2, 4]
-a[0] = 5
+class A:
+    def __init__(self: A) -> None:
+        self.a: int = 2
+        self.b: int = 5
+        self.c: int = 10
+
+a: list[A] = [A(), A(), A()]
+a[0]

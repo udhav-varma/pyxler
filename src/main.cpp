@@ -147,6 +147,9 @@ void make_3ac(node * root)
             if(root->children[2]->data_type == "atom_expr_name"){
                 info->type = ((atom_expr_name *) root->children[2]->info)->name;
             }
+            else if(root->children[2]->data_type == "list_name_type"){
+                info->type = "list"s + "[" + ((list_name_type *) root->children[2]->info)->type + "]";
+            }
             else{
                 cerr << "Invalid type for argument";
                 exit(0);
@@ -887,7 +890,7 @@ void make_3ac(node * root)
                             temp_var * offs = new temp_var("int");
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
                             root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
-                            root->code.push_back(quad("", tempprint(derefpos), "", tempprint(root->temp)));
+                            root->code.push_back(quad("", "*"s + tempprint(derefpos), "", tempprint(root->temp)));
                         }
                     }
                     else{
