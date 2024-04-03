@@ -23,6 +23,7 @@
     }
     set<string> native_types{"int", "str", "list", "set", "dict"};
     extern stack<int> indents;
+    extern vector<string> headers;
     extern symbol_table* present_table;
     #define YYDEBUG 1
 %}
@@ -811,6 +812,7 @@ int main(int argc, char *argv[]){
     else return -1;
     make_3ac(root);
     cerr << root->code.size() << '\n';
+    for(auto x: headers) cerr << x << '\n';
     for(auto x: root->code){
         cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
     }

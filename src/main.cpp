@@ -4,6 +4,23 @@
 #include "node.hpp"
 
 symbol_table * present_table;
+vector<string> headers;
+int string_id = 0;
+
+string trim_string(string s)
+{
+    if (s.length() >= 2) {
+        if ((s[0] == '"' && s[s.length() - 1] == '"') || (s[0] == '\'' && s[s.length() - 1] == '\'')) {
+            s = s.substr(1, s.length() - 2);
+        }
+    }
+    if (s.length() >= 6) {
+        if ((s.substr(0, 3) == "'''" && s.substr(s.length() - 3, 3) == "'''") || (s.substr(0, 3) == "\"\"\"" && s.substr(s.length() - 3, 3) == "\"\"\"")) {
+            s = s.substr(3, s.length() - 6);
+        }
+    }
+    return s;
+}
 
 string tempprint(temp_var * temp)
 {
@@ -275,6 +292,52 @@ void make_3ac(node * root)
                         else{
                             root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + tempprint(root->children[0]->temp)));
                         }
+                    }
+                    else if(root->children[0]->data_type == "obj_access"){
+                        // cerr << "entered obj_access\n";
+                        root->data_type = root->children[0]->data_type;
+                        root->info = root->children[0]->info;
+                        obj_access * info = (obj_access *) root->info;
+                        if(present_table->find_var_entry(info->obj)){
+                            if(info->obj == "self"){
+                                if(present_table->parent == NULL or present_table->parent->type != CLASS_TABLE){
+                                    cerr << "self not defined in class\n";
+                                    exit(0);
+                                }
+                                if(present_table->parent->find_var_entry(info->attr_name) == NULL){
+                                    cerr << "Attribute not defined in class\n";
+                                    exit(0);
+                                }
+                                root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")"));
+                            }
+                            else{
+                                auto obj = present_table->find_var_entry(info->obj);
+                                if(obj == NULL){
+                                    cerr << "Object not defined\n";
+                                    exit(0);
+                                }
+                                auto cls = present_table->find_class_entry(obj->type);
+                                if(cls != NULL){
+                                    auto attr = cls->find_var_entry(info->attr_name);
+                                    if(attr == NULL){
+                                        cerr << "Attribute not defined in class\n";
+                                        exit(0);
+                                    }
+                                    root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")"));
+                                }
+                                else{
+
+                                }
+                            }
+                        }
+                        else{
+                            cerr << "Object not defined\n";
+                            exit(0);
+                        }
+                    }
+                    else{
+                        cerr << "Invalid assignment\n";
+                        exit(0);
                     }
                 }
                 else{
@@ -813,6 +876,13 @@ void make_3ac(node * root)
                 else if(root->children[0]->data_type == "brack_test_type"){
                     root->temp = root->children[0]->temp;
                 }
+                else if(root->children[0]->data_type == "str_type"){
+                    root->data_type = "atom_expr_string";
+                    string_id++;
+                    headers.push_back(".string" + to_string(string_id) + ": " + trim_string(((str_type *) root->children[0]->info)->str));
+                    root->temp = new temp_var("str");
+                    root->code.push_back(quad(".string" + to_string(string_id), "", "", tempprint(root->temp))); 
+                }
             }
             else if(root->children.size() == 2){
                 if(root->children[1]->data_type == "funccall"){
@@ -1010,12 +1080,13 @@ void make_3ac(node * root)
             else{
                 if(root->children[0]->data_type == "name_type"){
                     // cerr << "nm " << root->children[0]->name << '\n';
-                    if(present_table->find_var_entry(root->children[0]->name)){
-                        root->temp = new temp_var("name");
-                        root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
-                    }
+                    // if(present_table->find_var_entry(root->children[0]->name)){
+                    //     root->temp = new temp_var("name");
+                    //     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                    // }
                 }
                 else if(root->children[0]->name == "NUMBER"){
+                    cerr << "enter number\n";
                     root->temp = new temp_var("number");
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
                 }
@@ -1199,6 +1270,7 @@ void make_3ac(node * root)
             root->info = new str_type();
             str_type * info = (str_type*)root->info;
             info->str = root->name;
+            // cerr << root->name << '\n';
         }
         else if(root->type == "NEWLINE"){
             // ignore
