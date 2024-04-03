@@ -812,8 +812,32 @@ int main(int argc, char *argv[]){
     make_3ac(root);
     cerr << root->code.size() << '\n';
     for(auto x: headers) cerr << x << '\n';
+
     for(auto x: root->code){
-        cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n';
+        /* cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n'; */
+        if(x.op=="label"){
+            cout<<"\n"<<x.arg1<<":\n";
+        }
+        else if(x.op=="goto" && x.arg1==""){
+            cout<<setw(4)<<left<<"";
+            cout<<"goto "<<x.result<<"\n";
+        }
+        else if(x.op=="goto"){
+            cout<<setw(4)<<left<<"";
+            cout<<setw(12)<<x.arg1;
+            cout<<setw(12)<<x.arg2;
+            cout<<"goto "<<x.result<<"\n";
+        }
+        else{
+            cout<<setw(4)<<left<<"";
+            cout<<setw(12)<<left<<x.result;
+            cout<<setw(4)<<left<<"=";
+            cout<<setw(12)<<left<<x.arg1;
+            cout<<setw(4)<<left<<x.op;
+            cout<<setw(12)<<left<<x.arg2;
+            cout<<"\n";
+        }
     }
+
     return 0;
 }
