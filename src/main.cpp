@@ -235,7 +235,7 @@ void make_3ac(node * root)
                             size = (elsize) * num_elements + 8;
                             root->code.push_back(quad("", "", "param", to_string(size)));
                             root->code.push_back(quad("allocmem 1", "", "callfunc ", ""));
-                            root->code.push_back(quad("", "", "popparam", ((atom_expr_name *) root->children[0]->info)->name));                                                 
+                            root->code.push_back(quad("", "", "popreturn", ((atom_expr_name *) root->children[0]->info)->name));                                                 
                             root->code.push_back(quad("", to_string(num_elements), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + ")"));
                             for(int i = 0; i < num_elements; i++){
                                 root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
@@ -377,7 +377,8 @@ void make_3ac(node * root)
                             exit(0);
                         }
                         else{
-                            root->code.push_back(quad("*"s + tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), "*"s + tempprint(root->children[0]->temp)));
+                            auto info = ((arr_access *) root->children[0]->info);
+                            root->code.push_back(quad("*("s + info->name + " + " + tempprint(info->accessind) + ")", tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -911,6 +912,9 @@ void make_3ac(node * root)
             else if(root->children.size() == 3){
                 if(root->children[2]->temp != NULL and root->children[2]->temp->type == "int"){
                     //TODO - implement power;
+                    root->temp = new temp_var("int");
+                    root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+
                 }
                 else{
                     cerr << "TypeError: power operation not defined for these operands";
