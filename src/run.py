@@ -17,9 +17,11 @@ else:
 
 print("Running code\n")
 
-output_loc = "./graph.dot"
+output_loc = "3ac.txt"
+if args.output:
+    output_loc = args.output
 infile = args.input
-instr = "./mile " + infile
+instr = "./mile " + infile + ">" + output_loc
 ret = os.system(instr)
 if ret:
     print("Failed running the code.")
@@ -27,18 +29,18 @@ if ret:
 else:
     print("Successful execution\n")
 
-print("Running graph ")
+# print("Running graph ")
 
-output_loc = "./graph.pdf"
-if args.output:
-    output_loc = args.output
-instr = "dot -Tpdf -o " + output_loc + " ./graph.dot"
-ret = os.system(instr)
-if ret:
-    print("Error in running graphviz")
-    exit()
-else:
-    print(f"Successfully ran graphviz dot tool. Find output at {output_loc}")
+# output_loc = "./graph.pdf"
+# if args.output:
+    # output_loc = args.output
+# instr = "dot -Tpdf -o " + output_loc + " ./graph.dot"
+# ret = os.system(instr)
+# if ret:
+    # print("Error in running graphviz")
+    # exit()
+# else:
+    # print(f"Successfully ran graphviz dot tool. Find output at {output_loc}")
 
 if args.verbose:
     with open('./logs.txt') as f:

@@ -880,7 +880,7 @@ void make_3ac(node * root)
                 }
             }
             if(root->children.size() == 2){
-                cerr << "here factor\n";
+                // cerr << "here factor\n";
                 // if(root->children[1]->temp == NULL || root->children[1]->temp->type != "int" || root->children[1]->temp->type != "float"){
                 //     cerr << "TypeError: Unary operation unsupported on this type\n";
                 //     exit(0);
@@ -965,7 +965,7 @@ void make_3ac(node * root)
                     info->keyword = ((keyword_type *) root->children[0]->info)->keyword;
                 }
                 else if(root->children[0]->data_type == "sqbrackettestlist_type"){
-                    cerr << "atom_expr list\n";
+                    // cerr << "atom_expr list\n";
                     root->data_type = root->children[0]->data_type;
                     root->info = root->children[0]->info;
                     // root->data_type = "atom_expr_list";
@@ -1021,7 +1021,7 @@ void make_3ac(node * root)
                                 }
                             }
                             else if(info->funcname == "len"){
-                                cerr << "here\n";
+                                // cerr << "here\n";
                                 root->temp = new temp_var("int");
                                 auto args = ((funccall* )root->children[1]->info)->arglist;
                                 if(args.size() != 1){
@@ -1045,7 +1045,7 @@ void make_3ac(node * root)
                                 root->code.push_back(quad("*(" + args[0]->name + ")", "", "", tempprint(root->temp)));
                             }
                             else if(info->funcname == "print"){
-                                cerr << "here print\n";
+                                // cerr << "here print\n";
                                 auto args = ((funccall* )root->children[1]->info)->arglist;
                                 if(args.size() != 1){
                                     cerr << "Error: print() takes exactly 1 argument\n";
@@ -1096,7 +1096,7 @@ void make_3ac(node * root)
                             root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
                             temp_var * derefpos = new temp_var("int");
                             temp_var * offs = new temp_var("int");
-                            cerr << "accessind " << tempprint(info->accessind) << '\n';
+                            // cerr << "accessind " << tempprint(info->accessind) << '\n';
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
                             root->code.push_back(quad(tempprint(offs), "8", "+", tempprint(offs)));
                             root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
@@ -1233,7 +1233,7 @@ void make_3ac(node * root)
                 }
             }
             if(root->children.size() == 3 && root->children[0]->name == "["){
-                cerr << "testlist_type\n";
+                // cerr << "testlist_type\n";
                 root->data_type = "sqbrackettestlist_type";
                 root->info = new sqbrackettestlist_type();
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
@@ -1303,7 +1303,7 @@ void make_3ac(node * root)
             if(root->children.size() == 3){
                 info->testlist_vars = ((testlist_type *) root->children[0]->info)->testlist_vars;
             }
-            cerr << "test_type " << root->children.back()->data_type << ' ' << (root->children.back()->temp) << ' ' << tempprint(root->children.back()->temp) << '\n';
+            // cerr << "test_type " << root->children.back()->data_type << ' ' << (root->children.back()->temp) << ' ' << tempprint(root->children.back()->temp) << '\n';
             info->testlist_vars.push_back(root->children.back()->temp);
         }
         else if(root->name == "trailer"){
@@ -1330,7 +1330,7 @@ void make_3ac(node * root)
                 arr_access * info = (arr_access *) root->info;
                 
                 info->accessind = root->children[1]->temp;
-                cerr << " aind " << info->accessind  << '\n';
+                // cerr << " aind " << info->accessind  << '\n';
                 if(root->children[1]->data_type == "atom_expr_name"){
                     if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)){
                         if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)->type != "int"){
@@ -1482,7 +1482,7 @@ void make_3ac(node * root)
             info->lineno = root->lineno;
         }
         else if(root->type == "NUMBER"){
-            cerr << "number " << root->name << '\n';
+            // cerr << "number " << root->name << '\n';
             root->data_type = "num_type";
             root->info = new num_type();
             num_type * info = (num_type *) root->info;
