@@ -291,7 +291,7 @@ void make_3ac(node * root)
                         }
                     }
                     else if(root->children[0]->data_type == "arr_access"){// fill
-                        cerr << "array access\n";
+                        // cerr << "array access\n";
                         string name = ((arr_access *)root->children[0]->info)->name;
                         if(present_table->find_var_entry(name) == NULL){
                             cerr << "Array not defined\n";
@@ -349,7 +349,72 @@ void make_3ac(node * root)
                     }
                 }
                 else{
-                    //todo augassign
+                    if(root->children[0]->data_type == "atom_expr_name"){
+                        string name = ((atom_expr_name *) root->children[0]->info)->name;
+                        if(present_table->find_var_entry(name) == NULL){
+                            cerr << "variable not declared for assignment\n";
+                            exit(0);
+                        }
+                        else{
+                            root->code.push_back(quad(name, tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), name));
+                        }
+                    }
+                    else if(root->children[0]->data_type == "arr_access"){
+                        string name = ((arr_access *)root->children[0]->info)->name;
+                        if(present_table->find_var_entry(name) == NULL){
+                            cerr << "Array not defined\n";
+                            exit(0);
+                        }
+                        else{
+                            root->code.push_back(quad("*"s + tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), "*"s + tempprint(root->children[0]->temp)));
+                        }
+                    }
+                    else if(root->children[0]->data_type == "obj_access"){
+                        root->data_type = root->children[0]->data_type;
+                        root->info = root->children[0]->info;
+                        obj_access * info = (obj_access *) root->info;
+                        if(present_table->find_var_entry(info->obj)){
+                            if(info->obj == "self"){
+                                if(present_table->parent == NULL or present_table->parent->type != CLASS_TABLE){
+                                    cerr << "self not defined in class\n";
+                                    exit(0);
+                                }
+                                if(present_table->parent->find_var_entry(info->attr_name) == NULL){
+                                    cerr << "Attribute not defined in class\n";
+                                    exit(0);
+                                }
+                                root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")", tempprint(root->children[2]->temp), string(root->children[1]->name.begin(), root->children[1]->name.end() - 1), "*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")"));
+                            }
+                            else{
+                                auto obj = present_table->find_var_entry(info->obj);
+                                if(obj == NULL){
+                                    cerr << "Object not defined\n";
+                                    exit(0);
+                                }
+                                auto cls = present_table->find_class_entry(obj->type);
+                                if(cls != NULL){
+                                    auto attr = cls->find_var_entry(info->attr_name);
+                                    if(attr == NULL){
+                                        cerr << "Attribute not defined in class\n";
+                                        exit(0);
+                                    }
+                                    root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")", tempprint(root->children[2]->temp), string(root->children[1]->name.begin(), root->children[1]->name.end() - 1), "*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")"));
+                                }
+                                else{
+                                    cerr << "Class entry not found\n";
+                                    exit(0);
+                                }
+                            }
+                        }
+                        else{
+                            cerr << "Object not defined\n";
+                            exit(0);
+                        }
+                    }
+                    else{
+                        cerr << "Invalid assignment\n";
+                        exit(0);
+                    }
                 }
             }
         }
