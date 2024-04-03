@@ -307,7 +307,9 @@ void make_3ac(node * root)
                             exit(0);
                         }
                         else{
-                            root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + tempprint(root->children[0]->temp)));
+                            auto info = ((arr_access *) root->children[0]->info);
+                            // cerr << "Accind " << tempprint(info->accessind) << '\n';
+                            root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -1094,11 +1096,12 @@ void make_3ac(node * root)
                             root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
                             temp_var * derefpos = new temp_var("int");
                             temp_var * offs = new temp_var("int");
-                            cerr << "accessind " << info->accessind << '\n';
+                            cerr << "accessind " << tempprint(info->accessind) << '\n';
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
                             root->code.push_back(quad(tempprint(offs), "8", "+", tempprint(offs)));
                             root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
                             root->code.push_back(quad("", "*"s + tempprint(derefpos), "", tempprint(root->temp)));
+                            info->accessind = offs;
                         }
                     }
                     else{
@@ -1327,7 +1330,7 @@ void make_3ac(node * root)
                 arr_access * info = (arr_access *) root->info;
                 
                 info->accessind = root->children[1]->temp;
-                cerr << " aind " << info->accessind << '\n';
+                cerr << " aind " << info->accessind  << '\n';
                 if(root->children[1]->data_type == "atom_expr_name"){
                     if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)){
                         if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)->type != "int"){
