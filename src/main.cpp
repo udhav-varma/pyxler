@@ -10,6 +10,15 @@ string tempprint(temp_var * temp)
     return "$"s + to_string(temp->id);
 }
 
+// int get_size(string type)
+// {
+//     if(type == "int" || type == "float" || type == "str"){
+//         return 8;
+//     }
+//     else if(type.substr(0, 4) == "list"){
+
+//     }
+// }
 
 int for_id = 0, while_id = 0, if_id = 0, elif_id = 0;
 stack<pair<string, int>> loop_stack;
@@ -188,6 +197,7 @@ void make_3ac(node * root)
                                 }
                                 size = cls->size;
                             }
+                            int elsize = size;
                             int num_elements = listinfo->vals->sqbrackettestlist_vars.size();
                             size = size * num_elements;
                             root->code.push_back(quad("", "", "param", to_string(size)));
@@ -196,6 +206,10 @@ void make_3ac(node * root)
                             for(int i = 0; i < num_elements; i++){
                                 root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(i * size / num_elements) + ")"));
                             }
+                            symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name *) root->children[0]->info)->name, "list["s + type + "]", present_table);
+                            newentry->size = elsize;
+                            newentry->numel = num_elements;
+                            present_table->add_entry_var(newentry);
                         }
                         else{
                             root->info = root->children[1]->info;
@@ -236,11 +250,7 @@ void make_3ac(node * root)
                 }
                 else if(root->children[1]->name == "="){
                 
-                    if(root->children[0]->data_type != "atom_expr_name"){
-                        cerr << "Invalid declaration\n";
-                        exit(0);
-                    }
-                    else{
+                    if(root->children[0]->data_type == "atom_expr_name"){
                         // cerr << root->children.size() << '\n';
                         string name = ((atom_expr_name *) root->children[0]->info)->name;
                         if(present_table->find_var_entry(name) == NULL){
@@ -250,6 +260,17 @@ void make_3ac(node * root)
                         else{
                             // if(root->children[2]->temp == NULL) cerr << "isnull\n";
                             root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
+                        }
+                    }
+                    else if(root->children[0]->data_type == "arr_access"){// fill
+                        cerr << "array access\n";
+                        string name = ((arr_access *)root->children[0]->info)->name;
+                        if(present_table->find_var_entry(name) == NULL){
+                            cerr << "Array not defined\n";
+                            exit(0);
+                        }
+                        else{
+                            root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + tempprint(root->children[0]->temp)));
                         }
                     }
                 }
@@ -863,7 +884,9 @@ void make_3ac(node * root)
                             }
                             root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
                             temp_var * derefpos = new temp_var("int");
-                            root->code.push_back(quad("", info->name + "+" + tempprint(info->accessind), "*", tempprint(derefpos)));
+                            temp_var * offs = new temp_var("int");
+                            root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
+                            root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
                             root->code.push_back(quad("", tempprint(derefpos), "", tempprint(root->temp)));
                         }
                     }
@@ -1040,7 +1063,7 @@ void make_3ac(node * root)
                 root->data_type = "arr_access";
                 root->info = new arr_access();
                 arr_access * info = (arr_access *) root->info;
-                info->accessind = ((test_type*) root->children[1]->info)->temp;
+                info->accessind = root->children[1]->temp;
                 if(root->children[1]->data_type == "atom_expr_name"){
                     info->access_name = ((atom_expr_name *) root->children[1]->info)->name;
                 }

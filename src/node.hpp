@@ -182,6 +182,8 @@ public:
     symbol_table* table = nullptr;
     string type;
     int offset = 0;
+    int size = 8;
+    int numel = 1;
     symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
         this->name = name;
