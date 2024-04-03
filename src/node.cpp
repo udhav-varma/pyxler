@@ -100,10 +100,9 @@ void AST::dfs1(node* node, int &i){
                 newstr.push_back(x);
             }
         }
-        node->name = newstr;
-        string s = "\t" + intToString(node->id) + "[label=\"" + node->type + "\\n( " + node->name + " )\"]\n";
+        string s = "\t" + intToString(node->id) + "[label=\"" + node->type + "\\n( " + newstr + " )\"]\n";
         if(node->type==""){
-            s = "\t" + intToString(node->id) + "[label=\"" + node->name + "\"]\n";
+            s = "\t" + intToString(node->id) + "[label=\"" + newstr + "\"]\n";
             string t = "\t" + intToString(node->id) + "[color=\"maroon\" shape=\"rectangle\"]\n";
             dotcode.append(t);
         }

@@ -842,29 +842,29 @@ int main(int argc, char *argv[]){
     else return -1;
     make_3ac(root);
     cerr << root->code.size() << '\n';
-    for(auto x: headers) cerr << x << '\n';
+    for(auto x: headers) cout << x << '\n';
 
     for(auto x: root->code){
         /* cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n'; */
         if(x.op=="label"){
             cout<<"\n"<<x.arg1<<":\n";
         }
-else if(x.op=="param"){
+        else if(x.op=="param"){
             cout<<setw(4)<<left<<"";
             cout<<"param "<<x.result<<"\n";
         }
         else if(x.op=="popparam" || x.op=="popreturn"){
             cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result;
+            cout<<setw(12)<<left<<x.result<<" ";
             cout<<setw(4)<<left<<"=";
-            cout<<setw(4)<<left<<x.op;
+            cout<<setw(4)<<left<<x.op<<" ";
             cout<<"\n";
         }
         else if(x.op=="callfunc "){
             cout<<setw(4)<<left<<"";
             cout<<"callfunc ";
-            cout<<setw(12)<<x.arg1;
-            cout<<setw(12)<<x.arg2;
+            cout<<setw(12)<<x.arg1<<" ";
+            cout<<setw(12)<<x.arg2<<" ";
             cout<<"\n";
         }
         else if(x.op=="goto" && x.arg1==""){
@@ -873,17 +873,17 @@ else if(x.op=="param"){
         }
         else if(x.op=="goto"){
             cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<x.arg1;
-            cout<<setw(12)<<x.arg2;
+            cout<<setw(12)<<x.arg1<<" ";
+            cout<<setw(12)<<x.arg2<<" ";
             cout<<"goto "<<x.result<<"\n";
         }
         else{
             cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result;
+            cout<<setw(12)<<left<<x.result<<" ";
             cout<<setw(4)<<left<<"=";
-            cout<<setw(12)<<left<<x.arg1;
-            cout<<setw(4)<<left<<x.op;
-            cout<<setw(12)<<left<<x.arg2;
+            cout<<setw(12)<<left<<x.arg1<<" ";
+            cout<<setw(4)<<left<<x.op<<" ";
+            cout<<setw(12)<<left<<x.arg2<<" ";
             cout<<"\n";
         }
     }
