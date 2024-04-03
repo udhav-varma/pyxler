@@ -795,24 +795,24 @@ void print_symbol_table(symbol_table *curr_table){
     ofstream fout(name);
 
     fout<<"VARIABLES:\n";
-    fout<<"Name,Offset\n";
+    fout<<"Name,Line number,Offset\n";
     for(auto p: curr_table->var_defs){
         auto x = p.first;
         auto entry = p.second;
-        fout<<entry->name<<","<<entry->offset<<"\n";
+        fout<<entry->name<<","<<entry->lineno<<","<<entry->offset<<"\n";
     }
     fout<<"FUNCTIONS:\n";
     for(auto p: curr_table->fun_defs){
         auto x = p.first;
         auto table = p.second;
-        fout<<x<<"\n";
+        fout<<x<<","<<table->lineno<<"\n";
         print_symbol_table(table);
     }
     fout<<"CLASSES:\n";
     for(auto p: curr_table->class_defs){
         auto x = p.first;
         auto table = p.second;
-        fout<<x<<"\n";
+        fout<<x<<","<<table->lineno<<"\n";
         print_symbol_table(table);
     }
 }
