@@ -54,6 +54,7 @@ struct str_type{
 
 struct arg_type{
     temp_var * temp;
+    string name;
 };
 
 struct arglist_type{

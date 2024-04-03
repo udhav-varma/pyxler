@@ -227,12 +227,13 @@ void make_3ac(node * root)
                             }
                             int elsize = size;
                             int num_elements = listinfo->vals->sqbrackettestlist_vars.size();
-                            size = size * num_elements;
+                            size = (elsize) * num_elements + 8;
                             root->code.push_back(quad("", "", "param", to_string(size)));
                             root->code.push_back(quad("allocmem 1", "", "callfunc", ""));
                             root->code.push_back(quad("", "", "popparam", ((atom_expr_name *) root->children[0]->info)->name));                                                 
+                            root->code.push_back(quad("", to_string(num_elements), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + ")"));
                             for(int i = 0; i < num_elements; i++){
-                                root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(i * size / num_elements) + ")"));
+                                root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
                             }
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name *) root->children[0]->info)->name, "list["s + type + "]", present_table);
                             newentry->size = elsize;
@@ -550,21 +551,23 @@ void make_3ac(node * root)
         else if(root->name == "while_stmt"){
             while_id++;
             loop_stack.push({"while", while_id});
+            int twhile_id = while_id;
             for(auto r: root->children){
                 if(r){
                     make_3ac(r);
                 }
             }
             root->code = root->children[3]->code;
-            beg_code.push_back(quad("beginwhile"s + to_string(while_id), "", "label", ""));
+            beg_code.push_back(quad("beginwhile"s + to_string(twhile_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
-            beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endwhile"s + to_string(while_id)));
-            end_code.push_back((quad("", "", "goto", "beginwhile"s + to_string(while_id))));
-            end_code.push_back(quad("endwhile"s + to_string(while_id), "", "label", ""));   
+            beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endwhile"s + to_string(twhile_id)));
+            end_code.push_back((quad("", "", "goto", "beginwhile"s + to_string(twhile_id))));
+            end_code.push_back(quad("endwhile"s + to_string(twhile_id), "", "label", ""));   
             loop_stack.pop();
         }
         else if(root->name == "for_stmt"){
             for_id++;
+            int tfor_id = for_id;
             loop_stack.push({"for", for_id});
             for(auto r: root->children){
                 if(r){
@@ -579,25 +582,31 @@ void make_3ac(node * root)
                     cerr << "For loop: only range(n) type functions allowed\n";
                     exit(0);
                 }
-                else if(info->arglist.size() != 1){
-                    cerr << "For loop: only range(n) type args allowed\n";
+                else if(info->arglist.size() != 1 and info->arglist.size() != 2){
+                    cerr << "For loop: only range(n) / range(a, b) type args allowed\n";
                     exit(0);
                 }
                 // cerr << info->funcname << '\n';
-                temp_var * upbound = info->arglist[0]->temp;
-                temp_var * itervar = new temp_var("uint");
+                temp_var * upbound = info->arglist.back()->temp;
+                temp_var * itervar = new temp_var("int");
+                beg_code.push_back(quad("beginfor"s + to_string(tfor_id), "", "label", ""));
                 beg_code.insert(beg_code.end(), root->children[3]->code.begin(), root->children[3]->code.end());
-                beg_code.push_back(quad("beginfor"s + to_string(for_id), "", "label", ""));
-                beg_code.push_back(quad("0", "", "", tempprint(itervar)));
+
+                if(info->arglist.size() == 2){
+                    beg_code.push_back(quad(tempprint(info->arglist[0]->temp), "", "", tempprint(itervar)));
+                }
+                else
+                    beg_code.push_back(quad("0", "", "", tempprint(itervar)));
                 temp_var * comp_res = new temp_var("bool");
                 // cerr << "upb\n";
                 // cerr << upbound << '\n';
                 tempprint(upbound);
                 beg_code.push_back(quad(tempprint(itervar), tempprint(upbound), "<", tempprint(comp_res)));
-                beg_code.push_back(quad("if_false", tempprint(comp_res), "goto", "endfor"s + to_string(for_id)));
+                beg_code.push_back(quad("if_false", tempprint(comp_res), "goto", "endfor"s + to_string(tfor_id)));
+                beg_code.push_back(quad(tempprint(itervar), "", "", root->children[1]->name));
                 end_code.push_back(quad(tempprint(itervar), "1", "+", tempprint(itervar)));
                 end_code.push_back(quad("", "", "goto", "beginfor"s + to_string(for_id)));
-                end_code.push_back(quad("endfor"s + to_string(for_id), "", "label", ""));
+                end_code.push_back(quad("endfor"s + to_string(tfor_id), "", "label", ""));
             }   
             else{
                 cerr << "For loop: only for using range(n) call is supported";
@@ -993,6 +1002,40 @@ void make_3ac(node * root)
                                     root->code.push_back(quad(cls->name + ".__init__", to_string(info->arglist.size() + 1), "callfunc", ""));
                                 }
                             }
+                            else if(info->funcname == "len"){
+                                cerr << "here\n";
+                                root->temp = new temp_var("int");
+                                auto args = ((funccall* )root->children[1]->info)->arglist;
+                                if(args.size() != 1){
+                                    cerr << "Error: len() takes exactly 1 argument\n";
+                                    exit(0);
+                                }
+                                if(args[0]->name == ""){
+                                    cerr << "Error: len() must take name of a list\n";
+                                    exit(0);
+                                }
+                                auto def = present_table->find_var_entry(args[0]->name);
+                                if(def == NULL){
+                                    cerr << "Error: list " << args[0]->name << " not defined\n";
+                                    exit(0);
+                                }
+                                if(def->type.substr(0, 4) != "list"){
+                                    cerr << "Error: len() must take name of a list\n";
+                                    exit(0);
+                                }
+                                int numel = def->numel;
+                                root->code.push_back(quad("*(" + args[0]->name + ")", "", "", tempprint(root->temp)));
+                            }
+                            else if(info->funcname == "print"){
+                                cerr << "here print\n";
+                                auto args = ((funccall* )root->children[1]->info)->arglist;
+                                if(args.size() != 1){
+                                    cerr << "Error: print() takes exactly 1 argument\n";
+                                    exit(0);
+                                }
+                                root->code.push_back(quad("", "", "param", tempprint(args[0]->temp)));
+                                root->code.push_back(quad("print", "1", "callfunc", ""));
+                            }
                         }
                         else{
 
@@ -1035,7 +1078,9 @@ void make_3ac(node * root)
                             root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
                             temp_var * derefpos = new temp_var("int");
                             temp_var * offs = new temp_var("int");
+                            cerr << "accessind " << info->accessind << '\n';
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
+                            root->code.push_back(quad(tempprint(offs), "8", "+", tempprint(offs)));
                             root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
                             root->code.push_back(quad("", "*"s + tempprint(derefpos), "", tempprint(root->temp)));
                         }
@@ -1218,9 +1263,20 @@ void make_3ac(node * root)
                 root->data_type = "arr_access";
                 root->info = new arr_access();
                 arr_access * info = (arr_access *) root->info;
+                
                 info->accessind = root->children[1]->temp;
+                cerr << " aind " << info->accessind << '\n';
                 if(root->children[1]->data_type == "atom_expr_name"){
-                    info->access_name = ((atom_expr_name *) root->children[1]->info)->name;
+                    if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)){
+                        if(present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name)->type != "int"){
+                            cerr << "TypeError: Array index must be an integer\n";
+                            exit(0);
+                        }
+                        info->accessind = new temp_var("int");
+                        root->code.push_back(quad(((atom_expr_name *) root->children[1]->info)->name, "", "", tempprint(info->accessind)));
+                    }
+                    else
+                        info->access_name = ((atom_expr_name *) root->children[1]->info)->name;
                 }
             }
             else if(root->children[0]->name == "."){ // Class Attr
@@ -1328,6 +1384,9 @@ void make_3ac(node * root)
             root->info = new arg_type();
             arg_type* info = (arg_type *) root->info;
             info->temp = root->children[0]->temp;
+            if(root->children[0]->data_type == "atom_expr_name"){
+                info->name = ((atom_expr_name *) root->children[0]->info)->name;
+            }
             // cerr << "Argument info " << info << ' ' << (arg_type *)info->temp << '\n';
         }
         root->code.insert(root->code.begin(), beg_code.begin(), beg_code.end());

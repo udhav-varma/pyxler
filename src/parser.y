@@ -411,7 +411,7 @@ while_stmt: WHILE test ':' suite{
     ast.add_edge($<ptr>$, $<ptr>3);
     ast.add_edge($<ptr>$, $<ptr>4);
 }
-for_stmt: FOR exprlist IN test ':' suite{
+for_stmt: FOR NAME IN test ':' suite{
     $<ptr>$ = new node("nt", "for_stmt");
     ast.add_edge($<ptr>$, $<ptr>1);
     ast.add_edge($<ptr>$, $<ptr>2);
@@ -732,15 +732,6 @@ trailer: '(' cond_arglist ')' {
 
 }
 
-exprlist: expr{
-    $<ptr>$ = $<ptr>1;
-} | exprlist ',' expr {
-    $<ptr>$ = new node("nt", "exprlist");
-    ast.add_edge($<ptr>$, $<ptr>1);
-    ast.add_edge($<ptr>$, $<ptr>2);
-    ast.add_edge($<ptr>$, $<ptr>3);
-}
-
 
 classdef: CLASS NAME cond_parent_class ':' suite{
     $<ptr>$ = new node("nt", "classdef");
@@ -799,8 +790,10 @@ int main(int argc, char *argv[]){
         return -1;
     }
     present_table = new symbol_table(SYMBOL_TABLE_TYPE::GLOBAL_TABLE, NULL);
-    symbol_table * rangef = new symbol_table(FUNCTION_TABLE, present_table, "range");
-    present_table->add_entry_fun(rangef);
+    symbol_table_entry * nameEntry = new symbol_table_entry("__name__", "str", present_table);
+    present_table->add_entry_var(nameEntry);
+    /* symbol_table * rangef = new symbol_table(FUNCTION_TABLE, present_table, "range");
+    present_table->add_entry_fun(rangef); */
     yyin = fopen(argv[1], "r");
     if(yyin == NULL){
         cerr << "Failed to open input file.\n Terminated\n";

@@ -1,0 +1,143 @@
+
+beginfunc bubbleSort:
+    array       =               popparam            
+    $1          =   0                           
+    i           =   $1                          
+    $2          =   0                           
+    j           =   $2                          
+
+beginfor1:
+    $3          =   array                       
+    $4          =   *(array)                    
+    $43         =   0                           
+    $44         =   $43         <   $4          
+    if_false    $44         goto endfor1
+    i           =   $43                         
+    $5          =   0                           
+    swapped     =   $5                          
+
+beginfor2:
+    $6          =   0                           
+    $7          =   array                       
+    $8          =   *(array)                    
+    $9          =   i                           
+    $10         =   $8          -   $9          
+    $11         =   1                           
+    $12         =   $10         -   $11         
+    $38         =   $6                          
+    $39         =   $38         <   $12         
+    if_false    $39         goto endfor2
+    j           =   $38                         
+    $13         =   j                           
+    $14         =   j                           
+    $17         =   8           *   $14         
+    $17         =   $17         +   8           
+    $16         =                   (array + $17)
+    $15         =                   *$16        
+    temp        =   $15                         
+    $18         =   j                           
+    $19         =   j                           
+    $22         =   8           *   $19         
+    $22         =   $22         +   8           
+    $21         =                   (array + $22)
+    $20         =                   *$21        
+    $23         =   j                           
+    $24         =   1                           
+    $25         =   $23         +   $24         
+    $28         =   8           *   $25         
+    $28         =   $28         +   8           
+    $27         =                   (array + $28)
+    $26         =                   *$27        
+    *$20        =   $26                         
+    $29         =   j                           
+    $30         =   1                           
+    $31         =   $29         +   $30         
+    $34         =   8           *   $31         
+    $34         =   $34         +   8           
+    $33         =                   (array + $34)
+    $32         =                   *$33        
+    $35         =   temp                        
+    *$32        =   $35                         
+    $36         =   swapped                     
+    $37         =   1                           
+    swapped     =   $37                         
+    $38         =   $38         +   1           
+    goto beginfor2
+
+endfor2:
+
+beginif1:
+    $40         =   swapped                     
+    $41         =   0                           
+    $42         =   $40         ==  $41         
+    if_false    $42         goto endif1
+    goto endfor1
+    goto endifblock1
+
+endif1:
+
+endifblock1:
+    $43         =   $43         +   1           
+    goto beginfor2
+
+endfor1:
+
+endfuncbubbleSort:
+
+beginfunc main:
+    $45         =   1                           
+    $46         =   2                           
+    $47         =   3                           
+    $48         =   4                           
+    40          =               param            
+                =   allocmem 1  callfunc            
+    data        =               popparam            
+    *(data)     =                   4           
+    *(data + 8) =                   $45         
+    *(data + 16)=                   $46         
+    *(data + 24)=                   $47         
+    *(data + 32)=                   $48         
+    $49         =   data                        
+    $49         =               param            
+                =   bubbleSort  callfunc1           
+    $50         =               popreturn            
+    $51         =   .string1                    
+    $51         =               param            
+                =   print       callfunc1           
+    $52         =   0                           
+    i           =   $52                         
+
+beginfor3:
+    $53         =   data                        
+    $54         =   *(data)                     
+    $60         =   0                           
+    $61         =   $60         <   $54         
+    if_false    $61         goto endfor3
+    i           =   $60                         
+    $55         =   i                           
+    $56         =   i                           
+    $59         =   8           *   $56         
+    $59         =   $59         +   8           
+    $58         =                   (data + $59)
+    $57         =                   *$58        
+    $57         =               param            
+                =   print       callfunc1           
+    $60         =   $60         +   1           
+    goto beginfor3
+
+endfor3:
+
+endfuncmain:
+
+beginif2:
+    $62         =   __name__                    
+    $63         =   .string2                    
+    $64         =   $62         ==  $63         
+    if_false    $64         goto endif2
+                =   main        callfunc0           
+    $65         =               popreturn            
+    goto endifblock2
+
+endif2:
+
+endifblock2:
