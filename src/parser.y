@@ -817,6 +817,80 @@ void print_symbol_table(symbol_table *curr_table){
     }
 }
 
+string printutil(void* v, string &s, ofstream &fout, int type){
+    string res = "";
+    int ofst = 0;
+    if(type == TEMP_VAR){
+        if(((temp_var*)v)->found == 0){
+            string z = "\tsubq $8, %rsp\n";
+            fout<<z;
+            ((temp_var*)v)->found = 1;
+        }
+        ofst = ((temp_var*)v)->offset;
+        res.append("-"s + to_string(ofst));
+        res.append("(%rbp)");
+    }
+    else if(type == NUM){
+        res.append("$"s + s);
+    }
+    else if(type == VAR){
+        if(((symbol_table_entry*)v)->found == 0){
+            string z = "\tsubq $8, %rsp\n";
+            fout<<z;
+            ((symbol_table_entry*)v)->found = 1;
+        }
+        ofst = ((symbol_table_entry*)v)->offset;
+        res.append("-"s + to_string(ofst));
+        res.append("(%rbp)");
+    }
+    return res;
+}
+
+void printx86(vector<quad> code){
+    ofstream z("x86.s");
+    ofstream fout("x86.s", ios::app);
+
+    fout<<".section .data\n";
+    fout<<".text\n";
+
+    fout<<".globl main\n";
+    fout<<".type main, @function\n\n";
+
+    fout<<"main:\n";
+
+    fout<<"\tpushq %rbp\n\tmovq %rsp, %rbp\n";
+
+    for(int i=0; i<2; i++){
+        auto x = code[i];
+        if(x.op=="label"){
+            
+        }
+        else if(x.op=="param"){
+            
+        }
+        else if(x.op=="popparam" || x.op=="popreturn"){
+            
+        }
+        else if(x.op=="callfunc "|| x.op=="callfunc"){
+            
+        }
+        else if(x.op=="goto" && x.arg1==""){
+            
+        }
+        else if(x.op=="goto"){
+            
+        }
+        else if(x.op==""){
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", "<<sres<<"\n";
+        }
+    }
+
+    fout<<"\n\tleave\n\tret\n";
+
+}
+
 
 int main(int argc, char *argv[]){
     /* yydebug = 1  */
@@ -842,53 +916,56 @@ int main(int argc, char *argv[]){
     else return -1;
     make_3ac(root);
     /* cerr << root->code.size() << '\n'; */
-    for(auto x: headers) cout << x << '\n';
+    /* for(auto x: headers) cout << x << '\n'; */
 
+    ofstream z("3ac.txt");
+    ofstream fout("3ac.txt", ios::app);
     for(auto x: root->code){
         /* cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n'; */
         if(x.op=="label"){
-            cout<<"\n"<<x.arg1<<":\n";
+            fout<<"\n"<<x.arg1<<":\n";
         }
         else if(x.op=="param"){
-            cout<<setw(4)<<left<<"";
-            cout<<"param "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"param "<<x.result<<"\n";
         }
         else if(x.op=="popparam" || x.op=="popreturn"){
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result<<" ";
-            cout<<setw(4)<<left<<"=";
-            cout<<setw(4)<<left<<x.op<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<left<<x.result<<" ";
+            fout<<setw(4)<<left<<"=";
+            fout<<setw(4)<<left<<x.op<<" ";
+            fout<<"\n";
         }
         else if(x.op=="callfunc "|| x.op=="callfunc"){
-            cout<<setw(4)<<left<<"";
-            cout<<"callfunc ";
-            cout<<setw(12)<<x.arg1<<" ";
-            cout<<setw(12)<<x.arg2<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"callfunc ";
+            fout<<setw(12)<<x.arg1<<" ";
+            fout<<setw(12)<<x.arg2<<" ";
+            fout<<"\n";
         }
         else if(x.op=="goto" && x.arg1==""){
-            cout<<setw(4)<<left<<"";
-            cout<<"goto "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"goto "<<x.result<<"\n";
         }
         else if(x.op=="goto"){
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<x.arg1<<" ";
-            cout<<setw(12)<<x.arg2<<" ";
-            cout<<"goto "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<x.arg1<<" ";
+            fout<<setw(12)<<x.arg2<<" ";
+            fout<<"goto "<<x.result<<"\n";
         }
         else{
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result<<" ";
-            cout<<setw(4)<<left<<"=";
-            cout<<setw(12)<<left<<x.arg1<<" ";
-            cout<<setw(4)<<left<<x.op<<" ";
-            cout<<setw(12)<<left<<x.arg2<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<left<<x.result<<" ";
+            fout<<setw(4)<<left<<"=";
+            fout<<setw(12)<<left<<x.arg1<<" ";
+            fout<<setw(4)<<left<<x.op<<" ";
+            fout<<setw(12)<<left<<x.arg2<<" ";
+            fout<<"\n";
         }
     }
 
-    print_symbol_table(present_table);
+    /* print_symbol_table(present_table); */
+    printx86(root->code);
 
     return 0;
 }

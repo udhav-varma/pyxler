@@ -23,8 +23,8 @@ string trim_string(string s)
     return s;
 }
 
-string tempprint(temp_var * temp)
-{
+string tempprint(temp_var * temp){
+    temp->tempid = "$"s + to_string(temp->id);
     return "$"s + to_string(temp->id);
 }
 
@@ -95,6 +95,7 @@ void make_3ac(node * root)
             }
             beg_code.push_back(quad("beginfunc "s + printName, "", "label", ""));
             //PUSHPARAMS
+       
             symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
             fun_table->lineno = (root->children[1]->lineno);
             // cerr << "new fun table " << info->name << '\n';
@@ -106,6 +107,8 @@ void make_3ac(node * root)
             fun_table->args = info->args->args;
             for(auto x: info->args->args){
                 auto en = new symbol_table_entry(x->name, x->type, present_table);
+                present_table->offset += 8;
+                en->offset = present_table->offset;
                 en->lineno = x->lineno;
                 beg_code.push_back(quad("", "", "popparam", x->name));
                 present_table->add_entry_var(en, false);
@@ -215,7 +218,7 @@ void make_3ac(node * root)
                     // cerr << "here\n";
                     if(root->children[0]->data_type == "atom_expr_name"){
                         //TODO: checking in current level
-                        if(root->children[1]->data_type == "list_name_type"){
+                        if(root->children[1]->data_type == "list_name_type"){   //TODO3
                             list_name_type * listinfo = ((list_name_type *) root->children[1]->info);
                             string type = listinfo->type;
                             int size = 0;
@@ -241,6 +244,8 @@ void make_3ac(node * root)
                                 root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
                             }
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name *) root->children[0]->info)->name, "list["s + type + "]", present_table);
+                            present_table->offset += size;
+                            newentry->offset = present_table->offset;
                             newentry->lineno = root->children[1]->lineno;
                             newentry->size = elsize;
                             newentry->numel = num_elements;
@@ -251,12 +256,19 @@ void make_3ac(node * root)
                             annasign * info = ((annasign *) root->info);
                             info->name = ((atom_expr_name*) root->children[0]->info)->name;
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
+                            present_table->offset += 8;
+                            newentry->offset = present_table->offset;
                             newentry->lineno = root->children[1]->lineno;
                             present_table->add_entry_var(newentry);
-                            if(((annasign*) root->children[1]->info)->inval != NULL)
-                                root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
-                            // else
-                                // cerr << "invalnull\n";
+                            if(((annasign*) root->children[1]->info)->inval != NULL){
+                                root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "huihuihui", "", ((atom_expr_name*) root->children[0]->info)->name));
+                                root->code.back().a1 = (temp_var*)(((annasign*) root->children[1]->info)->inval);
+                                root->code.back().typea1 = TEMP_VAR;
+                                root->code.back().res = newentry;
+                                root->code.back().typeres = VAR;
+                                cerr<<"yoo "<<((temp_var*)(root->code.back().a1))->tempid<<" "<<((temp_var*)(root->code.back().a1))->offset<<" "<<root->code.back().result<<"\n";
+                            }
+                            cerr<<newentry->name<<" "<<newentry->offset<<"\n";
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -277,12 +289,18 @@ void make_3ac(node * root)
                         annasign * info = ((annasign *) root->info);
                         info->name = ((obj_access *) root->children[0]->info)->attr_name;
                         symbol_table_entry * newentry = new symbol_table_entry(((obj_access *) root->children[0]->info)->attr_name, ((annasign *) root->children[1]->info)->type, present_table);
+                        present_table->offset += 8;
+                        newentry->offset = present_table->offset;
                         newentry->lineno = root->children[1]->lineno;
                         present_table->add_entry_var(newentry); 
                         present_table->parent->add_entry_var(newentry);
                         // cerr << "nm " << newentry->name << ' ' << newentry->offset << '\n';
-                        if(((annasign*) root->children[1]->info)->inval != NULL)
+                        if(((annasign*) root->children[1]->info)->inval != NULL){
                             root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", "*"s + "(" + ((obj_access *) root->children[0]->info)->obj + " + " + to_string(newentry->offset) + ")"));
+                            root->code.back().a1 = (temp_var*)(((annasign*) root->children[1]->info)->inval);
+                            root->code.back().typea1 = TEMP_VAR;
+                            // root->code.back().typeres = VAR; todo3
+                        }
                     }
                 }
                 else if(root->children[1]->name == "="){
@@ -297,6 +315,9 @@ void make_3ac(node * root)
                         else{
                             // if(root->children[2]->temp == NULL) cerr << "isnull\n";
                             root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
+                            root->code.back().a1 = (temp_var*)(root->children[2]->temp);
+                            root->code.back().typea1 = TEMP_VAR;
+                            root->code.back().typeres = VAR;
                         }
                     }
                     else if(root->children[0]->data_type == "arr_access"){// fill
@@ -310,6 +331,10 @@ void make_3ac(node * root)
                             auto info = ((arr_access *) root->children[0]->info);
                             // cerr << "Accind " << tempprint(info->accessind) << '\n';
                             root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
+                            root->code.back().a1 = (temp_var*)(root->children[2]->temp);
+                            root->code.back().typea1 = TEMP_VAR;
+                            // root->code.back().typeres = VAR; todo3
+                            // root->code.back().res
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -328,6 +353,9 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")"));
+                                root->code.back().a1 = (temp_var*)(root->children[2]->temp);
+                                root->code.back().typea1 = TEMP_VAR;
+                                // root->code.back().typeres = VAR; todo3
                             }
                             else{
                                 auto obj = present_table->find_var_entry(info->obj);
@@ -343,9 +371,13 @@ void make_3ac(node * root)
                                         exit(0);
                                     }
                                     root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")"));
+                                    root->code.back().a1 = (temp_var*)(root->children[2]->temp);
+                                    root->code.back().typea1 = TEMP_VAR;
+                                    // root->code.back().typeres = VAR; todo3
                                 }
                                 else{
-
+                                    cerr<<"Undefined class\n";
+                                    exit(0);
                                 }
                             }
                         }
@@ -368,6 +400,10 @@ void make_3ac(node * root)
                         }
                         else{
                             root->code.push_back(quad(name, tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), name));
+                            root->code.back().a2 = (temp_var*)(root->children[2]->temp);
+                            root->code.back().typea1 = TEMP_VAR;
+                            root->code.back().typea2 = VAR;
+                            root->code.back().typeres = VAR;
                         }
                     }
                     else if(root->children[0]->data_type == "arr_access"){
@@ -379,6 +415,10 @@ void make_3ac(node * root)
                         else{
                             auto info = ((arr_access *) root->children[0]->info);
                             root->code.push_back(quad("*("s + info->name + " + " + tempprint(info->accessind) + ")", tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
+                            root->code.back().a2 = (temp_var*)(root->children[2]->temp);
+                            root->code.back().typea2 = TEMP_VAR;
+                            // root->code.back().typeres = VAR; //todo3
+                            
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -396,6 +436,7 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")", tempprint(root->children[2]->temp), string(root->children[1]->name.begin(), root->children[1]->name.end() - 1), "*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")"));
+                                root->code.back().a2 = (temp_var*)(root->children[2]->temp);
                             }
                             else{
                                 auto obj = present_table->find_var_entry(info->obj);
@@ -411,6 +452,7 @@ void make_3ac(node * root)
                                         exit(0);
                                     }
                                     root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")", tempprint(root->children[2]->temp), string(root->children[1]->name.begin(), root->children[1]->name.end() - 1), "*"s + "(" + info->obj + " + " + to_string(attr->offset) + ")"));
+                                    root->code.back().a2 = (temp_var*)(root->children[2]->temp);
                                 }
                                 else{
                                     cerr << "Class entry not found\n";
@@ -507,6 +549,7 @@ void make_3ac(node * root)
             }
             else{
                 root->code.push_back(quad("", tempprint(root->children[1]->temp), "return", ""));
+                root->code.back().a2 = (temp_var*)(root->children[1]->temp);
             }
         }
         else if(root->name == "global_stmt"){
@@ -527,6 +570,7 @@ void make_3ac(node * root)
             beg_code.push_back(quad("beginif"s + to_string(if_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
             beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endif"s + to_string(if_id)));
+            beg_code.back().a2 = (temp_var*)(root->children[1]->temp);
             root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_id)));
             root->code.push_back(quad("endif"s + to_string(if_id), "", "label", ""));
             for(int i = 4; i < root->children.size(); i++){
@@ -557,6 +601,7 @@ void make_3ac(node * root)
             elif_id++;
             root->code.insert(root->code.end(), root->children.end()[-3]->code.begin(), root->children.end()[-3]->code.end());
             root->code.push_back(quad("if_false", tempprint(root->children.end()[-3]->temp), "goto", "endelif"+to_string(elif_id)));
+            root->code.back().a2 = (temp_var*)(root->children.end()[-3]->temp);
             root->code.insert(root->code.end(), root->children.back()->code.begin(), root->children.back()->code.end());
             root->code.push_back(quad("", "", "goto", "endifblock"s + to_string(if_stack.top())));
             root->code.push_back(quad("endelif"s + to_string(elif_id), "", "label", ""));
@@ -574,6 +619,7 @@ void make_3ac(node * root)
             beg_code.push_back(quad("beginwhile"s + to_string(twhile_id), "", "label", ""));
             beg_code.insert(beg_code.end(), root->children[1]->code.begin(), root->children[1]->code.end());
             beg_code.push_back(quad("if_false", tempprint(root->children[1]->temp), "goto", "endwhile"s + to_string(twhile_id)));
+            beg_code.back().a2 = (temp_var*)(root->children[1]->temp);
             end_code.push_back((quad("", "", "goto", "beginwhile"s + to_string(twhile_id))));
             end_code.push_back(quad("endwhile"s + to_string(twhile_id), "", "label", ""));   
             loop_stack.pop();
@@ -607,17 +653,27 @@ void make_3ac(node * root)
 
                 if(info->arglist.size() == 2){
                     beg_code.push_back(quad(tempprint(info->arglist[0]->temp), "", "", tempprint(itervar)));
+                    beg_code.back().a1 = (temp_var*)(info->arglist[0]->temp); //*
                 }
-                else
+                else{
                     beg_code.push_back(quad("0", "", "", tempprint(itervar)));
+                    beg_code.back().res = (temp_var*)(itervar); //*
+                }
                 temp_var * comp_res = new temp_var("bool");
                 // cerr << "upb\n";
                 // cerr << upbound << '\n';
                 tempprint(upbound);
                 beg_code.push_back(quad(tempprint(itervar), tempprint(upbound), "<", tempprint(comp_res)));
+                beg_code.back().a1 = (temp_var*)(itervar); //*
+                beg_code.back().a2 = (temp_var*)(upbound); //*
+                beg_code.back().res = (temp_var*)(comp_res); //*
                 beg_code.push_back(quad("if_false", tempprint(comp_res), "goto", "endfor"s + to_string(tfor_id)));
+                beg_code.back().a2 = (temp_var*)(comp_res); //*
                 beg_code.push_back(quad(tempprint(itervar), "", "", root->children[1]->name));
+                beg_code.back().a1 = (temp_var*)(itervar); //*
                 end_code.push_back(quad(tempprint(itervar), "1", "+", tempprint(itervar)));
+                end_code.back().a1 = (temp_var*)(itervar); //*
+                end_code.back().res = (temp_var*)(itervar); //*
                 end_code.push_back(quad("", "", "goto", "beginfor"s + to_string(for_id)));
                 end_code.push_back(quad("endfor"s + to_string(tfor_id), "", "label", ""));
             }   
@@ -678,7 +734,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));  
+                 
             }
 
         }
@@ -700,7 +757,10 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));  
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //* 
             }
 
         }
@@ -723,6 +783,8 @@ void make_3ac(node * root)
             else{
                 root->temp = new temp_var(root->children[1]->temp->type);
                 root->code.push_back(quad("", tempprint(root->children[1]->temp), "NOT", tempprint(root->temp)));
+                root->code.back().a1 = (temp_var*)(root->children[1]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "comparison"){
@@ -744,6 +806,9 @@ void make_3ac(node * root)
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "expr"){
@@ -765,6 +830,9 @@ void make_3ac(node * root)
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "xor_expr"){
@@ -785,7 +853,10 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
-                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp))); 
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*  
             }
 
         }
@@ -808,6 +879,9 @@ void make_3ac(node * root)
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "shift_expr"){
@@ -848,6 +922,9 @@ void make_3ac(node * root)
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "term"){
@@ -871,6 +948,9 @@ void make_3ac(node * root)
                 root->temp = new temp_var(root->children[0]->temp->type);
                 //TODO: typechecking
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+                root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                root->code.back().res = (temp_var*)(root->temp); //*
             }
         }
         else if(root->name == "factor"){
@@ -889,6 +969,8 @@ void make_3ac(node * root)
                 // else{
                     root->temp = new temp_var("int");
                     root->code.push_back(quad("", tempprint(root->children[1]->temp), root->children[0]->name, tempprint(root->temp)));
+                    root->code.back().a2 = (temp_var*)(root->children[1]->temp); //*
+                    root->code.back().res = (temp_var*)(root->temp); //*
                 // }
             }
             else{
@@ -914,6 +996,9 @@ void make_3ac(node * root)
                     //TODO - implement power;
                     root->temp = new temp_var("int");
                     root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
+                    root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
+                    root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
+                    root->code.back().res = (temp_var*)(root->temp); //*
 
                 }
                 else{
@@ -929,7 +1014,6 @@ void make_3ac(node * root)
                     make_3ac(r);
                     root->code.insert(root->code.end(), r->code.begin(), r->code.end());
                 }
-                    // cerr << "rent\n";
             }
             if(root->children.size() == 1){
                 if(root->children[0]->data_type == "name_type"){
@@ -943,24 +1027,41 @@ void make_3ac(node * root)
                     // cerr << "addr2 " << root->temp << '\n';
                     if(present_table->find_var_entry(info->name)){
                         root->temp = new temp_var("name");
-                        root->code.push_back(quad(info->name, "", "", tempprint(root->temp)));
+                        present_table->offset += 8;
+                        root->temp->offset = present_table->offset;
+                        root->temp->tempid = tempprint(root->temp);
+                        root->code.push_back(quad(info->name, "", "", root->temp->tempid));
+                        root->code.back().res = (temp_var*)(root->temp); //*
+                        root->code.back().typeres = TEMP_VAR;
+                        root->code.back().typea1 = VAR;
+                        cerr<<root->temp->tempid<<" "<<root->temp->offset<<"\n";
                     }
                 }
                 else if(root->children[0]->data_type == "num_type"){
-                    // cerr << "here\n";
                     root->data_type = "atom_expr_number";
                     root->info = new atom_expr_number();
                     atom_expr_number * info = (atom_expr_number *) root->info;
                     info->num = ((num_type *) root->children[0]->info)->number;
                     if(((num_type *) root->children[0]->info)->is_int){
                         root->temp = new temp_var("int");
+                        root->temp->tempid = tempprint(root->temp);
+                        present_table->offset += 8;
+                        root->temp->offset = present_table->offset;
+                        cerr<<root->temp->tempid<<" "<<root->temp->offset<<"\n";
                         // cerr << "here int " << info->num << '\n';
                         // cerr << root->temp << '\n';
                     }
                     else{
                         root->temp = new temp_var("number");
+                        root->temp->tempid = tempprint(root->temp);
+                        present_table->offset += 8;
+                        root->temp->offset = present_table->offset;
+                        cerr<<root->temp->tempid<<" "<<root->temp->offset<<"\n";
                     }
-                    root->code.push_back(quad(info->num, "", "", tempprint(root->temp)));
+                    root->code.push_back(quad(info->num, "", "", root->temp->tempid));
+                    root->code.back().res = (temp_var*)root->temp;
+                    root->code.back().typea1 = NUM;
+                    root->code.back().typeres = TEMP_VAR;
                 }
                 else if(root->children[0]->data_type == "keyword_type"){
                     root->data_type = "atom_expr_keyword";
@@ -986,6 +1087,9 @@ void make_3ac(node * root)
                     headers.push_back(".string" + to_string(string_id) + ": " + trim_string(((str_type *) root->children[0]->info)->str));
                     root->temp = new temp_var("str");
                     root->code.push_back(quad(".string" + to_string(string_id), "", "", tempprint(root->temp))); 
+                    root->code.back().res = (temp_var*)(root->temp); //*
+                    root->code.back().typea1 = STR;
+                    root->code.back().typeres = TEMP_VAR;
                 }
             }
             else if(root->children.size() == 2){
@@ -1017,10 +1121,16 @@ void make_3ac(node * root)
                                     root->code.push_back(quad("", "", "param", to_string(sz)));
                                     root->code.push_back(quad("allocmem", "1", "callfunc ", ""));
                                     root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                                    root->code.back().res = (temp_var*)(root->temp); //*
+                                    root->code.back().typeres = TEMP_VAR;
                                     for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                         root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                                        root->code.back().res = (temp_var*)(*it)->temp; //*
+                                        root->code.back().typeres = TEMP_VAR;
                                     }
                                     root->code.push_back(quad("", "", "param", tempprint(root->temp)));
+                                    root->code.back().res = (temp_var*)(root->temp); //*
+                                    root->code.back().typeres = TEMP_VAR;
                                     root->code.push_back(quad(cls->name + ".__init__", to_string(info->arglist.size() + 1), "callfunc ", ""));
                                 }
                             }
@@ -1047,6 +1157,9 @@ void make_3ac(node * root)
                                 }
                                 int numel = def->numel;
                                 root->code.push_back(quad("*(" + args[0]->name + ")", "", "", tempprint(root->temp)));
+                                root->code.back().res = (temp_var*)(root->temp); //*
+                                root->code.back().typeres = TEMP_VAR;
+                                // root->code.back().typea1 = VAR; todo3
                             }
                             else if(info->funcname == "print"){
                                 // cerr << "here print\n";
@@ -1056,6 +1169,8 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 root->code.push_back(quad("", "", "param", tempprint(args[0]->temp)));
+                                root->code.back().res = (temp_var*)(args[0]->temp); //*
+                                root->code.back().typeres = TEMP_VAR;
                                 root->code.push_back(quad("print", "1", "callfunc ", ""));
                             }
                         }
@@ -1066,6 +1181,8 @@ void make_3ac(node * root)
                             // func->args.size() == info->arglist.size(); TODO
                             for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                 root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                                root->code.back().res = (temp_var*)(*it)->temp;
+                                root->code.back().typeres = TEMP_VAR;
                             }
                             string printName = info->funcname;
                             if(func->func_classname != ""){
@@ -1073,6 +1190,8 @@ void make_3ac(node * root)
                             }
                             root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc ", ""));
                             root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                            root->code.back().res = (temp_var*)root->temp;
+                            root->code.back().typeres = TEMP_VAR;
                         }
                     }
                     else{
@@ -1102,9 +1221,27 @@ void make_3ac(node * root)
                             temp_var * offs = new temp_var("int");
                             // cerr << "accessind " << tempprint(info->accessind) << '\n';
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
+                            root->code.back().a2 = (temp_var*)info->accessind;
+                            root->code.back().res = (temp_var*)offs;
+                            root->code.back().typea2 = TEMP_VAR;
+                            root->code.back().typeres = TEMP_VAR;
+                            // root->code.back().typea1 = VAR; todo3
                             root->code.push_back(quad(tempprint(offs), "8", "+", tempprint(offs)));
+                            root->code.back().a2 = (temp_var*)offs;
+                            root->code.back().res = (temp_var*)offs;
+                            root->code.back().typea1 = TEMP_VAR;
+                            root->code.back().typeres = TEMP_VAR;
+                            // root->code.back().typea2 = NUM; todo3
                             root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
+                            root->code.back().a2 = (temp_var*)offs;
+                            root->code.back().res = (temp_var*)derefpos;
+                            root->code.back().typeres = TEMP_VAR;
+                            // root->code.back().typea2 = TEMP_VAR; todo3
                             root->code.push_back(quad("", "*"s + tempprint(derefpos), "", tempprint(root->temp)));
+                            root->code.back().res = (temp_var*)root->temp;
+                            root->code.back().a2 = (temp_var*)derefpos;
+                            root->code.back().typeres = TEMP_VAR;
+                            // root->code.back().typea2 = TEMP_VAR; todo3
                             info->accessind = offs;
                         }
                     }
@@ -1127,6 +1264,9 @@ void make_3ac(node * root)
                                     // cerr << "entr " << obj_entry << ' ' << obj_entry->name << '\n';
                                     // cerr << "ptable " << present_table->name << ' ' << present_table->parent->name << ' ' << present_table->parent->find_var_entry(info->attr_name) << '\n';
                                     root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")", "", "", tempprint(root->temp)));
+                                    root->code.back().res = (temp_var*)root->temp;
+                                    root->code.back().typeres = TEMP_VAR;
+                                    // root->code.back().typea1 = VAR; todo3
                                 }
                             }
                             else{
@@ -1145,6 +1285,9 @@ void make_3ac(node * root)
                                     root->temp = new temp_var(attr->type);
                                     int offset = attr->offset;
                                     root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(offset) + ")", "", "", tempprint(root->temp)));
+                                    root->code.back().res = (temp_var*)root->temp;
+                                    root->code.back().typeres = TEMP_VAR;
+                                    // root->code.back().typea1 = VAR; todo3
                                 }
                                 else{
                                     
@@ -1184,6 +1327,8 @@ void make_3ac(node * root)
                         info->funcname = fun->name;
                         for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                             root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                            root->code.back().res = (temp_var*)(*it)->temp;
+                            root->code.back().typeres = TEMP_VAR;
                         }
                         // root->code.push_back(quad("", "", "param", obj_entry->name));
                         string printName = info->funcname;
@@ -1193,6 +1338,8 @@ void make_3ac(node * root)
                         root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc", ""));
                         root->temp = new temp_var(fun->returntype);
                         root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                        root->code.back().res = (temp_var*)root->temp;
+                        root->code.back().typeres = TEMP_VAR;
                     }
                     else{
                         cerr << "Error: Object " << ((name_type *)root->children[0]->info)->name_val << " not found\n";
@@ -1217,6 +1364,8 @@ void make_3ac(node * root)
                     info->funcname = fun->name;
                     for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                         root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
+                        root->code.back().res = (temp_var*)(*it)->temp;
+                        root->code.back().typeres = TEMP_VAR;
                     }
                     root->code.push_back(quad("", "", "param", obj_entry->name));
                     string printName = info->funcname;
@@ -1226,6 +1375,8 @@ void make_3ac(node * root)
                     root->code.push_back(quad(printName, to_string(info->arglist.size() + 1), "callfunc", ""));
                     root->temp = new temp_var(fun->returntype);
                     root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
+                    root->code.back().res = (temp_var*)root->temp;
+                    root->code.back().typeres = TEMP_VAR;
                 }
             }
         }
@@ -1263,16 +1414,45 @@ void make_3ac(node * root)
                     // }
                 }
                 else if(root->children[0]->name == "NUMBER"){
-                    cerr << "enter number\n";
-                    root->temp = new temp_var("number");
+                    // root->info = root->children[1]->info;
+                    // annasign * info = ((annasign *) root->info);
+                    // info->name = ((atom_expr_name*) root->children[0]->info)->name;
+                    // symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
+                    // newentry->lineno = root->children[1]->lineno;
+                    // present_table->add_entry_var(newentry);
+                    // present_table->offset += 8;
+                    // newentry->offset = present_table->offset;
+                    // if(((annasign*) root->children[1]->info)->inval != NULL){
+                    //     root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
+                    //     root->code.back().a1 = (temp_var*)(((annasign*) root->children[1]->info)->inval);
+                    //     cerr << ((atom_expr_name*) root->children[0]->info)->name << '\n';
+                    // }
+
+                    // root->info = new funcdef();
+                    // funcdef * info = (funcdef *) root->info;
+                    
+                    cerr << "enter number h1\n";
+                    temp_var *entry = new temp_var("number");
+                    root->temp = entry;
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                    root->code.back().res = (temp_var*)root->temp;
+                    // cerr << ((temp_var*)(root->code.back().res))->tempid << '\n';
+                    
                 }
                 else if(root->children[0]->name == "STRING"){
-                    root->temp = new temp_var("string");
+                    cerr << "enter string h2\n";
+                    temp_var *entry = new temp_var("string");
+                    root->temp = entry;
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
+                    root->code.back().res = (temp_var*)root->temp;
+                    // cerr << ((temp_var*)(root->code.back().res))->tempid << '\n';
                 }
                 else if(root->children[0]->name == "True"){
+                    // cerr << "enter true h3\n";
+                    temp_var *entry = new temp_var("True");
                     root->temp = new temp_var("int");
+                    // present_table->offset += 8; //cbm
+                    // entry->offset = present_table->offset; //cbm
                     root->data_type = "num_type";
                     root->info = new num_type();
                     ((num_type *) root->info)->is_int = true;
@@ -1280,7 +1460,10 @@ void make_3ac(node * root)
                     // root->code.push_back(quad("1", "", "", tempprint(root->temp)));
                 }
                 else if(root->children[0]->name == "False"){
+                    temp_var *entry = new temp_var("False");
                     root->temp = new temp_var("int");
+                    // present_table->offset += 8; //cbm
+                    // entry->offset = present_table->offset; //cbm
                     root->data_type = "num_type";
                     root->info = new num_type();
                     ((num_type *) root->info)->is_int = true;
@@ -1343,6 +1526,7 @@ void make_3ac(node * root)
                         }
                         info->accessind = new temp_var("int");
                         root->code.push_back(quad(((atom_expr_name *) root->children[1]->info)->name, "", "", tempprint(info->accessind)));
+                        root->code.back().res = (temp_var*)info->accessind;
                     }
                     else
                         info->access_name = ((atom_expr_name *) root->children[1]->info)->name;

@@ -1,10 +1,15 @@
 #include<bits/stdc++.h>
-#include "quad.hpp"
 using namespace std;
+
+class quad;
+
 class temp_var{
 public:
     string type;
+    string tempid;
     int id;
+    int offset=0;
+    bool found = 0;
     bool is_literal = true;
     temp_var(string type);
 };
@@ -177,8 +182,15 @@ enum SYMBOL_TABLE_TYPE{
     FUNCTION_TABLE,
     CLASS_TABLE
 };
-class symbol_table;
 
+enum QUAD_ARG_TYPE{
+    TEMP_VAR,
+    NUM,
+    VAR,
+    STR
+};
+
+class symbol_table;
 
 class symbol_table_entry
 {
@@ -189,6 +201,7 @@ public:
     int offset = 0;
     int size = 8;
     int numel = 1;
+    bool found = 0;
     int lineno = 0;
     symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
@@ -196,6 +209,21 @@ public:
         this->type = type;
         this->table = table;
     }
+};
+
+class quad{
+public:
+    string arg1;
+    string arg2;
+    string op;
+    string result;
+    void* a1 = NULL;
+    void* a2 = NULL;
+    void* res = NULL;
+    int typea1;
+    int typea2;
+    int typeres;
+    quad(string arg1, string arg2, string op, string result);
 };
 
 class symbol_table
@@ -216,6 +244,7 @@ public:
     string func_classname = "";
     int size = 0;
     int lineno = 0;
+    int offset=0;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {
         this->type = type;
