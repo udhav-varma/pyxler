@@ -10,68 +10,48 @@ int_fmt:
 main:
 	pushq %rbp
 	movq %rsp, %rbp
-	subq $8, %rsp
-	movq $3, %rax
-	movq %rax, -8(%rbp)
-	subq $8, %rsp
-	movq -8(%rbp), %rax
+	subq $128, %rsp
+	movq $15, %rax
 	movq %rax, -16(%rbp)
-	subq $8, %rsp
-	movq $2, %rax
+	movq -16(%rbp), %rax
 	movq %rax, -24(%rbp)
-	subq $8, %rsp
-	movq -24(%rbp), %rax
-	movq %rax, -32(%rbp)
-	subq $8, %rsp
-	movq $431, %rax
+	movq $20, %rax
 	movq %rax, -40(%rbp)
-	subq $8, %rsp
 	movq -40(%rbp), %rax
 	movq %rax, -48(%rbp)
-	subq $8, %rsp
-	movq -16(%rbp), %rax
+
+beginwhile1:
+	movq -24(%rbp), %rax
 	movq %rax, -56(%rbp)
-	movq -56(%rbp), %rsi
-	subq $8, %rsp
-	movq $int_fmt, %rdi
-	call printf
-	subq $8, %rsp
 	movq -48(%rbp), %rax
 	movq %rax, -64(%rbp)
-	movq -64(%rbp), %rsi
-	subq $8, %rsp
-	movq $int_fmt, %rdi
-	call printf
-	subq $8, %rsp
-	movq -32(%rbp), %rax
+	movq -56(%rbp), %rax
+	cmpq -64(%rbp), %rax
+	setl %al
+	movzbq %al, %rax
 	movq %rax, -72(%rbp)
-	movq -72(%rbp), %rsi
-	subq $8, %rsp
-	movq $int_fmt, %rdi
-	call printf
-	subq $8, %rsp
-	movq -16(%rbp), %rax
+	movq -72(%rbp), %rax
+	cmpq $0, %rax
+	je endwhile1
+	movq -24(%rbp), %rax
 	movq %rax, -80(%rbp)
-	subq $8, %rsp
-	movq -48(%rbp), %rax
+	movq -24(%rbp), %rax
 	movq %rax, -88(%rbp)
-	subq $8, %rsp
-	movq -32(%rbp), %rax
-	movq %rax, -96(%rbp)
-	subq $8, %rsp
-	movq -88(%rbp), %rax
-	movq -96(%rbp), %rbx
-	idivq %rbx
-	movq %rax, -0(%rbp)
-	movq -0(%rbp), %rax
-	movq %rax, -16(%rbp)
-	subq $8, %rsp
-	movq -16(%rbp), %rax
+	movq $1, %rax
 	movq %rax, -104(%rbp)
-	movq -104(%rbp), %rsi
-	subq $8, %rsp
+	movq -88(%rbp), %rax
+	addq -104(%rbp), %rax
+	movq %rax, -112(%rbp)
+	movq -112(%rbp), %rax
+	movq %rax, -24(%rbp)
+	movq -24(%rbp), %rax
+	movq %rax, -120(%rbp)
+	movq -120(%rbp), %rsi
 	movq $int_fmt, %rdi
 	call printf
+	jmp beginwhile1
+
+endwhile1:
 
 	leave
 	ret

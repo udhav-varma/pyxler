@@ -302,7 +302,7 @@ void make_3ac(node * root)
                             exit(0);
                         }
                         else{
-                            root->code.push_back(quad(tempprint(root->children[2]->temp), "huhuihui", "", name));
+                            root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", name));
                             root->code.back().a1 = (temp_var*)(root->children[2]->temp);
                             root->code.back().typea1 = TEMP_VAR;
                             root->code.back().res = present_table->find_var_entry(name);
@@ -663,6 +663,8 @@ void make_3ac(node * root)
                 }
                 temp_var * upbound = info->arglist.back()->temp;
                 temp_var * itervar = new temp_var("int");
+                present_table->offset += 8;
+                itervar->offset = present_table->offset;
                 beg_code.push_back(quad("beginfor"s + to_string(tfor_id), "", "label", ""));
                 // beg_code.back().typea1 = VAR; todo3
                 beg_code.insert(beg_code.end(), root->children[3]->code.begin(), root->children[3]->code.end());
@@ -682,7 +684,8 @@ void make_3ac(node * root)
                     // beg_code.back().typea1 = VAR; todo3
                 }
                 temp_var * comp_res = new temp_var("bool");
-
+                present_table->offset += 8;
+                comp_res->offset = present_table->offset;
                 tempprint(upbound);
                 beg_code.push_back(quad(tempprint(itervar), tempprint(upbound), "<", tempprint(comp_res)));
                 beg_code.back().a1 = (temp_var*)(itervar); //*
@@ -768,6 +771,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));  
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -796,6 +801,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));  
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -824,6 +831,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[1]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad("", tempprint(root->children[1]->temp), "NOT", tempprint(root->temp)));
                 root->code.back().a2 = (temp_var*)(root->children[1]->temp); //*
                 root->code.back().res = (temp_var*)(root->temp); //*
@@ -849,6 +858,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -876,6 +887,9 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
+                // cerr<<"yo "<<root->children[1]->name<<"\n";
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -903,6 +917,11 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset; 
+                // cerr<<root->children[0]->name<<"\n";
+                // cerr<<root->children[1]->name<<"\n";
+                // cerr<<root->children[2]->name<<"\n";
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp))); 
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -931,6 +950,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -958,6 +979,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));   
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -983,6 +1006,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                 root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -990,7 +1015,7 @@ void make_3ac(node * root)
                 root->code.back().typea1 = TEMP_VAR;
                 root->code.back().typea2 = TEMP_VAR;
                 root->code.back().typeres = TEMP_VAR;
-                cerr<<"yoyo77 "<<root->code.back().op<<"\n";
+                // cerr<<"yoyo77 "<<root->code.back().op<<"\n";
             }
         }
         else if(root->name == "term"){
@@ -1011,6 +1036,8 @@ void make_3ac(node * root)
             }
             else{
                 root->temp = new temp_var(root->children[0]->temp->type);
+                present_table->offset += 8;
+                root->temp->offset = present_table->offset;
                 //TODO: typechecking
                 root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
                 root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
@@ -1034,6 +1061,8 @@ void make_3ac(node * root)
                 // }
                 // else{
                     root->temp = new temp_var("int");
+                    present_table->offset += 8;
+                    root->temp->offset = present_table->offset;
                     root->code.push_back(quad("", tempprint(root->children[1]->temp), root->children[0]->name, tempprint(root->temp)));
                     root->code.back().a2 = (temp_var*)(root->children[1]->temp); //*
                     root->code.back().res = (temp_var*)(root->temp); //*
@@ -1063,6 +1092,8 @@ void make_3ac(node * root)
                 if(root->children[2]->temp != NULL and root->children[2]->temp->type == "int"){
                     //TODO - implement power;
                     root->temp = new temp_var("int");
+                    present_table->offset += 8;
+                    root->temp->offset = present_table->offset;
                     root->code.push_back(quad(tempprint(root->children[0]->temp), tempprint(root->children[2]->temp), root->children[1]->name, tempprint(root->temp)));
                     root->code.back().a1 = (temp_var*)(root->children[0]->temp); //*
                     root->code.back().a2 = (temp_var*)(root->children[2]->temp); //*
@@ -1098,7 +1129,7 @@ void make_3ac(node * root)
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         root->temp->tempid = tempprint(root->temp);
-                        root->code.push_back(quad(info->name, "yoyoyoyo", "", root->temp->tempid));
+                        root->code.push_back(quad(info->name, "", "", root->temp->tempid));
                         root->code.back().res = (temp_var*)(root->temp); //*
                         root->code.back().typeres = TEMP_VAR;
                         root->code.back().a1 = present_table->find_var_entry(info->name);
@@ -1113,6 +1144,8 @@ void make_3ac(node * root)
                     info->num = ((num_type *) root->children[0]->info)->number;
                     if(((num_type *) root->children[0]->info)->is_int){
                         root->temp = new temp_var("int");
+                        present_table->offset += 8;
+                        root->temp->offset = present_table->offset;
                         root->temp->tempid = tempprint(root->temp);
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
@@ -1152,6 +1185,8 @@ void make_3ac(node * root)
                     string_id++;
                     headers.push_back(".string" + to_string(string_id) + ": " + trim_string(((str_type *) root->children[0]->info)->str));
                     root->temp = new temp_var("str");
+                    present_table->offset += 8;
+                    root->temp->offset = present_table->offset;
                     root->code.push_back(quad(".string" + to_string(string_id), "", "", tempprint(root->temp))); 
                     root->code.back().res = (temp_var*)(root->temp); //*
                     root->code.back().typea1 = STR;
@@ -1175,6 +1210,8 @@ void make_3ac(node * root)
                                 else{
                                     auto cls = present_table->find_class_entry(info->funcname);
                                     root->temp = new temp_var("pointer");
+                                    // present_table->offset += 8;
+                                    // root->temp->offset = present_table->offset;
                                     int sz = cls->size;
                                     root->code.push_back(quad("", "", "param", to_string(sz)));
                                     // root->code.back().typeres = NUM; todo3
@@ -1200,6 +1237,8 @@ void make_3ac(node * root)
                             }
                             else if(info->funcname == "len"){
                                 root->temp = new temp_var("int");
+                                // present_table->offset += 8;
+                                // root->temp->offset = present_table->offset;
                                 auto args = ((funccall* )root->children[1]->info)->arglist;
                                 if(args.size() != 1){
                                     cerr << "Error: len() takes exactly 1 argument\n";
@@ -1240,6 +1279,8 @@ void make_3ac(node * root)
                         else{
 
                             root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
+                            // present_table->offset += 8;
+                            // root->temp->offset = present_table->offset;
                             auto func = present_table->find_fun_entry(info->funcname);
                             // func->args.size() == info->arglist.size(); TODO
                             for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
@@ -1282,6 +1323,8 @@ void make_3ac(node * root)
                                 exit(0);
                             }
                             root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
+                            present_table->offset += 8;
+                            root->temp->offset = present_table->offset;
                             temp_var * derefpos = new temp_var("int");
                             temp_var * offs = new temp_var("int");
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
@@ -1323,6 +1366,8 @@ void make_3ac(node * root)
                         if(present_table->find_var_entry(info->obj)){
                             if(info->obj == "self"){
                                 root->temp = new temp_var(present_table->find_var_entry(info->obj)->type);
+                                present_table->offset += 8;
+                                root->temp->offset = present_table->offset;
                                 symbol_table_entry * obj_entry = present_table->find_var_entry(info->obj);
                                 if(present_table->parent->find_var_entry(info->attr_name)){
                                     root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(present_table->parent->find_var_entry(info->attr_name)->offset) + ")", "", "", tempprint(root->temp)));
@@ -1345,6 +1390,8 @@ void make_3ac(node * root)
                                         exit(0);
                                     }
                                     root->temp = new temp_var(attr->type);
+                                    present_table->offset += 8;
+                                    root->temp->offset = present_table->offset;
                                     int offset = attr->offset;
                                     root->code.push_back(quad("*"s + "(" + info->obj + " + " + to_string(offset) + ")", "", "", tempprint(root->temp)));
                                     root->code.back().res = (temp_var*)root->temp;
@@ -1399,6 +1446,8 @@ void make_3ac(node * root)
                         root->code.back().typea1 = VAR;
                         // root->code.back().typea2 = VAR; todo3
                         root->temp = new temp_var(fun->returntype);
+                        // present_table->offset += 8;
+                        // root->temp->offset = present_table->offset;
                         root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                         root->code.back().res = (temp_var*)root->temp;
                         root->code.back().typeres = TEMP_VAR;
@@ -1493,6 +1542,8 @@ void make_3ac(node * root)
                     
                     cerr << "enter number h1\n";
                     temp_var *entry = new temp_var("number");
+                    // present_table->offset += 8;
+                    // root->temp->offset = present_table->offset;
                     root->temp = entry;
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
                     root->code.back().res = (temp_var*)root->temp;
@@ -1503,6 +1554,8 @@ void make_3ac(node * root)
                 else if(root->children[0]->name == "STRING"){
                     cerr << "enter string h2\n";
                     temp_var *entry = new temp_var("string");
+                    // present_table->offset += 8;
+                    // root->temp->offset = present_table->offset;
                     root->temp = entry;
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
                     root->code.back().res = (temp_var*)root->temp;

@@ -817,17 +817,15 @@ void print_symbol_table(symbol_table *curr_table){
     }
 }
 
-int countsubq = 0;
 string printutil(void* v, string &s, ofstream &fout, int type){
     string res = "";
     int ofst = 0;
     if(type == TEMP_VAR){
         if(((temp_var*)v)->found == 0){
-            fout<<"\tsubq $8, %rsp\n";
-            countsubq += 1;
             ((temp_var*)v)->found = 1;
         }
         ofst = ((temp_var*)v)->offset;
+        cerr<<s<<" "<<ofst<<"\n";
         res.append("-"s + to_string(ofst));
         res.append("(%rbp)");
     }
@@ -836,11 +834,10 @@ string printutil(void* v, string &s, ofstream &fout, int type){
     }
     else if(type == VAR){
         if(((symbol_table_entry*)v)->found == 0){
-            fout<<"\tsubq $8, %rsp\n";
-            countsubq += 1;
             ((symbol_table_entry*)v)->found = 1;
         }
         ofst = ((symbol_table_entry*)v)->offset;
+        cerr<<s<<" "<<ofst<<"\n";
         res.append("-"s + to_string(ofst));
         res.append("(%rbp)");
     }
@@ -863,12 +860,17 @@ void printx86(vector<quad> code){
 
     fout<<"main:\n";
 
+    if(present_table->offset % 16 == 8){
+        present_table->offset += 8;
+    }
+
     fout<<"\tpushq %rbp\n\tmovq %rsp, %rbp\n";
+    fout<<"\tsubq $"<<present_table->offset<<", %rsp\n";
 
     for(auto x: code){
         /* auto x = code[i]; */
         if(x.op=="label"){
-            
+            fout<<"\n"<<x.arg1<<":\n";
         }
         else if(x.op=="param"){
             string sres = printutil(x.res, x.result, fout, x.typeres);
@@ -882,22 +884,21 @@ void printx86(vector<quad> code){
         }
         else if(x.op=="callfunc "|| x.op=="callfunc"){
             if(x.arg1 == "print"){
-                if(countsubq % 2 == 1){
-                    fout<<"\tsubq $8, %rsp\n";
-                    countsubq++;
-                }
                 fout<<"\tmovq $int_fmt, %rdi\n";
                 fout<<"\tcall printf\n";
             }
         }
         else if(x.op=="goto" && x.arg1==""){
-            
+            fout<<"\tjmp "<<x.result<<"\n";
         }
         else if(x.op=="goto"){
-            
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            fout<<"\tmovq "<<sa2<<", %rax\n";
+            fout<<"\tcmpq $0, %rax\n";
+            fout<<"\tje "<<x.result<<"\n";
         }
         else if(x.op=="+"){
-            cerr<<"here +\n";
+            /* cerr<<"here +\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
@@ -906,8 +907,9 @@ void printx86(vector<quad> code){
             fout<<"\tmovq %rax, "<<sres<<"\n";
         }
         else if(x.op=="-"){
-            cerr<<"here -\n";
-            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            /* cerr<<"here -\n"; */
+            string sa1 = "$0";
+            if(x.arg1!="")  sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
             fout<<"\tmovq "<<sa1<<", %rax\n";
@@ -915,7 +917,7 @@ void printx86(vector<quad> code){
             fout<<"\tmovq %rax, "<<sres<<"\n";
         }
         else if(x.op=="*"){
-            cerr<<"here *\n";
+            /* cerr<<"here *\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
@@ -923,8 +925,8 @@ void printx86(vector<quad> code){
             fout<<"\timulq "<<sa2<<", %rax\n";
             fout<<"\tmovq %rax, "<<sres<<"\n";
         }
-        else if(x.op=="/"){
-            cerr<<"here /\n";
+        else if(x.op=="/" || x.op=="//"){
+            /* cerr<<"here /\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
@@ -933,11 +935,129 @@ void printx86(vector<quad> code){
             fout<<"\tidivq %rbx\n";
             fout<<"\tmovq %rax, "<<sres<<"\n";
         }
+        else if(x.op=="|"){
+            /* cerr<<"here |\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\torq "<<sa2<<", %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="&"){
+            /* cerr<<"here &\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tandq "<<sa2<<", %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="<<"){
+            /* cerr<<"here <<\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tmovb "<<sa2<<", %cl\n";
+            fout<<"\tshlq %cl, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op==">>"){
+            /* cerr<<"here >>\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tmovb "<<sa2<<", %cl\n";
+            fout<<"\tshrq %cl, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="%"){
+            cerr<<"here %\n";
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\txorq %rdx, %rdx\n";
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tmovq "<<sa2<<", %rbx\n";
+            fout<<"\tidivq %rbx\n";
+            fout<<"\tmovq %rdx, "<<sres<<"\n";
+        }
+        else if(x.op=="=="){
+            /* cerr<<"here ==\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsete %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="!="){
+            /* cerr<<"here !=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsetne %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="<="){
+            /* cerr<<"here <=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsetle %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op==">="){
+            /* cerr<<"here >=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsetge %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op=="<"){
+            /* cerr<<"here <\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsetl %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else if(x.op==">"){
+            /* cerr<<"here >\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            fout<<"\tmovq "<<sa1<<", %rax\n";
+            fout<<"\tcmpq "<<sa2<<", %rax\n";
+            fout<<"\tsetg %al\n";
+            fout<<"\tmovzbq %al, %rax\n";
+            fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
         else if(x.op==""){
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sres = printutil(x.res, x.result, fout, x.typeres);
             fout<<"\tmovq "<<sa1<<", %rax"<<"\n";
             fout<<"\tmovq %rax, "<<sres<<"\n";
+        }
+        else{
+            cerr<<x.op<<"\n";
         }
     }
 
