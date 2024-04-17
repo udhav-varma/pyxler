@@ -19,7 +19,7 @@ main:
     # Output y
     movq %r8, %rsi  # Move y into %rsi (second argument for printf)
     movq $output_fmt, %rdi # Move format string into %rdi (first argument for printf)
-    xorq %rax, %rax # Clear %rax for printf call
+    # xorq %rax, %rax # Clear %rax for printf call
     call printf
 
     # Exit the program

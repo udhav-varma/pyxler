@@ -17,82 +17,100 @@ public:
 struct name_type{
     string name_val;
     int lineno = 0;
+    int offset = 0;
 };
 
 struct test_type{
     temp_var * temp;
+    int offset = 0;
 };
 
 struct testlist_type{
     vector<temp_var*> testlist_vars;
+    int offset = 0;
 };
 
 struct sqbrackettestlist_type{
     vector<temp_var*> sqbrackettestlist_vars;
+    int offset = 0;
 };
 
 struct keyword_type{
     string keyword;
+    int offset = 0;
 };
 
 struct list_name_type{
     string name;
     string type;
     sqbrackettestlist_type * vals;
+    int offset = 0;
 };
 
 struct delim_type{
     string delim;
+    int offset = 0;
 };
 
 struct num_type{
     string number;
     bool is_int;
+    int offset = 0;
 };
 
 struct op_type{
     string op;
+    int offset = 0;
 };
 
 struct str_type{
+    int offset = 0;
     string str;
 };
 
 struct arg_type{
     temp_var * temp;
+    int offset = 0;
     string name;
 };
 
 struct arglist_type{
     vector<arg_type*> args;
+    int offset = 0;
 };
 
 struct arr_access{
     string name;
     temp_var * accessind;
     string access_name;
+    int offset = 0;
 };
 
 struct funccall{
     string funcname;
     vector<arg_type*> arglist;
+    int offset = 0;
 };
 
 struct atom_expr_list{
     vector<temp_var *> tstlist;
+    int offset = 0;
 };
 
 struct atom_expr_name{
     string name;
     int lineno;
+    int offset;
 };
 
 struct atom_expr_number{
     string num;
+    int offset = 0;
 };
 
 struct atom_expr_keyword{
     string keyword;
+    int offset = 0;
 };
 
 struct funcarg{
@@ -101,28 +119,33 @@ struct funcarg{
     bool hasdefval = false;
     temp_var * defval = NULL;
     int lineno = 0;
+    int offset = 0;
 };
 
 struct funcarglist{
     vector<funcarg*> args;
+    int offset = 0;
 };
 
 struct annasign{
     string name;
     string type;
     temp_var * inval;
+    int offset = 0;
 };
 
 struct funcdef{
     string name;
     string returntype;
     funcarglist * args;
+    int offset = 0;
 };
 
 struct obj_access{
     temp_var * obj_base;
     string attr_name;
     string obj;
+    int offset = 0;
 };
 
 class node{
@@ -137,6 +160,7 @@ public:
     string data_type;
     struct temp_var * temp = NULL;
     vector<quad> code;
+    int offset = 0;
     int lineno = 0;
 };
 
