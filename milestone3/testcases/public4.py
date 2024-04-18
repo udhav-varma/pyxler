@@ -1,22 +1,20 @@
-# Initialize the array
-arr: list[int] = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+def main() -> None:
+    number: int = 431  # Example input (you can replace with any positive number)
+    start: int = 0
+    end: int = number+1
+    ans: int = 0
 
-# Value to search for
-x: int = 11
+    # Binary search for integral part
+    while start+1 < end:
+        mid : int = 0
+        mid = (start+end)/2
+        if mid*mid <= number:
+            start = mid
+        else:
+            end = mid
 
-# Initialize the low and high indices
-low: int = 0
-high: int =  10
-
-# Perform binary search
-while low <= high:
-    mid: int = (low + high) // 2
+    print(start);
     
-    if arr[mid] == x:
-        print(mid)
-        break
-    elif arr[mid] < x:
-        low = mid + 1
-    else:
-        high = mid - 1
-        
+if __name__ == "__main__":
+    main()
+    
