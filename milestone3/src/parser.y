@@ -817,6 +817,332 @@ void print_symbol_table(symbol_table *curr_table){
     }
 }
 
+vector<string> x86data = {"int_fmt:\n\t.string \"%ld\\n\"\n\n"s};
+vector<string> x86;
+
+string printutil(void* v, string s, ofstream &fout, int type){
+    string res = "";
+    int ofst = 0;
+    if(type == TEMP_VAR || type == TEMP_VAR_ARG){
+        ofst = ((temp_var*)v)->offset;
+        /* cerr<<s<<" "<<ofst<<"\n"; */
+        res.append("-"s + to_string(ofst));
+        res.append("(%rbp)");
+    }
+    else if(type == NUM){
+        res.append("$"s + s);
+    }
+    else if(type == STR){
+        res.append(s);
+    }
+    else if(type == VAR){
+        auto it = (symbol_table_entry*)v;
+        if(it->stackofst > 0){
+            ofst = it->stackofst;
+            /* cerr<<s<<" "<<ofst<<"\n"; */
+            res.append(to_string(ofst));
+            res.append("(%rbp)");
+        }
+        else{
+            ofst = it->offset;
+            /* cerr<<s<<" "<<ofst<<"\n"; */
+            res.append("-"s + to_string(ofst));
+            res.append("(%rbp)");
+        }
+    }
+    else if(type == ARR_ACCESS){
+        auto arr = (arr_access*)(v);
+        auto entry = present_table->find_var_entry(arr->name);
+        string z = "";
+        if(arr->tempidx){
+            z = printutil(arr->accessind, arr->name, fout, TEMP_VAR);
+            /* cout<<"heyyy "<<z<<"\n"; */
+        }
+        else{
+            z = printutil(NULL, to_string(arr->offset), fout, NUM);
+            /* cout<<"hey "<<z<<"\n"; */
+        }
+        x86.push_back("\tmovq " + z + ", %r9\n");
+        x86.push_back("\tmovq -" + to_string(entry->offset) + "(%rbp), %r10\n");
+        res = "(%r9, %r10)";
+    }
+    else if(type==ARG){
+        ofst = ((symbol_table_entry*)v)->stackofst;
+        /* cerr<<s<<" "<<ofst<<"\n"; */
+        res.append(to_string(ofst));
+        res.append("(%rbp)");
+    }
+    return res;
+}
+
+
+void printx86(vector<quad> code){
+    ofstream z("x86.s");
+    ofstream fout("x86.s", ios::app);
+
+    fout<<".section .data\n\n";
+    fout<<".text\n";
+
+    for(auto x: code){
+        if(x.op=="label"){
+            if(x.arg1 == "beginfunc main"){
+                x86.push_back(".globl main\n");
+                x86.push_back(".type main, @function\n");
+                x86.push_back("main:\n");
+                if(((symbol_table*)(x.a1))->offset % 16 == 8){
+                    ((symbol_table*)(x.a1))->offset += 8;
+                }
+                x86.push_back("\tpushq %rbp\n\tmovq %rsp, %rbp\n");
+                x86.push_back("\tsubq $" + to_string(((symbol_table*)(x.a1))->offset) + ", %rsp\n");
+            }
+            else if(x.arg1.substr(0, 9)=="beginfunc"){
+                x86.push_back(x.arg1.substr(10, x.arg1.size()-10) + ":\n");
+                if(((symbol_table*)(x.a1))->offset % 16 == 8){
+                    ((symbol_table*)(x.a1))->offset += 8;
+                }
+                x86.push_back("\tpushq %rbp\n\tmovq %rsp, %rbp\n");
+                x86.push_back("\tsubq $" + to_string(((symbol_table*)(x.a1))->offset) + ", %rsp\n");
+            }
+            else if(x.arg1.substr(0, 7)=="endfunc"){
+                x86.push_back("\n" + x.arg1 + ":\n");
+                x86.push_back("\n\tleave\n\tret\n\n");
+            }
+            else{
+                x86.push_back("\n" + x.arg1 + ":\n");
+            }
+        }
+        else if(x.op=="param"){
+            if(x.typeres==NUM){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tmovq " + sres + ", %rdi\n");
+            }
+            else if(x.typeres==TEMP_VAR_ARG){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tpushq " + sres + "\n");
+            }
+            else if(x.typeres==TEMP_VAR){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tmovq " + sres + ", %rdi\n");
+            }
+        }
+        else if(x.op=="return"){
+            if(x.arg2==""){
+                x86.push_back("\tleave\n\tret\n\n");
+            }
+            else{
+                string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+                x86.push_back("\tmovq " + sa2 + ", %rax\n");
+            }
+        }
+        else if(x.op=="popreturn"){
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="popparam"){
+            printutil(x.res, x.result, fout, x.typeres);
+        }
+        else if(x.op=="callfunc "|| x.op=="callfunc"){
+            /* cout<<x.arg1<<"\n"; */
+            if(x.arg1 == "print"){
+                x86.push_back("\tmovq %rdi, %rsi\n");
+                x86.push_back("\tmovq $int_fmt, %rdi\n");
+                x86.push_back("\txorq %rax, %rax\n");
+                x86.push_back("\tcall printf\n");
+            }
+            else if(x.arg1 == "allocmem 1"){
+                x86.push_back("\tcall malloc\n");
+                /* x86.push_back("\tmovq %rax, %rbx\n"); */
+            }
+            else{
+                string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+                x86.push_back("\tcall " + sa1 +"\n");
+                x86.push_back("\taddq $" + to_string(stoi(x.arg2)*8) + ", %rsp\n");
+            }
+        }
+
+        else if(x.op=="goto" && x.arg1==""){
+            x86.push_back("\tjmp " + x.result + "\n");
+        }
+        else if(x.op=="goto"){
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            x86.push_back("\tmovq " + sa2 +", %rax\n");
+            x86.push_back("\tcmpq $0, %rax\n");
+            x86.push_back("\tje " + x.result +"\n");
+        }
+        else if(x.op=="+"){
+            /* cerr<<"here +\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\taddq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="-"){
+            /* cerr<<"here -\n"; */
+            string sa1 = "$0";
+            if(x.arg1!="")  sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tsubq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="*"){
+            /* cerr<<"here *\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\timulq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="/" || x.op=="//"){
+            /* cerr<<"here /\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\txorq %rdx, %rdx\n");
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovq " + sa2 + ", %rbx\n");
+            x86.push_back("\tidivq %rbx\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="|"){
+            /* cerr<<"here |\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\torq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="&"){
+            /* cerr<<"here &\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tandq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="<<"){
+            /* cerr<<"here <<\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovb " + sa2 + ", %cl\n");
+            x86.push_back("\tshlq %cl, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op==">>"){
+            /* cerr<<"here >>\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovb " + sa2 + ", %cl\n");
+            x86.push_back("\tshrq %cl, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="%"){
+            /* cerr<<"here %\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\txorq %rdx, %rdx\n");
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovq " + sa2 + ", %rbx\n");
+            x86.push_back("\tidivq %rbx\n");
+            x86.push_back("\tmovq %rdx, " + sres + "\n");
+        }
+        else if(x.op=="=="){
+            /* cerr<<"here ==\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsete %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="!="){
+            /* cerr<<"here !=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetne %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="<="){
+            /* cerr<<"here <=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetle %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op==">="){
+            /* cerr<<"here >=\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetge %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="<"){
+            /* cerr<<"here <\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetl %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op==">"){
+            /* cerr<<"here >\n"; */
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetg %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op==""){
+            if(x.typea1==STR){
+                string z = x.arg1 + ":\n\t.string\t" + x.arg2 + "\n\n";
+                x86data.push_back(z);
+            }
+            string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq " + sa1 + ", %rax" + "\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else{
+            /* cerr<<x.op<<"   yoyoyoyo\n"; */
+        }
+    }
+
+    for(auto x: x86data)    fout<<x;
+    for(auto x: x86)    fout<<x;
+
+}
+
 
 int main(int argc, char *argv[]){
     /* yydebug = 1  */
@@ -842,53 +1168,56 @@ int main(int argc, char *argv[]){
     else return -1;
     make_3ac(root);
     /* cerr << root->code.size() << '\n'; */
-    for(auto x: headers) cout << x << '\n';
+    /* for(auto x: headers) cout << x << '\n'; */
 
+    ofstream z("3ac.txt");
+    ofstream fout("3ac.txt", ios::app);
     for(auto x: root->code){
         /* cerr << x.result << " = " << x.arg1 << ' ' << x.op << ' ' << x.arg2 << '\n'; */
         if(x.op=="label"){
-            cout<<"\n"<<x.arg1<<":\n";
+            fout<<"\n"<<x.arg1<<":\n";
         }
         else if(x.op=="param"){
-            cout<<setw(4)<<left<<"";
-            cout<<"param "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"param "<<x.result<<"\n";
         }
         else if(x.op=="popparam" || x.op=="popreturn"){
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result<<" ";
-            cout<<setw(4)<<left<<"=";
-            cout<<setw(4)<<left<<x.op<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<left<<x.result<<" ";
+            fout<<setw(4)<<left<<"=";
+            fout<<setw(4)<<left<<x.op<<" ";
+            fout<<"\n";
         }
         else if(x.op=="callfunc "|| x.op=="callfunc"){
-            cout<<setw(4)<<left<<"";
-            cout<<"callfunc ";
-            cout<<setw(12)<<x.arg1<<" ";
-            cout<<setw(12)<<x.arg2<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"callfunc ";
+            fout<<setw(12)<<x.arg1<<" ";
+            fout<<setw(12)<<x.arg2<<" ";
+            fout<<"\n";
         }
         else if(x.op=="goto" && x.arg1==""){
-            cout<<setw(4)<<left<<"";
-            cout<<"goto "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<"goto "<<x.result<<"\n";
         }
         else if(x.op=="goto"){
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<x.arg1<<" ";
-            cout<<setw(12)<<x.arg2<<" ";
-            cout<<"goto "<<x.result<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<x.arg1<<" ";
+            fout<<setw(12)<<x.arg2<<" ";
+            fout<<"goto "<<x.result<<"\n";
         }
         else{
-            cout<<setw(4)<<left<<"";
-            cout<<setw(12)<<left<<x.result<<" ";
-            cout<<setw(4)<<left<<"=";
-            cout<<setw(12)<<left<<x.arg1<<" ";
-            cout<<setw(4)<<left<<x.op<<" ";
-            cout<<setw(12)<<left<<x.arg2<<" ";
-            cout<<"\n";
+            fout<<setw(4)<<left<<"";
+            fout<<setw(12)<<left<<x.result<<" ";
+            fout<<setw(4)<<left<<"=";
+            fout<<setw(12)<<left<<x.arg1<<" ";
+            fout<<setw(4)<<left<<x.op<<" ";
+            fout<<setw(12)<<left<<x.arg2<<" ";
+            fout<<"\n";
         }
     }
 
-    print_symbol_table(present_table);
+    /* print_symbol_table(present_table); */
+    printx86(root->code);
 
     return 0;
 }

@@ -29,6 +29,11 @@ if ret:
 else:
     print("Successful execution\n")
 
+instr = "gcc -o test x86.s -no-pie"
+ret = os.system(instr)
+instr = "./test"
+ret = os.system(instr)
+
 # print("Running graph ")
 
 # output_loc = "./graph.pdf"

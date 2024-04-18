@@ -9,7 +9,6 @@ public:
     string tempid;
     int id;
     int offset=0;
-    bool found = 0;
     bool is_literal = true;
     temp_var(string type);
 };
@@ -83,6 +82,7 @@ struct arr_access{
     string name;
     temp_var * accessind;
     string access_name;
+    int tempidx = 1;
     int offset = 0;
 };
 
@@ -211,7 +211,11 @@ enum QUAD_ARG_TYPE{
     TEMP_VAR,
     NUM,
     VAR,
-    STR
+    STR,
+    ARR_ACCESS,
+    ARG, 
+    FXN,
+    TEMP_VAR_ARG
 };
 
 class symbol_table;
@@ -225,8 +229,8 @@ public:
     int offset = 0;
     int size = 8;
     int numel = 1;
-    bool found = 0;
     int lineno = 0;
+    int stackofst = 0;
     symbol_table_entry(string name, string type, symbol_table* table = 0)
     {
         this->name = name;
@@ -269,6 +273,7 @@ public:
     int size = 0;
     int lineno = 0;
     int offset=0;
+    int stackofst=0;
     symbol_table(int type, symbol_table* prt = 0, string name = "")
     {
         this->type = type;

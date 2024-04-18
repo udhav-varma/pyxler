@@ -1,0 +1,16 @@
+%token ADDASSIGN // += done
+%token SUBASSIGN // -= done
+%token MULASSIGN // *= done
+%token ATASSIGN // @= done
+%token DIVASSIGN // /= done
+%token MODASSIGN // %= done
+%token ANDASSIGN // &= done
+%token ORASSIGN // |= done
+%token XORASSIGN // ^= done
+%token LSASSIGN // <<= done
+%token RSASSIGN // >>= done
+%token POWASSIGN // **= done
+%token IDIVASSIGN // //= done
+%token NOT // done
+%token OR // done
+%token AND // done

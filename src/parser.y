@@ -817,28 +817,59 @@ void print_symbol_table(symbol_table *curr_table){
     }
 }
 
-string printutil(void* v, string &s, ofstream &fout, int type){
+vector<string> x86data = {"int_fmt:\n\t.string \"%ld\\n\"\n\n"s};
+vector<string> x86;
+
+string printutil(void* v, string s, ofstream &fout, int type){
     string res = "";
     int ofst = 0;
-    if(type == TEMP_VAR){
-        if(((temp_var*)v)->found == 0){
-            ((temp_var*)v)->found = 1;
-        }
+    if(type == TEMP_VAR || type == TEMP_VAR_ARG){
         ofst = ((temp_var*)v)->offset;
-        cerr<<s<<" "<<ofst<<"\n";
+        /* cerr<<s<<" "<<ofst<<"\n"; */
         res.append("-"s + to_string(ofst));
         res.append("(%rbp)");
     }
     else if(type == NUM){
         res.append("$"s + s);
     }
+    else if(type == STR){
+        res.append(s);
+    }
     else if(type == VAR){
-        if(((symbol_table_entry*)v)->found == 0){
-            ((symbol_table_entry*)v)->found = 1;
+        auto it = (symbol_table_entry*)v;
+        if(it->stackofst > 0){
+            ofst = it->stackofst;
+            /* cerr<<s<<" "<<ofst<<"\n"; */
+            res.append(to_string(ofst));
+            res.append("(%rbp)");
         }
-        ofst = ((symbol_table_entry*)v)->offset;
-        cerr<<s<<" "<<ofst<<"\n";
-        res.append("-"s + to_string(ofst));
+        else{
+            ofst = it->offset;
+            /* cerr<<s<<" "<<ofst<<"\n"; */
+            res.append("-"s + to_string(ofst));
+            res.append("(%rbp)");
+        }
+    }
+    else if(type == ARR_ACCESS){
+        auto arr = (arr_access*)(v);
+        auto entry = present_table->find_var_entry(arr->name);
+        string z = "";
+        if(arr->tempidx){
+            z = printutil(arr->accessind, arr->name, fout, TEMP_VAR);
+            /* cout<<"heyyy "<<z<<"\n"; */
+        }
+        else{
+            z = printutil(NULL, to_string(arr->offset), fout, NUM);
+            /* cout<<"hey "<<z<<"\n"; */
+        }
+        x86.push_back("\tmovq " + z + ", %r9\n");
+        x86.push_back("\tmovq -" + to_string(entry->offset) + "(%rbp), %r10\n");
+        res = "(%r9, %r10)";
+    }
+    else if(type==ARG){
+        ofst = ((symbol_table_entry*)v)->stackofst;
+        /* cerr<<s<<" "<<ofst<<"\n"; */
+        res.append(to_string(ofst));
         res.append("(%rbp)");
     }
     return res;
@@ -850,61 +881,102 @@ void printx86(vector<quad> code){
     ofstream fout("x86.s", ios::app);
 
     fout<<".section .data\n\n";
-    string data_str = "int_fmt:\n\t.string \"%ld\\n\"\n\n";
-    fout<<data_str;
-
     fout<<".text\n";
 
-    fout<<".globl main\n";
-    fout<<".type main, @function\n\n";
-
-    fout<<"main:\n";
-
-    if(present_table->offset % 16 == 8){
-        present_table->offset += 8;
-    }
-
-    fout<<"\tpushq %rbp\n\tmovq %rsp, %rbp\n";
-    fout<<"\tsubq $"<<present_table->offset<<", %rsp\n";
-
     for(auto x: code){
-        /* auto x = code[i]; */
         if(x.op=="label"){
-            fout<<"\n"<<x.arg1<<":\n";
-        }
-        else if(x.op=="param"){
-            string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sres<<", %rsi\n";
-        }
-        else if(x.op=="popreturn"){
-            
-        }
-        else if(x.op=="popparam"){
-
-        }
-        else if(x.op=="callfunc "|| x.op=="callfunc"){
-            if(x.arg1 == "print"){
-                fout<<"\tmovq $int_fmt, %rdi\n";
-                fout<<"\tcall printf\n";
+            if(x.arg1 == "beginfunc main"){
+                x86.push_back(".globl main\n");
+                x86.push_back(".type main, @function\n");
+                x86.push_back("main:\n");
+                if(((symbol_table*)(x.a1))->offset % 16 == 8){
+                    ((symbol_table*)(x.a1))->offset += 8;
+                }
+                x86.push_back("\tpushq %rbp\n\tmovq %rsp, %rbp\n");
+                x86.push_back("\tsubq $" + to_string(((symbol_table*)(x.a1))->offset) + ", %rsp\n");
+            }
+            else if(x.arg1.substr(0, 9)=="beginfunc"){
+                x86.push_back(x.arg1.substr(10, x.arg1.size()-10) + ":\n");
+                if(((symbol_table*)(x.a1))->offset % 16 == 8){
+                    ((symbol_table*)(x.a1))->offset += 8;
+                }
+                x86.push_back("\tpushq %rbp\n\tmovq %rsp, %rbp\n");
+                x86.push_back("\tsubq $" + to_string(((symbol_table*)(x.a1))->offset) + ", %rsp\n");
+            }
+            else if(x.arg1.substr(0, 7)=="endfunc"){
+                x86.push_back("\n" + x.arg1 + ":\n");
+                x86.push_back("\n\tleave\n\tret\n\n");
+            }
+            else{
+                x86.push_back("\n" + x.arg1 + ":\n");
             }
         }
+        else if(x.op=="param"){
+            if(x.typeres==NUM){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tmovq " + sres + ", %rdi\n");
+            }
+            else if(x.typeres==TEMP_VAR_ARG){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tpushq " + sres + "\n");
+            }
+            else if(x.typeres==TEMP_VAR){
+                string sres = printutil(x.res, x.result, fout, x.typeres);
+                x86.push_back("\tmovq " + sres + ", %rdi\n");
+            }
+        }
+        else if(x.op=="return"){
+            if(x.arg2==""){
+                x86.push_back("\tleave\n\tret\n\n");
+            }
+            else{
+                string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
+                x86.push_back("\tmovq " + sa2 + ", %rax\n");
+            }
+        }
+        else if(x.op=="popreturn"){
+            string sres = printutil(x.res, x.result, fout, x.typeres);
+            x86.push_back("\tmovq %rax, " + sres + "\n");
+        }
+        else if(x.op=="popparam"){
+            printutil(x.res, x.result, fout, x.typeres);
+        }
+        else if(x.op=="callfunc "|| x.op=="callfunc"){
+            /* cout<<x.arg1<<"\n"; */
+            if(x.arg1 == "print"){
+                x86.push_back("\tmovq %rdi, %rsi\n");
+                x86.push_back("\tmovq $int_fmt, %rdi\n");
+                x86.push_back("\txorq %rax, %rax\n");
+                x86.push_back("\tcall printf\n");
+            }
+            else if(x.arg1 == "allocmem 1"){
+                x86.push_back("\tcall malloc\n");
+                /* x86.push_back("\tmovq %rax, %rbx\n"); */
+            }
+            else{
+                string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
+                x86.push_back("\tcall " + sa1 +"\n");
+                x86.push_back("\taddq $" + to_string(stoi(x.arg2)*8) + ", %rsp\n");
+            }
+        }
+
         else if(x.op=="goto" && x.arg1==""){
-            fout<<"\tjmp "<<x.result<<"\n";
+            x86.push_back("\tjmp " + x.result + "\n");
         }
         else if(x.op=="goto"){
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
-            fout<<"\tmovq "<<sa2<<", %rax\n";
-            fout<<"\tcmpq $0, %rax\n";
-            fout<<"\tje "<<x.result<<"\n";
+            x86.push_back("\tmovq " + sa2 +", %rax\n");
+            x86.push_back("\tcmpq $0, %rax\n");
+            x86.push_back("\tje " + x.result +"\n");
         }
         else if(x.op=="+"){
             /* cerr<<"here +\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\taddq "<<sa2<<", %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\taddq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="-"){
             /* cerr<<"here -\n"; */
@@ -912,156 +984,162 @@ void printx86(vector<quad> code){
             if(x.arg1!="")  sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tsubq "<<sa2<<", %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tsubq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="*"){
             /* cerr<<"here *\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\timulq "<<sa2<<", %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\timulq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="/" || x.op=="//"){
             /* cerr<<"here /\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tmovq "<<sa2<<", %rbx\n";
-            fout<<"\tidivq %rbx\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\txorq %rdx, %rdx\n");
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovq " + sa2 + ", %rbx\n");
+            x86.push_back("\tidivq %rbx\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="|"){
             /* cerr<<"here |\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\torq "<<sa2<<", %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\torq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="&"){
             /* cerr<<"here &\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tandq "<<sa2<<", %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tandq " + sa2 + ", %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="<<"){
             /* cerr<<"here <<\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tmovb "<<sa2<<", %cl\n";
-            fout<<"\tshlq %cl, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovb " + sa2 + ", %cl\n");
+            x86.push_back("\tshlq %cl, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op==">>"){
             /* cerr<<"here >>\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tmovb "<<sa2<<", %cl\n";
-            fout<<"\tshrq %cl, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovb " + sa2 + ", %cl\n");
+            x86.push_back("\tshrq %cl, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="%"){
-            cerr<<"here %\n";
+            /* cerr<<"here %\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\txorq %rdx, %rdx\n";
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tmovq "<<sa2<<", %rbx\n";
-            fout<<"\tidivq %rbx\n";
-            fout<<"\tmovq %rdx, "<<sres<<"\n";
+            x86.push_back("\txorq %rdx, %rdx\n");
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tmovq " + sa2 + ", %rbx\n");
+            x86.push_back("\tidivq %rbx\n");
+            x86.push_back("\tmovq %rdx, " + sres + "\n");
         }
         else if(x.op=="=="){
             /* cerr<<"here ==\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsete %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsete %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="!="){
             /* cerr<<"here !=\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsetne %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetne %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="<="){
             /* cerr<<"here <=\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsetle %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetle %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op==">="){
             /* cerr<<"here >=\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsetge %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetge %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op=="<"){
             /* cerr<<"here <\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsetl %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetl %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op==">"){
             /* cerr<<"here >\n"; */
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sa2 = printutil(x.a2, x.arg2, fout, x.typea2);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax\n";
-            fout<<"\tcmpq "<<sa2<<", %rax\n";
-            fout<<"\tsetg %al\n";
-            fout<<"\tmovzbq %al, %rax\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax\n");
+            x86.push_back("\tcmpq " + sa2 + ", %rax\n");
+            x86.push_back("\tsetg %al\n");
+            x86.push_back("\tmovzbq %al, %rax\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else if(x.op==""){
+            if(x.typea1==STR){
+                string z = x.arg1 + ":\n\t.string\t" + x.arg2 + "\n\n";
+                x86data.push_back(z);
+            }
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
             string sres = printutil(x.res, x.result, fout, x.typeres);
-            fout<<"\tmovq "<<sa1<<", %rax"<<"\n";
-            fout<<"\tmovq %rax, "<<sres<<"\n";
+            x86.push_back("\tmovq " + sa1 + ", %rax" + "\n");
+            x86.push_back("\tmovq %rax, " + sres + "\n");
         }
         else{
-            cerr<<x.op<<"\n";
+            /* cerr<<x.op<<"   yoyoyoyo\n"; */
         }
     }
 
-    fout<<"\n\tleave\n\tret\n";
+    for(auto x: x86data)    fout<<x;
+    for(auto x: x86)    fout<<x;
 
 }
 

@@ -86,10 +86,12 @@ void make_3ac(node * root)
                 printName = present_table->name + "." + printName;
             }
             beg_code.push_back(quad("beginfunc "s + printName, "", "label", ""));
+            symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
+            beg_code.back().a1 = fun_table;
+            beg_code.back().typea1 = FXN;
             // beg_code.back().typea1 = VAR; todo3
             //PUSHPARAMS
        
-            symbol_table * fun_table = new symbol_table(FUNCTION_TABLE, present_table, info->name);
             fun_table->lineno = (root->children[1]->lineno);
             if(present_table->type == CLASS_TABLE){
                 fun_table->func_classname = present_table->name;
@@ -97,20 +99,23 @@ void make_3ac(node * root)
             present_table->add_entry_fun(fun_table);
             present_table = fun_table;
             fun_table->args = info->args->args;
+            present_table->stackofst = 8;
             for(auto x: info->args->args){
                 auto en = new symbol_table_entry(x->name, x->type, present_table);
-                present_table->offset += 8;
-                en->offset = present_table->offset;
+                present_table->add_entry_var(en, false);
+                present_table->stackofst += 8;
+                en->stackofst = present_table->stackofst;
                 en->lineno = x->lineno;
                 beg_code.push_back(quad("", "", "popparam", x->name));
-                beg_code.back().typeres = VAR;
-                present_table->add_entry_var(en, false);
+                beg_code.back().typeres = ARG;
+                beg_code.back().res = en;
             }
             make_3ac(root->children[6]);
             root->code.insert(root->code.end(), root->children[6]->code.begin(), root->children[6]->code.end());
             present_table = present_table->parent;
             end_code.push_back(quad("endfunc"s + info->name, "", "label", ""));
             // end_code.back().typea1 = VAR; todo3
+            // cerr << fun_table->offset << " yoyoyo\n";
         }
         else if(root->name == "parameters"){ // checked
             for(auto r: root->children){
@@ -218,30 +223,39 @@ void make_3ac(node * root)
                             int elsize = size;
                             int num_elements = listinfo->vals->sqbrackettestlist_vars.size();
                             size = (elsize) * num_elements + 8;
-                            root->code.push_back(quad("", "", "param", to_string(size)));
-                            // root->code.back().typeres = VAR; todo3
-                            root->code.push_back(quad("allocmem 1", "", "callfunc", ""));
-                            // root->code.back().typea1 = VAR: todo3
-                            root->code.push_back(quad("", "", "popreturn", ((atom_expr_name *) root->children[0]->info)->name));
-                            root->code.back().typeres = VAR;   
-                            // UDHAV                                              
-                            root->code.push_back(quad("", to_string(num_elements), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + ")"));
-                            // root->code.back().typeres = VAR; todo3
-                            // root->code.back().typea2 = VAR; todo3
-                            for(int i = 0; i < num_elements; i++){
-                                // UDHAV derefrencing
-                                root->code.push_back(quad("", tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
-                                root->code.back().a2 = (temp_var*)(listinfo->vals->sqbrackettestlist_vars[i]);
-                                root->code.back().typea2 = TEMP_VAR;
-                                // root->code.back().typeres = VAR; todo3
-                            }
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name *) root->children[0]->info)->name, "list["s + type + "]", present_table);
-                            present_table->offset += size;
-                            newentry->offset = root->children[1]->offset = present_table->offset;
+                            present_table->add_entry_var(newentry);        
+                            root->code.push_back(quad("", "", "param", to_string(size)));
+                            root->code.back().typeres = NUM;
+                            root->code.push_back(quad("allocmem 1", "", "callfunc", ""));
+                            root->code.push_back(quad("", "", "popreturn", ((atom_expr_name *) root->children[0]->info)->name));
+                            root->code.back().typeres = VAR;
+                            root->code.back().res = newentry;
+                            present_table->offset += 8; //DANGER
+                            newentry->offset = present_table->offset;
                             newentry->lineno = root->children[1]->lineno;
                             newentry->size = elsize;
                             newentry->numel = num_elements;
-                            present_table->add_entry_var(newentry);
+                            root->code.push_back(quad(to_string(num_elements), "", "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + ")"));
+                            root->code.back().typea1 = NUM;
+                            root->code.back().typeres = ARR_ACCESS;
+                            root->code.back().res = new arr_access();
+                            ((arr_access*)(root->code.back().res))->tempidx = 0;
+                            ((arr_access*)(root->code.back().res))->offset = 0;
+                            ((arr_access*)(root->code.back().res))->name = ((atom_expr_name *) root->children[0]->info)->name;
+
+                            // root->code.back().typea2 = VAR; todo3
+                            for(int i = 0; i < num_elements; i++){
+                                root->code.push_back(quad(tempprint(listinfo->vals->sqbrackettestlist_vars[i]), "", "", "*"s + "(" + ((atom_expr_name *) root->children[0]->info)->name + " + " + to_string(8 + i * elsize) + ")"));
+                                root->code.back().a1 = (temp_var*)(listinfo->vals->sqbrackettestlist_vars[i]);
+                                root->code.back().typea1 = TEMP_VAR;
+                                root->code.back().typeres = ARR_ACCESS;
+                                root->code.back().res = new arr_access();
+                                ((arr_access*)(root->code.back().res))->tempidx = 0;
+                                ((arr_access*)(root->code.back().res))->offset = i * elsize + 8;
+                                ((arr_access*)(root->code.back().res))->name = ((atom_expr_name *) root->children[0]->info)->name;
+                                // root->code.back().typeres = VAR; todo3
+                            }
                         }
                         else{
                             root->info = root->children[1]->info;
@@ -250,7 +264,7 @@ void make_3ac(node * root)
                             symbol_table_entry * newentry = new symbol_table_entry(((atom_expr_name*) root->children[0]->info)->name, ((annasign*) root->children[1]->info)->type, present_table);
                             present_table->add_entry_var(newentry);
                             present_table->offset += 8;
-                            newentry->offset = root->children[1]->offset = present_table->offset;
+                            newentry->offset = present_table->offset;
                             newentry->lineno = root->children[1]->lineno;
                             if(((annasign*) root->children[1]->info)->inval != NULL){
                                 root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", ((atom_expr_name*) root->children[0]->info)->name));
@@ -279,11 +293,11 @@ void make_3ac(node * root)
                         annasign * info = ((annasign *) root->info);
                         info->name = ((obj_access *) root->children[0]->info)->attr_name;
                         symbol_table_entry * newentry = new symbol_table_entry(((obj_access *) root->children[0]->info)->attr_name, ((annasign *) root->children[1]->info)->type, present_table);
+                        present_table->add_entry_var(newentry); 
+                        present_table->parent->add_entry_var(newentry);
                         present_table->offset += 8;
                         newentry->offset = present_table->offset;
                         newentry->lineno = root->children[1]->lineno;
-                        present_table->add_entry_var(newentry); 
-                        present_table->parent->add_entry_var(newentry);
                         if(((annasign*) root->children[1]->info)->inval != NULL){
                             // UDHAV defrefrencing
                             root->code.push_back(quad(tempprint(((annasign*) root->children[1]->info)->inval), "", "", "*"s + "(" + ((obj_access *) root->children[0]->info)->obj + " + " + to_string(newentry->offset) + ")"));
@@ -319,9 +333,11 @@ void make_3ac(node * root)
                             auto info = ((arr_access *) root->children[0]->info);
                             root->code.push_back(quad(tempprint(root->children[2]->temp), "", "", "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
                             root->code.back().a1 = (temp_var*)(root->children[2]->temp);
+                            // cerr << "yo\n";
                             root->code.back().typea1 = TEMP_VAR;
-                            // root->code.back().typeres = VAR; todo3
-                            // root->code.back().res
+                            // cerr << info->offset <<"\n";
+                            root->code.back().res = info;
+                            root->code.back().typeres = ARR_ACCESS;
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -388,9 +404,9 @@ void make_3ac(node * root)
                             // UDHAV
                             root->code.push_back(quad(name, tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), name));
                             root->code.back().a2 = (temp_var*)(root->children[2]->temp);
-                            root->code.back().typea1 = TEMP_VAR;
+                            root->code.back().typea2 = TEMP_VAR;
                             root->code.back().a1 = present_table->find_var_entry(name);
-                            root->code.back().typea2 = VAR;
+                            root->code.back().typea1 = VAR;
                             root->code.back().res = present_table->find_var_entry(name);
                             root->code.back().typeres = VAR;
                             
@@ -405,6 +421,7 @@ void make_3ac(node * root)
                         else{
                             auto info = ((arr_access *) root->children[0]->info);
                             root->code.push_back(quad("*("s + info->name + " + " + tempprint(info->accessind) + ")", tempprint(root->children[2]->temp), (string(root->children[1]->name.begin(), root->children[1]->name.end() - 1)), "*("s + info->name + " + " + tempprint(info->accessind) + ")"));
+                            // cerr<<"lol what?\n";
                             root->code.back().a2 = (temp_var*)(root->children[2]->temp);
                             root->code.back().typea2 = TEMP_VAR;
                             // root->code.back().typeres = VAR; //todo3
@@ -478,7 +495,7 @@ void make_3ac(node * root)
             if(root->children[1]->data_type == "list_name_type"){
                 root->data_type = root->children[1]->data_type;
                 root->info = root->children[1]->info;
-                root->lineno = root->children[0]->lineno;
+                root->lineno = root->children[1]->lineno;
                 if(root->children.size() == 4){
                     if(root->children[3]->data_type != "sqbrackettestlist_type"){
                         cerr << "Invalid list declaration\n";
@@ -677,7 +694,6 @@ void make_3ac(node * root)
                     beg_code.back().typeres = TEMP_VAR;
                 }
                 else{
-                    // UDHAV
                     beg_code.push_back(quad("0", "", "", tempprint(itervar)));
                     beg_code.back().res = (temp_var*)(itervar); //*
                     beg_code.back().typeres = TEMP_VAR;
@@ -1129,6 +1145,7 @@ void make_3ac(node * root)
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         root->temp->tempid = tempprint(root->temp);
+                        // cerr << root->temp->tempid << " h1\n"; 
                         root->code.push_back(quad(info->name, "", "", root->temp->tempid));
                         root->code.back().res = (temp_var*)(root->temp); //*
                         root->code.back().typeres = TEMP_VAR;
@@ -1147,6 +1164,7 @@ void make_3ac(node * root)
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         root->temp->tempid = tempprint(root->temp);
+                        // cerr << root->temp->tempid << " h2\n"; 
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         // cerr<<root->temp->tempid<<" "<<root->temp->offset<<" here3\n";
@@ -1154,6 +1172,7 @@ void make_3ac(node * root)
                     else{
                         root->temp = new temp_var("number");
                         root->temp->tempid = tempprint(root->temp);
+                        // cerr << root->temp->tempid << " h3\n"; 
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         // cerr<<root->temp->tempid<<" "<<root->temp->offset<<" here4\n";
@@ -1187,7 +1206,7 @@ void make_3ac(node * root)
                     root->temp = new temp_var("str");
                     present_table->offset += 8;
                     root->temp->offset = present_table->offset;
-                    root->code.push_back(quad(".string" + to_string(string_id), "", "", tempprint(root->temp))); 
+                    root->code.push_back(quad("string" + to_string(string_id), ((str_type *) root->children[0]->info)->str, "", tempprint(root->temp))); 
                     root->code.back().res = (temp_var*)(root->temp); //*
                     root->code.back().typea1 = STR;
                     root->code.back().typeres = TEMP_VAR;
@@ -1214,7 +1233,7 @@ void make_3ac(node * root)
                                     // root->temp->offset = present_table->offset;
                                     int sz = cls->size;
                                     root->code.push_back(quad("", "", "param", to_string(sz)));
-                                    // root->code.back().typeres = NUM; todo3
+                                    root->code.back().typeres = NUM;
                                     root->code.push_back(quad("allocmem", "1", "callfunc", ""));
                                     // root->code.back().typea1 = NUM; todo3
                                     // root->code.back().typea2 = VAR; todo3
@@ -1224,7 +1243,7 @@ void make_3ac(node * root)
                                     for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                         root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
                                         root->code.back().res = (temp_var*)(*it)->temp; //*
-                                        root->code.back().typeres = TEMP_VAR;
+                                        root->code.back().typeres = TEMP_VAR_ARG;
                                     }
                                     root->code.push_back(quad("", "", "param", tempprint(root->temp)));
                                     root->code.back().res = (temp_var*)(root->temp); //*
@@ -1261,6 +1280,11 @@ void make_3ac(node * root)
                                 root->code.push_back(quad("*(" + args[0]->name + ")", "", "", tempprint(root->temp)));
                                 root->code.back().res = (temp_var*)(root->temp); //*
                                 root->code.back().typeres = TEMP_VAR;
+                                root->code.back().a1 = new arr_access();
+                                ((arr_access*)(root->code.back().a1))->name = args[0]->name;
+                                ((arr_access*)(root->code.back().a1))->accessind = 0;
+                                ((arr_access*)(root->code.back().a1))->tempidx = 0;
+                                root->code.back().typea1 = ARR_ACCESS;
                                 // root->code.back().typea1 = VAR; todo3
                             }
                             else if(info->funcname == "print"){
@@ -1279,22 +1303,22 @@ void make_3ac(node * root)
                         else{
 
                             root->temp = new temp_var(present_table->find_fun_entry(info->funcname)->returntype);
-                            // present_table->offset += 8;
-                            // root->temp->offset = present_table->offset;
+                            present_table->offset += 8;
+                            root->temp->offset = present_table->offset;
                             auto func = present_table->find_fun_entry(info->funcname);
                             // func->args.size() == info->arglist.size(); TODO
                             for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                                 root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
-                                root->code.back().res = (temp_var*)(*it)->temp;
-                                root->code.back().typeres = TEMP_VAR;
+                                root->code.back().typeres = TEMP_VAR_ARG;
+                                root->code.back().res = (*it)->temp;
                             }
                             string printName = info->funcname;
                             if(func->func_classname != ""){
                                 printName = func->func_classname + "." + printName;
                             }
                             root->code.push_back(quad(printName, to_string(info->arglist.size()), "callfunc", ""));
-                            // root->code.back().typea1 = VAR; todo3
-                            // root->code.back().typea2 = VAR; todo3
+                            root->code.back().typea1 = STR; 
+                            root->code.back().typea2 = NUM;
                             root->code.push_back(quad("", "", "popreturn", tempprint(root->temp)));
                             root->code.back().res = (temp_var*)root->temp;
                             root->code.back().typeres = TEMP_VAR;
@@ -1322,34 +1346,47 @@ void make_3ac(node * root)
                                 cerr << "Array " << info->name << " not defined\n";
                                 exit(0);
                             }
-                            root->temp = new temp_var(present_table->find_var_entry(info->name)->type);
-                            present_table->offset += 8;
-                            root->temp->offset = present_table->offset;
                             temp_var * derefpos = new temp_var("int");
+                            root->temp = derefpos;
+                            present_table->offset += 8;
+                            derefpos->offset = present_table->offset;
                             temp_var * offs = new temp_var("int");
+                            present_table->offset += 8;
+                            offs->offset = present_table->offset;
                             root->code.push_back(quad(to_string(present_table->find_var_entry(info->name)->size), tempprint(info->accessind), "*", tempprint(offs)));
                             root->code.back().a2 = (temp_var*)info->accessind;
                             root->code.back().res = (temp_var*)offs;
+                            root->code.back().typea1 = NUM;
                             root->code.back().typea2 = TEMP_VAR;
                             root->code.back().typeres = TEMP_VAR;
+                            // cerr << info->accessind->tempid << " h5\n"; 
+                            // cerr << offs->tempid << " h55\n"; 
                             // root->code.back().typea1 = VAR; todo3
                             root->code.push_back(quad(tempprint(offs), "8", "+", tempprint(offs)));
-                            root->code.back().a2 = (temp_var*)offs;
+                            root->code.back().a1 = (temp_var*)offs;
                             root->code.back().res = (temp_var*)offs;
+                            root->code.back().typea2 = NUM;
                             root->code.back().typea1 = TEMP_VAR;
                             root->code.back().typeres = TEMP_VAR;
-                            // root->code.back().typea2 = NUM; todo3
-                            root->code.push_back(quad("", "("s + info->name + " + " + tempprint(offs) + ")", "", tempprint(derefpos)));
-                            root->code.back().a2 = (temp_var*)offs;
+                            // cerr << offs->tempid << " h6\n"; 
+                            root->code.push_back(quad("**("s + info->name + " + " + tempprint(offs) + ")", "", "", tempprint(derefpos)));
+                            root->code.back().a1 = new arr_access();
+                            auto x = root->code.back();
+                            // cerr<<"yay - "<<x.result<<" - "<<x.arg1<<" - "<<x.op<<" - "<<x.arg2<<"\n";
+                            ((arr_access*)(root->code.back().a1))->name = info->name;
+                            ((arr_access*)(root->code.back().a1))->accessind = offs;
                             root->code.back().res = (temp_var*)derefpos;
                             root->code.back().typeres = TEMP_VAR;
-                            // root->code.back().typea2 = TEMP_VAR; todo3
-                            root->code.push_back(quad("", "*"s + tempprint(derefpos), "", tempprint(root->temp)));
-                            root->code.back().res = (temp_var*)root->temp;
-                            root->code.back().a2 = (temp_var*)derefpos;
-                            root->code.back().typeres = TEMP_VAR;
-                            // root->code.back().typea2 = TEMP_VAR; todo3
+                            root->code.back().typea1 = ARR_ACCESS;
                             info->accessind = offs;
+                            // cerr << derefpos->tempid << " h7\n"; 
+                            // root->code.back().typea2 = TEMP_VAR; todo3
+                            // DANGER
+                            // root->code.push_back(quad("*"s + tempprint(derefpos), "", "", tempprint(root->temp)));
+                            // root->code.back().res = (temp_var*)root->temp;
+                            // root->code.back().a2 = (temp_var*)derefpos;
+                            // root->code.back().typeres = DEREF;
+                            // root->code.back().typea2 = TEMP_VAR; todo3
                         }
                     }
                     else{
@@ -1435,7 +1472,8 @@ void make_3ac(node * root)
                         for(auto it = info->arglist.rbegin(); it != info->arglist.rend(); it++){
                             root->code.push_back(quad("", "", "param", tempprint((*it)->temp)));
                             root->code.back().res = (temp_var*)(*it)->temp;
-                            root->code.back().typeres = TEMP_VAR;
+                            root->code.back().typeres = TEMP_VAR_ARG;
+                            // cerr << ((*it)->temp)->tempid << " h8\n"; 
                         }
                         // root->code.push_back(quad("", "", "param", obj_entry->name));
                         string printName = info->funcname;
@@ -1505,7 +1543,7 @@ void make_3ac(node * root)
                 root->info = new sqbrackettestlist_type();
                 sqbrackettestlist_type * info = (sqbrackettestlist_type *) root->info;
                 info->sqbrackettestlist_vars = ((testlist_type *) root->children[1]->info)->testlist_vars;
-                cerr << info->sqbrackettestlist_vars.size() << '\n';
+                // cerr << info->sqbrackettestlist_vars.size() << '\n';
             }
             else if(root->children.size() == 3 and root->children[0]->name == "("){
                 root->data_type = "brack_test_type";
@@ -1540,7 +1578,7 @@ void make_3ac(node * root)
                     // root->info = new funcdef();
                     // funcdef * info = (funcdef *) root->info;
                     
-                    cerr << "enter number h1\n";
+                    // cerr << "enter number h1\n";
                     temp_var *entry = new temp_var("number");
                     // present_table->offset += 8;
                     // root->temp->offset = present_table->offset;
@@ -1548,11 +1586,12 @@ void make_3ac(node * root)
                     root->code.push_back(quad(root->children[0]->name, "", "", tempprint(root->temp)));
                     root->code.back().res = (temp_var*)root->temp;
                     root->code.back().typeres = TEMP_VAR;
+                    // cerr << root->temp->tempid << " h9\n"; 
                     // root->code.back().typea1 = VAR; todo3
                     
                 }
                 else if(root->children[0]->name == "STRING"){
-                    cerr << "enter string h2\n";
+                    // cerr << "enter string h2\n";
                     temp_var *entry = new temp_var("string");
                     // present_table->offset += 8;
                     // root->temp->offset = present_table->offset;
@@ -1633,9 +1672,14 @@ void make_3ac(node * root)
                             exit(0);
                         }
                         info->accessind = new temp_var("int");
+                        present_table->offset += 8;
+                        info->accessind->offset = present_table->offset;
                         root->code.push_back(quad(((atom_expr_name *) root->children[1]->info)->name, "", "", tempprint(info->accessind)));
                         root->code.back().res = (temp_var*)info->accessind;
                         root->code.back().typeres = TEMP_VAR;
+                        root->code.back().a1 = present_table->find_var_entry(((atom_expr_name *) root->children[1]->info)->name);
+                        root->code.back().typea1 = VAR;
+                        // cerr << info->accessind->tempid << " h10\n"; 
                         // root->code.back().typea1 = VAR; todo3
                     }
                     else

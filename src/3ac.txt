@@ -1,21 +1,51 @@
-    $1           =   15                             
-    a            =   $1                             
-    $2           =   20                             
-    b            =   $2                             
 
-beginwhile1:
-    $3           =   a                              
-    $4           =   b                              
-    $5           =   $3           <    $4           
-    if_false     $5           goto endwhile1
-    $6           =   a                              
-    $7           =   a                              
-    $8           =   1                              
-    $9           =   $7           +    $8           
-    a            =   $9                             
-    $10          =   a                              
+beginfunc binarySearch:
+    x            =   popparam 
+    y            =   popparam 
+    $1           =   8                              
+    c            =   $1                             
+    $2           =   c                              
+    $3           =   x                              
+    $4           =   y                              
+    $5           =   $3           +    $4           
+    c            =   c            +    $5           
+    $6           =   c                              
+    param $6
+    callfunc print        1            
+    $7           =   c                              
+                 =                return $7           
+
+endfuncbinarySearch:
+
+beginfunc main:
+    $8           =   0                              
+    d            =   $8                             
+
+beginfor1:
+    $9           =   10                             
+    $11          =   0                              
+    $12          =   $11          <    $9           
+    if_false     $12          goto endfor1
+    d            =   $11                            
+    $10          =   d                              
     param $10
     callfunc print        1            
-    goto beginwhile1
+    $11          =   $11          +    1            
+    goto beginfor1
 
-endwhile1:
+endfor1:
+
+endfuncmain:
+
+beginif1:
+    $13          =   __name__                       
+    $14          =   string1           "__main__"   
+    $15          =   $13          ==   $14          
+    if_false     $15          goto endif1
+    callfunc main         0            
+    $16          =   popreturn 
+    goto endifblock1
+
+endif1:
+
+endifblock1:
