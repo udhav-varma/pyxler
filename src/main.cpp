@@ -240,6 +240,7 @@ void make_3ac(node * root)
                             root->code.back().typea1 = NUM;
                             root->code.back().typeres = ARR_ACCESS;
                             root->code.back().res = new arr_access();
+                            ((arr_access*)(root->code.back().res))->en = newentry;
                             ((arr_access*)(root->code.back().res))->tempidx = 0;
                             ((arr_access*)(root->code.back().res))->offset = 0;
                             ((arr_access*)(root->code.back().res))->name = ((atom_expr_name *) root->children[0]->info)->name;
@@ -251,6 +252,7 @@ void make_3ac(node * root)
                                 root->code.back().typea1 = TEMP_VAR;
                                 root->code.back().typeres = ARR_ACCESS;
                                 root->code.back().res = new arr_access();
+                                ((arr_access*)(root->code.back().res))->en = newentry;
                                 ((arr_access*)(root->code.back().res))->tempidx = 0;
                                 ((arr_access*)(root->code.back().res))->offset = i * elsize + 8;
                                 ((arr_access*)(root->code.back().res))->name = ((atom_expr_name *) root->children[0]->info)->name;
@@ -338,6 +340,7 @@ void make_3ac(node * root)
                             // cerr << info->offset <<"\n";
                             root->code.back().res = info;
                             root->code.back().typeres = ARR_ACCESS;
+                            ((arr_access*)(root->code.back().res))->en = present_table->find_var_entry(info->name);
                         }
                     }
                     else if(root->children[0]->data_type == "obj_access"){
@@ -1103,6 +1106,8 @@ void make_3ac(node * root)
                 root->data_type = root->children[0]->data_type;
                 root->info = root->children[0]->info;
                 root->temp = root->children[0]->temp;
+                // cerr<<"here 2\n";
+                // cerr<<root->children[0]->data_type <<" debug1"<<"\n";
             }
             else if(root->children.size() == 3){
                 if(root->children[2]->temp != NULL and root->children[2]->temp->type == "int"){
@@ -1159,12 +1164,14 @@ void make_3ac(node * root)
                     root->info = new atom_expr_number();
                     atom_expr_number * info = (atom_expr_number *) root->info;
                     info->num = ((num_type *) root->children[0]->info)->number;
+                    // cout<<"here\n";
                     if(((num_type *) root->children[0]->info)->is_int){
                         root->temp = new temp_var("int");
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         root->temp->tempid = tempprint(root->temp);
                         // cerr << root->temp->tempid << " h2\n"; 
+                        // cerr << root->temp->type<<"\n";
                         present_table->offset += 8;
                         root->temp->offset = present_table->offset;
                         // cerr<<root->temp->tempid<<" "<<root->temp->offset<<" here3\n";
@@ -1277,10 +1284,12 @@ void make_3ac(node * root)
                                     exit(0);
                                 }
                                 int numel = def->numel;
-                                root->code.push_back(quad("*(" + args[0]->name + ")", "", "", tempprint(root->temp)));
+                                root->code.push_back(quad("**(" + args[0]->name + ")", "", "", tempprint(root->temp)));
                                 root->code.back().res = (temp_var*)(root->temp); //*
                                 root->code.back().typeres = TEMP_VAR;
                                 root->code.back().a1 = new arr_access();
+                                auto en = present_table->find_var_entry(args[0]->name);
+                                ((arr_access*)(root->code.back().res))->en = en;
                                 ((arr_access*)(root->code.back().a1))->name = args[0]->name;
                                 ((arr_access*)(root->code.back().a1))->accessind = 0;
                                 ((arr_access*)(root->code.back().a1))->tempidx = 0;
@@ -1297,7 +1306,9 @@ void make_3ac(node * root)
                                 root->code.back().res = (temp_var*)(args[0]->temp); //*
                                 root->code.back().typeres = TEMP_VAR;
                                 root->code.push_back(quad("print", "1", "callfunc", ""));
-                                // cerr<<args[0]->temp->type<<" here5\n";
+                                root->code.back().res = (temp_var*)(args[0]->temp); //*
+                                root->code.back().typeres = TEMP_VAR;
+                                // cerr<<root->children[0]->data_type<<" here6\n";
                             }
                         }
                         else{
@@ -1373,6 +1384,7 @@ void make_3ac(node * root)
                             root->code.back().a1 = new arr_access();
                             auto x = root->code.back();
                             // cerr<<"yay - "<<x.result<<" - "<<x.arg1<<" - "<<x.op<<" - "<<x.arg2<<"\n";
+                            ((arr_access*)(root->code.back().a1))->en = present_table->find_var_entry(info->name);
                             ((arr_access*)(root->code.back().a1))->name = info->name;
                             ((arr_access*)(root->code.back().a1))->accessind = offs;
                             root->code.back().res = (temp_var*)derefpos;

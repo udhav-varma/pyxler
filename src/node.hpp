@@ -78,14 +78,6 @@ struct arglist_type{
     int offset = 0;
 };
 
-struct arr_access{
-    string name;
-    temp_var * accessind;
-    string access_name;
-    int tempidx = 1;
-    int offset = 0;
-};
-
 struct funccall{
     string funcname;
     vector<arg_type*> arglist;
@@ -158,6 +150,7 @@ public:
     node(string Type, string Name) : type(Type), name(Name){}
     void * info;
     string data_type;
+    string var_data_type;
     struct temp_var * temp = NULL;
     vector<quad> code;
     int offset = 0;
@@ -237,6 +230,15 @@ public:
         this->type = type;
         this->table = table;
     }
+};
+
+struct arr_access{
+    string name;
+    temp_var * accessind;
+    string access_name;
+    symbol_table_entry* en;
+    int tempidx = 1;
+    int offset = 0;
 };
 
 class quad{

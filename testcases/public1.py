@@ -1,14 +1,13 @@
-def binarySearch(x: int, y: int) -> int:
-  c : int = 8
-  c += x + y
-  print(c)
-  return c
+def func(a: list[int], b:int) -> int:
+  a[0] = a[0] + a[1]
+  print(a[0])
 
 def main() -> None:
-  d: int = 0
-  for d in range(10):
-    print(d)
+  a: list[int] = [2, 3]
+  a[0] = a[0] + a[1]
+  print(a[0])
+  func(a, 2)
+  print(a[0] + 3)
 
 if __name__ == "__main__":
   main()
-
