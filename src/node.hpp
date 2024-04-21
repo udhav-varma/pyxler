@@ -133,13 +133,6 @@ struct funcdef{
     int offset = 0;
 };
 
-struct obj_access{
-    temp_var * obj_base;
-    string attr_name;
-    string obj;
-    int offset = 0;
-};
-
 class node{
 public:
     int id = -1;
@@ -208,7 +201,9 @@ enum QUAD_ARG_TYPE{
     ARR_ACCESS,
     ARG, 
     FXN,
-    TEMP_VAR_ARG
+    TEMP_VAR_ARG,
+    OBJ_ACCESS,
+    OBJ_FUNC
 };
 
 class symbol_table;
@@ -236,6 +231,15 @@ struct arr_access{
     string name;
     temp_var * accessind;
     string access_name;
+    symbol_table_entry* en;
+    int tempidx = 1;
+    int offset = 0;
+};
+
+struct obj_access{
+    temp_var * obj_base;
+    string attr_name;
+    string obj;
     symbol_table_entry* en;
     int tempidx = 1;
     int offset = 0;

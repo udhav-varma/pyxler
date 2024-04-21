@@ -1,13 +1,8 @@
-def func(a: list[int], b:int) -> int:
-  a[0] = a[0] + a[1]
-  print(a[0])
 
-def main() -> None:
-  a: list[int] = [2, 3]
-  a[0] = a[0] + a[1]
-  print(a[0])
-  func(a, 2)
-  print(a[0] + 3)
+def main() -> None:  
+  i: int = 0
+  for i in range(5):
+    print(i)
 
 if __name__ == "__main__":
-  main()
+    main()

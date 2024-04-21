@@ -78,14 +78,6 @@ struct arglist_type{
     int offset = 0;
 };
 
-struct arr_access{
-    string name;
-    temp_var * accessind;
-    string access_name;
-    int tempidx = 1;
-    int offset = 0;
-};
-
 struct funccall{
     string funcname;
     vector<arg_type*> arglist;
@@ -141,13 +133,6 @@ struct funcdef{
     int offset = 0;
 };
 
-struct obj_access{
-    temp_var * obj_base;
-    string attr_name;
-    string obj;
-    int offset = 0;
-};
-
 class node{
 public:
     int id = -1;
@@ -158,6 +143,7 @@ public:
     node(string Type, string Name) : type(Type), name(Name){}
     void * info;
     string data_type;
+    string var_data_type;
     struct temp_var * temp = NULL;
     vector<quad> code;
     int offset = 0;
@@ -215,7 +201,9 @@ enum QUAD_ARG_TYPE{
     ARR_ACCESS,
     ARG, 
     FXN,
-    TEMP_VAR_ARG
+    TEMP_VAR_ARG,
+    OBJ_ACCESS,
+    OBJ_FUNC
 };
 
 class symbol_table;
@@ -237,6 +225,24 @@ public:
         this->type = type;
         this->table = table;
     }
+};
+
+struct arr_access{
+    string name;
+    temp_var * accessind;
+    string access_name;
+    symbol_table_entry* en;
+    int tempidx = 1;
+    int offset = 0;
+};
+
+struct obj_access{
+    temp_var * obj_base;
+    string attr_name;
+    string obj;
+    symbol_table_entry* en;
+    int tempidx = 1;
+    int offset = 0;
 };
 
 class quad{

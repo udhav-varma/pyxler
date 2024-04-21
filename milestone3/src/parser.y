@@ -852,18 +852,40 @@ string printutil(void* v, string s, ofstream &fout, int type){
     }
     else if(type == ARR_ACCESS){
         auto arr = (arr_access*)(v);
-        auto entry = present_table->find_var_entry(arr->name);
+        auto entry = arr->en;
         string z = "";
         if(arr->tempidx){
             z = printutil(arr->accessind, arr->name, fout, TEMP_VAR);
             /* cout<<"heyyy "<<z<<"\n"; */
         }
         else{
+            /* cerr<<"yo\n"; */
             z = printutil(NULL, to_string(arr->offset), fout, NUM);
             /* cout<<"hey "<<z<<"\n"; */
         }
+        /* if(entry==NULL)     cerr<<"yes\n"; */
         x86.push_back("\tmovq " + z + ", %r9\n");
-        x86.push_back("\tmovq -" + to_string(entry->offset) + "(%rbp), %r10\n");
+        if(entry->stackofst > 0){
+            x86.push_back("\tmovq " + to_string(entry->stackofst) + "(%rbp), %r10\n");
+        }
+        else{
+            x86.push_back("\tmovq -" + to_string(entry->offset) + "(%rbp), %r10\n");
+        }
+        res = "(%r9, %r10)";
+    }
+    else if(type==OBJ_ACCESS){
+        auto obj = (obj_access*)v;
+        string z;
+        auto entry = obj->en;
+        z = printutil(NULL, to_string(obj->offset), fout, NUM);
+        x86.push_back("\tmovq " + z + ", %r9\n");
+        if(entry->stackofst > 0){
+            cout<<"yes\n";
+            x86.push_back("\tmovq " + to_string(entry->stackofst) + "(%rbp), %r10\n");
+        }
+        else{
+            x86.push_back("\tmovq -" + to_string(entry->offset) + "(%rbp), %r10\n");
+        }
         res = "(%r9, %r10)";
     }
     else if(type==ARG){
@@ -872,6 +894,7 @@ string printutil(void* v, string s, ofstream &fout, int type){
         res.append(to_string(ofst));
         res.append("(%rbp)");
     }
+    /* else if(type==OBJ_FUNC) */
     return res;
 }
 
@@ -883,7 +906,11 @@ void printx86(vector<quad> code){
     fout<<".section .data\n\n";
     fout<<".text\n";
 
+    /* for(int i=0; i<25; i++){ */
     for(auto x: code){
+        /* auto x = code[i];  */
+        x86.push_back("# -------->\t" + x.result + "\t=\t" + x.arg1 + "\t" + x.op + "\t" + x.arg2 + "\n");
+        /* cerr<<x86.back()<<"\n"; */
         if(x.op=="label"){
             if(x.arg1 == "beginfunc main"){
                 x86.push_back(".globl main\n");
@@ -924,6 +951,9 @@ void printx86(vector<quad> code){
                 string sres = printutil(x.res, x.result, fout, x.typeres);
                 x86.push_back("\tmovq " + sres + ", %rdi\n");
             }
+            /* else if(x.typeres==OBJ_FUNC){
+                string sres = printutil(, fout, x.typeres)
+            } */
         }
         else if(x.op=="return"){
             if(x.arg2==""){
@@ -942,14 +972,21 @@ void printx86(vector<quad> code){
             printutil(x.res, x.result, fout, x.typeres);
         }
         else if(x.op=="callfunc "|| x.op=="callfunc"){
-            /* cout<<x.arg1<<"\n"; */
             if(x.arg1 == "print"){
-                x86.push_back("\tmovq %rdi, %rsi\n");
-                x86.push_back("\tmovq $int_fmt, %rdi\n");
-                x86.push_back("\txorq %rax, %rax\n");
-                x86.push_back("\tcall printf\n");
+                auto z = (temp_var*)x.res;
+                /* cerr<<"heyyy "<<z->type<<"\n"; */
+                if(z->type != "str"){
+                    x86.push_back("\tmovq %rdi, %rsi\n");
+                    x86.push_back("\tmovq $int_fmt, %rdi\n");
+                    x86.push_back("\txorq %rax, %rax\n");
+                    x86.push_back("\tcall printf\n");
+                }
+                else{
+                    x86.push_back("\txorq %rax, %rax\n");
+                    x86.push_back("\tcall printf\n");
+                }
             }
-            else if(x.arg1 == "allocmem 1"){
+            else if(x.arg1 == "allocmem 1" || x.arg1 == "allocmem"){
                 x86.push_back("\tcall malloc\n");
                 /* x86.push_back("\tmovq %rax, %rbx\n"); */
             }
@@ -1125,7 +1162,7 @@ void printx86(vector<quad> code){
         }
         else if(x.op==""){
             if(x.typea1==STR){
-                string z = x.arg1 + ":\n\t.string\t" + x.arg2 + "\n\n";
+                string z = x.arg1.substr(1, size(x.arg1)-1) + ":\n\t.string\t" + x.arg2 + "\n\n";
                 x86data.push_back(z);
             }
             string sa1 = printutil(x.a1, x.arg1, fout, x.typea1);
