@@ -736,7 +736,6 @@ void make_3ac(node * root)
                     present_table->parent->size += 8;
                 }
                 itervar->offset = present_table->offset;
-                beg_code.push_back(quad("beginfor"s + to_string(tfor_id), "", "label", ""));
                 // beg_code.back().typea1 = VAR; todo3
                 beg_code.insert(beg_code.end(), root->children[3]->code.begin(), root->children[3]->code.end());
 
@@ -754,6 +753,7 @@ void make_3ac(node * root)
                     beg_code.back().typea1 = NUM;
                     // beg_code.back().typea1 = VAR; todo3
                 }
+                beg_code.push_back(quad("beginfor"s + to_string(tfor_id), "", "label", ""));
                 temp_var * comp_res = new temp_var("bool");
                 present_table->offset += 8;
                 if(present_table->type==FUNCTION_TABLE && present_table->parent->type == CLASS_TABLE){

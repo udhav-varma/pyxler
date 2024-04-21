@@ -20,15 +20,15 @@ main:
 # -------->	i	=	$1		
 	movq -16(%rbp), %rax
 	movq %rax, -24(%rbp)
-# -------->		=	beginfor1	label	
-
-beginfor1:
 # -------->	$2	=	5		
 	movq $5, %rax
 	movq %rax, -40(%rbp)
 # -------->	$4	=	0		
 	movq $0, %rax
 	movq %rax, -56(%rbp)
+# -------->		=	beginfor1	label	
+
+beginfor1:
 # -------->	$5	=	$4	<	$2
 	movq -56(%rbp), %rax
 	cmpq -40(%rbp), %rax

@@ -2,10 +2,10 @@
 beginfunc main:
     $1           =   0                              
     i            =   $1                             
-
-beginfor1:
     $2           =   5                              
     $4           =   0                              
+
+beginfor1:
     $5           =   $4           <    $2           
     if_false     $5           goto endfor1
     i            =   $4                             
